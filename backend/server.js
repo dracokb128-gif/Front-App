@@ -14,9 +14,23 @@ function nowISO(){ return new Date().toISOString(); }
 
 /* -------------------- app -------------------- */
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+
+/* ✅ CORS allow-list (Netlify + local dev) */
+const ALLOWED = new Set([
+  "https://delightful-pegasus-a4a345.netlify.app", // ← apni Netlify site yahan
+  "http://localhost:3000",
+  "http://127.0.0.1:3000"
+]);
+app.use(cors({
+  origin: (origin, cb) => cb(null, !origin || ALLOWED.has(origin)),
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+/* optional: simple root health */
+app.get("/", (_req, res) => res.send("OK"));
 
 /* -------------------- storage paths -------------------- */
 const DATA_DIR   = path.join(__dirname, "data");
