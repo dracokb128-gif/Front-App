@@ -3,7 +3,7 @@
     "id": 1,
     "username": "Number1",
     "password": "123123",
-    "balance": 358.965,
+    "balance": 391.996,
     "createdAt": 1759155600071,
     "inviteCode": "120236",
     "isAdmin": false,
@@ -11,6 +11,13 @@
     "totalCompleted": 0,
     "lastTaskDate": "2025-10-01",
     "history": [
+      {
+        "id": "t_1759320284098",
+        "kind": "single",
+        "orderAmount": 75.78,
+        "commission": 3.031,
+        "at": 1759320285122
+      },
       {
         "id": "t_1759312574453",
         "kind": "single",
@@ -327,12 +334,14 @@
         "seenTotalsCents": []
       },
       "2025-10-01": {
-        "completed": 0,
-        "commission": 0,
-        "seenTotalsCents": []
+        "completed": 1,
+        "commission": 3.031,
+        "seenTotalsCents": [
+          7578
+        ]
       }
     },
-    "overallCommission": 13729.965,
+    "overallCommission": 13732.996,
     "isFrozen": false,
     "wd_pwd_set": true,
     "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
@@ -519,7 +528,7 @@
   {
     "id": 5,
     "username": "shera1",
-    "password": "741741",
+    "password": "123123",
     "balance": 183.215,
     "createdAt": 1759227237766,
     "inviteCode": "120236",
