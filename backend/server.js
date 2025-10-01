@@ -17,7 +17,9 @@ const app = express();
 
 /* ✅ CORS allow-list (Netlify + local dev) */
 const ALLOWED = new Set([
-  "https://delightful-pegasus-a4a345.netlify.app", // ← apni Netlify site yahan
+  "https://delightful-pegasus-a4a345.netlify.app",
+  "https://dhwin.app",
+  "https://www.dhwin.app",
   "http://localhost:3000",
   "http://127.0.0.1:3000"
 ]);
