@@ -4,7 +4,8 @@ const path = require("path");
 
 module.exports = function adminRoutes(app) {
   // ====== Common helpers ======
-  const DATA_DIR = path.join(__dirname, "data");
+  const DATA_DIR = fs.existsSync("/var/data") ? "/var/data" : path.join(__dirname, "data");
+
 
   // Inject rules files (existing)
   const RULES_FILE  = path.join(DATA_DIR, "inject-rules.json");

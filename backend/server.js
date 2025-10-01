@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (_req, res) => res.send("OK"));
 
 /* -------------------- storage paths -------------------- */
-const DATA_DIR   = path.join(__dirname, "data");
+const DATA_DIR = fs.existsSync("/var/data") ? "/var/data" : path.join(__dirname, "data");
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 const RULES_FILE = path.join(DATA_DIR, "injectRules.json");
 const ADMIN_FILE = path.join(DATA_DIR, "admin.json");
