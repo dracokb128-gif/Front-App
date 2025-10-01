@@ -164,7 +164,7 @@ const API_BASE =
   (typeof process !== "undefined" &&
     process.env &&
     (process.env.REACT_APP_API_BASE || process.env.VITE_API_BASE)) ||
-  "http://127.0.0.1:4000";
+  "https://backend-app-jqla.onrender.com";
 
 /** GET /api/wallet/address?userId=UID -> {address, network?, walletName?, owner?} */
 async function fetchServerWallet(uid) {
