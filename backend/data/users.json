@@ -1,0 +1,911 @@
+[
+  {
+    "id": 1,
+    "username": "Number1",
+    "password": "123123",
+    "balance": 358.965,
+    "createdAt": 1759155600071,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-01",
+    "history": [
+      {
+        "id": "t_1759312574453",
+        "kind": "single",
+        "orderAmount": 281.75,
+        "commission": 11.27,
+        "at": 1759312575623
+      },
+      {
+        "id": "t_1759312571435",
+        "kind": "single",
+        "orderAmount": 44.72,
+        "commission": 1.789,
+        "at": 1759312572578
+      },
+      {
+        "id": "t_1759312544722",
+        "kind": "single",
+        "orderAmount": 305.04,
+        "commission": 12.202,
+        "at": 1759312545542
+      },
+      {
+        "id": "t_1759312542773",
+        "kind": "single",
+        "orderAmount": 280.56,
+        "commission": 11.222,
+        "at": 1759312543852
+      },
+      {
+        "id": "t_1759312540013",
+        "kind": "single",
+        "orderAmount": 268.43,
+        "commission": 10.737,
+        "at": 1759312541396
+      },
+      {
+        "id": "t_1759312537615",
+        "kind": "single",
+        "orderAmount": 135.72,
+        "commission": 5.429,
+        "at": 1759312539008
+      },
+      {
+        "id": "t_1759312535705",
+        "kind": "single",
+        "orderAmount": 30.03,
+        "commission": 1.201,
+        "at": 1759312536451
+      },
+      {
+        "id": "t_1759312532655",
+        "kind": "single",
+        "orderAmount": 310.5,
+        "commission": 12.42,
+        "at": 1759312533902
+      },
+      {
+        "id": "t_1759279491617",
+        "kind": "single",
+        "orderAmount": 106.48,
+        "commission": 4.259,
+        "at": 1759279492648
+      },
+      {
+        "id": "t_1759279489664",
+        "kind": "single",
+        "orderAmount": 28.62,
+        "commission": 1.145,
+        "at": 1759279490623
+      },
+      {
+        "id": "t_1759279353479",
+        "kind": "single",
+        "orderAmount": 5.48,
+        "commission": 0.219,
+        "at": 1759279354570
+      },
+      {
+        "id": "t_1759279351436",
+        "kind": "single",
+        "orderAmount": 117.99,
+        "commission": 4.72,
+        "at": 1759279352437
+      },
+      {
+        "id": "t_1759279208258",
+        "kind": "combine",
+        "orderAmount": 141.44,
+        "commission": 16.973,
+        "at": 1759279344172
+      },
+      {
+        "id": "t_1759279206256",
+        "kind": "single",
+        "orderAmount": 63.08,
+        "commission": 2.523,
+        "at": 1759279207251
+      },
+      {
+        "id": "t_1759279203856",
+        "kind": "single",
+        "orderAmount": 46.48,
+        "commission": 1.859,
+        "at": 1759279205197
+      },
+      {
+        "id": "t_1759279184490",
+        "kind": "single",
+        "orderAmount": 58.7,
+        "commission": 2.348,
+        "at": 1759279185437
+      },
+      {
+        "id": "t_1759279182300",
+        "kind": "single",
+        "orderAmount": 12.1,
+        "commission": 0.484,
+        "at": 1759279183270
+      },
+      {
+        "id": "t_1759278835068",
+        "kind": "single",
+        "orderAmount": 17069.98,
+        "commission": 2048.398,
+        "at": 1759278836070
+      },
+      {
+        "id": "t_1759278832077",
+        "kind": "single",
+        "orderAmount": 232.25,
+        "commission": 27.87,
+        "at": 1759278833987
+      },
+      {
+        "id": "t_1759278825828",
+        "kind": "single",
+        "orderAmount": 16132.22,
+        "commission": 1935.866,
+        "at": 1759278830638
+      },
+      {
+        "id": "t_1759278821991",
+        "kind": "single",
+        "orderAmount": 2435.76,
+        "commission": 292.291,
+        "at": 1759278823238
+      },
+      {
+        "id": "t_1759278819484",
+        "kind": "single",
+        "orderAmount": 12515.72,
+        "commission": 1501.886,
+        "at": 1759278820650
+      },
+      {
+        "id": "t_1759278788868",
+        "kind": "single",
+        "orderAmount": 5247.58,
+        "commission": 629.71,
+        "at": 1759278789908
+      },
+      {
+        "id": "t_1759278717580",
+        "kind": "single",
+        "orderAmount": 10081.21,
+        "commission": 1209.745,
+        "at": 1759278720510
+      },
+      {
+        "id": "t_1759278715115",
+        "kind": "combine",
+        "orderAmount": 8922.44,
+        "commission": 1070.693,
+        "at": 1759278716463
+      },
+      {
+        "id": "t_1759278710563",
+        "kind": "single",
+        "orderAmount": 9184.3,
+        "commission": 1102.116,
+        "at": 1759278714059
+      },
+      {
+        "id": "t_1759278685540",
+        "kind": "single",
+        "orderAmount": 8486.06,
+        "commission": 1018.327,
+        "at": 1759278689477
+      },
+      {
+        "id": "t_1759277637062",
+        "kind": "combine",
+        "orderAmount": 8536.45,
+        "commission": 1280.467,
+        "at": 1759278682127
+      },
+      {
+        "id": "t_1759277468309",
+        "kind": "single",
+        "orderAmount": 1672.4,
+        "commission": 200.688,
+        "at": 1759277469215
+      },
+      {
+        "id": "t_1759277466496",
+        "kind": "single",
+        "orderAmount": 550.92,
+        "commission": 66.11,
+        "at": 1759277467371
+      },
+      {
+        "id": "t_1759277449332",
+        "kind": "single",
+        "orderAmount": 203.58,
+        "commission": 24.43,
+        "at": 1759277450182
+      },
+      {
+        "id": "t_1759276921117",
+        "kind": "single",
+        "orderAmount": 560.3,
+        "commission": 67.236,
+        "at": 1759276922099
+      },
+      {
+        "id": "t_1759276267894",
+        "kind": "combine",
+        "orderAmount": 3565.54,
+        "commission": 677.453,
+        "at": 1759276707793
+      },
+      {
+        "id": "t_1759276265887",
+        "kind": "single",
+        "orderAmount": 394.91,
+        "commission": 47.389,
+        "at": 1759276266803
+      },
+      {
+        "id": "t_1759276263726",
+        "kind": "single",
+        "orderAmount": 943.11,
+        "commission": 113.173,
+        "at": 1759276264602
+      },
+      {
+        "id": "t_1759276261426",
+        "kind": "single",
+        "orderAmount": 703.68,
+        "commission": 84.442,
+        "at": 1759276262777
+      },
+      {
+        "id": "t_1759275058744",
+        "kind": "single",
+        "orderAmount": 468.45,
+        "commission": 56.214,
+        "at": 1759275059739
+      },
+      {
+        "id": "t_1759223842926",
+        "kind": "single",
+        "orderAmount": 32.5,
+        "commission": 3.9,
+        "at": 1759223843918
+      },
+      {
+        "id": "t_1759223840946",
+        "kind": "single",
+        "orderAmount": 394.17,
+        "commission": 47.3,
+        "at": 1759223841798
+      },
+      {
+        "id": "t_1759222214152",
+        "kind": "single",
+        "orderAmount": 1002.4,
+        "commission": 120.288,
+        "at": 1759222214955
+      },
+      {
+        "id": "t_1759176551911",
+        "kind": "single",
+        "orderAmount": 25.44,
+        "commission": 1.018,
+        "at": 1759176553147
+      },
+      {
+        "id": "t_1759176550146",
+        "kind": "single",
+        "orderAmount": 35.53,
+        "commission": 1.421,
+        "at": 1759176550812
+      },
+      {
+        "id": "t_1759161401674",
+        "kind": "single",
+        "orderAmount": 18.34,
+        "commission": 0.734,
+        "at": 1759161402413
+      }
+    ],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-29": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      },
+      "2025-09-30": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      },
+      "2025-10-01": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      }
+    },
+    "overallCommission": 13729.965,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+    "wd_pwd_updated_at": "2025-09-29T15:41:03.563Z"
+  },
+  {
+    "id": 2,
+    "username": "Number2",
+    "password": "123123",
+    "balance": 2608.084,
+    "createdAt": 1759155652359,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-01",
+    "history": [
+      {
+        "id": "t_1759276230760",
+        "kind": "single",
+        "orderAmount": 1519.61,
+        "commission": 182.353,
+        "at": 1759276232026
+      },
+      {
+        "id": "t_1759274332572",
+        "kind": "combine",
+        "orderAmount": 1536.563,
+        "commission": 291.947,
+        "at": 1759274536988
+      },
+      {
+        "id": "t_1759274330583",
+        "kind": "single",
+        "orderAmount": 31.62,
+        "commission": 1.265,
+        "at": 1759274331585
+      },
+      {
+        "id": "t_1759274328684",
+        "kind": "single",
+        "orderAmount": 123.68,
+        "commission": 4.947,
+        "at": 1759274329645
+      },
+      {
+        "id": "t_1759274326741",
+        "kind": "single",
+        "orderAmount": 44.37,
+        "commission": 1.775,
+        "at": 1759274327704
+      },
+      {
+        "id": "t_1759274324885",
+        "kind": "single",
+        "orderAmount": 36.3,
+        "commission": 1.452,
+        "at": 1759274325682
+      },
+      {
+        "id": "t_1759258524369",
+        "kind": "single",
+        "orderAmount": 72.72,
+        "commission": 2.909,
+        "at": 1759258525829
+      },
+      {
+        "id": "t_1759221661432",
+        "kind": "single",
+        "orderAmount": 35.91,
+        "commission": 1.436,
+        "at": 1759221662169
+      }
+    ],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-29": {
+        "completed": 0,
+        "commission": 0
+      },
+      "2025-09-30": {
+        "completed": 2,
+        "commission": 4.345,
+        "seenTotalsCents": [
+          3591,
+          7272
+        ]
+      },
+      "2025-10-01": {
+        "completed": 6,
+        "commission": 483.739,
+        "seenTotalsCents": [
+          3630,
+          4437,
+          12368,
+          3162,
+          151961
+        ]
+      }
+    },
+    "overallCommission": 488.084,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+    "wd_pwd_updated_at": "2025-09-29T15:53:10.781Z"
+  },
+  {
+    "id": 3,
+    "username": "Number3",
+    "password": "123123",
+    "balance": 50.709,
+    "createdAt": 1759155712564,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-01",
+    "history": [
+      {
+        "id": "t_1759222088260",
+        "kind": "single",
+        "orderAmount": 17.72,
+        "commission": 0.709,
+        "at": 1759222089216
+      }
+    ],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-29": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      },
+      "2025-09-30": {
+        "completed": 1,
+        "commission": 0.709,
+        "seenTotalsCents": [
+          1772
+        ]
+      },
+      "2025-10-01": {
+        "completed": 0,
+        "commission": 0
+      }
+    },
+    "overallCommission": 0.709,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+    "wd_pwd_updated_at": "2025-09-29T16:29:20.430Z"
+  },
+  {
+    "id": 4,
+    "username": "userno4",
+    "password": "112233",
+    "balance": 10,
+    "createdAt": 1759174731440,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-09-30",
+    "history": [],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-29": {
+        "completed": 0,
+        "commission": 0
+      },
+      "2025-09-30": {
+        "completed": 0,
+        "commission": 0
+      }
+    },
+    "overallCommission": 0,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "e0bc60c82713f64ef8a57c0c40d02ce24fd0141d5cc3086259c19b1e62a62bea",
+    "wd_pwd_updated_at": "2025-09-29T19:45:50.845Z"
+  },
+  {
+    "id": 5,
+    "username": "shera1",
+    "password": "741741",
+    "balance": 183.215,
+    "createdAt": 1759227237766,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-01",
+    "history": [
+      {
+        "id": "t_1759306648319",
+        "kind": "single",
+        "orderAmount": 33.88,
+        "commission": 1.355,
+        "at": 1759306649564
+      },
+      {
+        "id": "t_1759306646520",
+        "kind": "single",
+        "orderAmount": 39.55,
+        "commission": 1.582,
+        "at": 1759306647458
+      },
+      {
+        "id": "t_1759306644662",
+        "kind": "single",
+        "orderAmount": 99.51,
+        "commission": 3.98,
+        "at": 1759306645671
+      },
+      {
+        "id": "t_1759306361589",
+        "kind": "single",
+        "orderAmount": 57.42,
+        "commission": 2.297,
+        "at": 1759306363725
+      },
+      {
+        "id": "t_1759227329941",
+        "kind": "combine",
+        "orderAmount": 160.56,
+        "commission": 32.112,
+        "at": 1759227375787
+      },
+      {
+        "id": "t_1759227327977",
+        "kind": "single",
+        "orderAmount": 36.72,
+        "commission": 1.469,
+        "at": 1759227328735
+      },
+      {
+        "id": "t_1759227302922",
+        "kind": "single",
+        "orderAmount": 44.85,
+        "commission": 1.794,
+        "at": 1759227303919
+      },
+      {
+        "id": "t_1759227300694",
+        "kind": "single",
+        "orderAmount": 16.35,
+        "commission": 0.654,
+        "at": 1759227301597
+      },
+      {
+        "id": "t_1759227298906",
+        "kind": "single",
+        "orderAmount": 24.3,
+        "commission": 0.972,
+        "at": 1759227299831
+      }
+    ],
+    "pending": {
+      "id": "t_1759306650584",
+      "kind": "combine",
+      "type": "combined",
+      "orderAmount": 563,
+      "commission": 67.56,
+      "commissionRate": 0.12,
+      "items": [
+        {
+          "title": "Tablet Case",
+          "quantity": 2,
+          "unitPrice": 10.4
+        },
+        {
+          "title": "Power Bank 10k",
+          "quantity": 1,
+          "unitPrice": 21.95
+        },
+        {
+          "title": "Tripod Stand",
+          "quantity": 1,
+          "unitPrice": 14.97
+        },
+        {
+          "title": "Wireless Headphone",
+          "quantity": 3,
+          "unitPrice": 36.87
+        },
+        {
+          "title": "USB-C Cable Pack",
+          "quantity": 2,
+          "unitPrice": 7.57
+        }
+      ],
+      "deficit": 379.785,
+      "__ruleId": "rule_1759306638140"
+    },
+    "staged": null,
+    "daily": {
+      "2025-09-30": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      },
+      "2025-10-01": {
+        "completed": 4,
+        "commission": 9.214,
+        "seenTotalsCents": [
+          5742,
+          9951,
+          3955,
+          3388
+        ]
+      }
+    },
+    "overallCommission": 46.215,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "e0bc60c82713f64ef8a57c0c40d02ce24fd0141d5cc3086259c19b1e62a62bea",
+    "wd_pwd_updated_at": "2025-10-01T08:14:13.727Z"
+  },
+  {
+    "id": 6,
+    "username": "New123r",
+    "password": "123123",
+    "balance": 50,
+    "createdAt": 1759235775827,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-09-30",
+    "history": [],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-30": {
+        "completed": 0,
+        "commission": 0
+      }
+    },
+    "overallCommission": 0,
+    "isFrozen": false,
+    "wd_pwd_set": false,
+    "wd_pwd_hash": null,
+    "wd_pwd_updated_at": null
+  },
+  {
+    "id": 7,
+    "username": "Bnb111",
+    "password": "123123",
+    "balance": 3129.663,
+    "createdAt": 1759236735629,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-01",
+    "history": [
+      {
+        "id": "t_1759259680627",
+        "kind": "combine",
+        "orderAmount": 2651.637,
+        "commission": 477.295,
+        "at": 1759260654197
+      },
+      {
+        "id": "t_1759259678672",
+        "kind": "single",
+        "orderAmount": 814.08,
+        "commission": 97.69,
+        "at": 1759259679528
+      },
+      {
+        "id": "t_1759259205786",
+        "kind": "combine",
+        "orderAmount": 786.763,
+        "commission": 149.485,
+        "at": 1759259669799
+      },
+      {
+        "id": "t_1759259201211",
+        "kind": "single",
+        "orderAmount": 186.24,
+        "commission": 7.45,
+        "at": 1759259204106
+      },
+      {
+        "id": "t_1759259182333",
+        "kind": "single",
+        "orderAmount": 292.35,
+        "commission": 11.694,
+        "at": 1759259183406
+      },
+      {
+        "id": "t_1759249201657",
+        "kind": "combine",
+        "orderAmount": 250.56,
+        "commission": 47.606,
+        "at": 1759259178263
+      },
+      {
+        "id": "t_1759249199679",
+        "kind": "single",
+        "orderAmount": 32.25,
+        "commission": 1.29,
+        "at": 1759249200298
+      },
+      {
+        "id": "t_1759249197621",
+        "kind": "single",
+        "orderAmount": 120.12,
+        "commission": 4.805,
+        "at": 1759249198559
+      },
+      {
+        "id": "t_1759249195576",
+        "kind": "single",
+        "orderAmount": 120.02,
+        "commission": 4.801,
+        "at": 1759249196198
+      },
+      {
+        "id": "t_1759249193629",
+        "kind": "single",
+        "orderAmount": 67.62,
+        "commission": 2.705,
+        "at": 1759249194360
+      },
+      {
+        "id": "t_1759249064842",
+        "kind": "single",
+        "orderAmount": 49.86,
+        "commission": 1.994,
+        "at": 1759249069114
+      },
+      {
+        "id": "t_1759249062507",
+        "kind": "single",
+        "orderAmount": 92.84,
+        "commission": 3.714,
+        "at": 1759249063638
+      },
+      {
+        "id": "t_1759249045763",
+        "kind": "single",
+        "orderAmount": 93.83,
+        "commission": 3.753,
+        "at": 1759249052925
+      },
+      {
+        "id": "t_1759249043605",
+        "kind": "single",
+        "orderAmount": 25.75,
+        "commission": 1.03,
+        "at": 1759249044720
+      },
+      {
+        "id": "t_1759249041090",
+        "kind": "single",
+        "orderAmount": 79.59,
+        "commission": 3.184,
+        "at": 1759249042069
+      },
+      {
+        "id": "t_1759249034443",
+        "kind": "single",
+        "orderAmount": 41.6,
+        "commission": 1.664,
+        "at": 1759249037897
+      },
+      {
+        "id": "t_1759249032471",
+        "kind": "single",
+        "orderAmount": 47.84,
+        "commission": 1.914,
+        "at": 1759249033315
+      },
+      {
+        "id": "t_1759249030459",
+        "kind": "single",
+        "orderAmount": 50.7,
+        "commission": 2.028,
+        "at": 1759249031165
+      },
+      {
+        "id": "t_1759242304192",
+        "kind": "single",
+        "orderAmount": 34.25,
+        "commission": 1.37,
+        "at": 1759242307090
+      },
+      {
+        "id": "t_1759242294773",
+        "kind": "single",
+        "orderAmount": 28.86,
+        "commission": 1.154,
+        "at": 1759242295633
+      },
+      {
+        "id": "t_1759242289002",
+        "kind": "single",
+        "orderAmount": 30.24,
+        "commission": 1.21,
+        "at": 1759242290338
+      },
+      {
+        "id": "t_1759240867029",
+        "kind": "single",
+        "orderAmount": 20.4,
+        "commission": 0.816,
+        "at": 1759240870828
+      },
+      {
+        "id": "t_1759240855058",
+        "kind": "single",
+        "orderAmount": 18.36,
+        "commission": 0.734,
+        "at": 1759240856005
+      },
+      {
+        "id": "t_1759240853586",
+        "kind": "single",
+        "orderAmount": 70.2,
+        "commission": 2.808,
+        "at": 1759240854059
+      },
+      {
+        "id": "t_1759240851611",
+        "kind": "single",
+        "orderAmount": 45.36,
+        "commission": 1.814,
+        "at": 1759240852210
+      },
+      {
+        "id": "t_1759240849520",
+        "kind": "single",
+        "orderAmount": 66,
+        "commission": 2.64,
+        "at": 1759240850136
+      },
+      {
+        "id": "t_1759239155836",
+        "kind": "single",
+        "orderAmount": 25.38,
+        "commission": 1.015,
+        "at": 1759239156470
+      }
+    ],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-30": {
+        "completed": 10,
+        "commission": 804.821,
+        "seenTotalsCents": [
+          6762,
+          12002,
+          12012,
+          3225,
+          29235,
+          18624,
+          81408
+        ]
+      },
+      "2025-10-01": {
+        "completed": 0,
+        "commission": 0
+      }
+    },
+    "overallCommission": 837.663,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "6ce5d724d32bdd2d72867fc3c7c752ec386ef8a3db6e73c7c3932d41f0519987",
+    "wd_pwd_updated_at": "2025-09-30T12:53:44.875Z"
+  }
+]

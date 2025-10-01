@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel (Compact)</title>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          borderRadius: { xl2: "1rem" }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Extra compact tweaks */
+    html, body { height:100%; background:#f7fafc; }
+    .sidebar { width: 10.5rem; }              /* ~168px (narrow) */
+    .nav-item { height: 2.25rem; }            /* 36px */
+    .table-wrap td, .table-wrap th { padding-top: 0.35rem; padding-bottom: 0.35rem; }
+    .table-wrap td { vertical-align: middle; }
+    .btn-xs { font-size: 0.72rem; padding: 0.25rem 0.45rem; border-radius: 0.4rem; }
+    .badge-usdt { font-size: 0.72rem; padding: 0.1rem 0.35rem; border-radius: 0.35rem; }
+    .head-tight { margin-bottom: 0.65rem; }
+    .card { border-radius: 0.9rem; }
+  </style>
+</head>
+<body class="text-[13px] leading-[1.25] text-slate-800">
+
+  <div class="min-h-full flex">
+    <!-- Sidebar (compact) -->
+    <aside class="sidebar bg-slate-900 text-slate-100 p-3">
+      <div class="text-base font-bold tracking-wide mb-4">LOGO</div>
+      <nav class="space-y-1">
+        <a class="nav-item flex items-center gap-2 rounded-md px-2 bg-slate-800/60" href="#">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span class="text-[12.5px]">Users</span>
+        </a>
+        <a class="nav-item flex items-center gap-2 rounded-md px-2 hover:bg-slate-800/60" href="#">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+          <span class="text-[12.5px]">Deposits</span>
+        </a>
+        <a class="nav-item flex items-center gap-2 rounded-md px-2 hover:bg-slate-800/60" href="#">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+          <span class="text-[12.5px]">Withdrawals</span>
+        </a>
+        <a class="nav-item flex items-center gap-2 rounded-md px-2 hover:bg-slate-800/60" href="#">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+          <span class="text-[12.5px]">Tasks</span>
+        </a>
+        <a class="nav-item flex items-center gap-2 rounded-md px-2 hover:bg-slate-800/60" href="#">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+          <span class="text-[12.5px]">Settings</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 p-4">
+      <div class="flex items-center justify-between head-tight">
+        <h1 class="text-[18px] font-semibold">Admin Panel</h1>
+        <div class="flex items-center gap-2">
+          <input id="search" placeholder="Search users by name or ID"
+            class="h-8 w-[320px] rounded-md border border-slate-300 bg-white px-2 text-[12.5px] focus:outline-none focus:ring-1 focus:ring-indigo-400" />
+          <button id="addUserBtn"
+            class="h-8 btn-xs bg-indigo-600 text-white hover:bg-indigo-700">Add User</button>
+          <button id="refreshBtn"
+            class="h-8 btn-xs bg-slate-200 text-slate-800 hover:bg-slate-300">Refresh</button>
+        </div>
+      </div>
+
+      <!-- Card -->
+      <section class="bg-white border border-slate-200 card">
+        <div class="overflow-x-auto table-wrap">
+          <table class="min-w-full">
+            <thead class="bg-slate-50 text-[12px] text-slate-600">
+              <tr class="[&>th]:px-3 text-left">
+                <th class="w-10">ID</th>
+                <th class="w-48">Username</th>
+                <th class="w-40">Balance</th>
+                <th class="w-56">Invitation Code</th>
+                <th class="w-[340px]">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbody" class="text-[12.5px]">
+              <!-- rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const tbody = document.getElementById("tbody");
+    const search = document.getElementById("search");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const addUserBtn = document.getElementById("addUserBtn");
+
+    let allUsers = [];
+
+    async function api(method, url, body) {
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: body ? JSON.stringify(body) : undefined
+      });
+      if (!res.ok) {
+        const t = await res.text().catch(()=> "");
+        throw new Error(t || res.statusText);
+      }
+      return res.json().catch(()=> ({}));
+    }
+
+    async function loadUsers() {
+      const data = await api("GET", "/api/admin/users");
+      allUsers = Array.isArray(data) ? data : (data.users || []);
+      render(allUsers);
+    }
+
+    function render(list) {
+      tbody.innerHTML = "";
+      for (const u of list) {
+        const tr = document.createElement("tr");
+        tr.className = "border-t border-slate-100 hover:bg-slate-50";
+        tr.innerHTML = `
+          <td class="px-3 text-slate-600">${u.id}</td>
+          <td class="px-3">${escapeHTML(u.username || "")}</td>
+          <td class="px-3">
+            <span class="badge-usdt bg-emerald-50 text-emerald-700 border border-emerald-200">${Number(u.balance||0)} USDT</span>
+          </td>
+          <td class="px-3">${escapeHTML(u.inviteCode || "")}</td>
+          <td class="px-3">
+            <div class="grid grid-cols-2 gap-1">
+              <div class="flex items-center gap-1">
+                <button class="btn-xs bg-indigo-500 text-white hover:bg-indigo-600"
+                  data-act="inject" data-id="${u.id}">Inject</button>
+                <button class="btn-xs bg-rose-300 text-white hover:bg-rose-400"
+                  data-act="reset" data-id="${u.id}">Reset</button>
+                <button class="btn-xs bg-amber-300 text-slate-900 hover:bg-amber-400"
+                  data-act="freeze" data-id="${u.id}">${u.isFrozen ? "Unfreeze" : "Freeze"}</button>
+              </div>
+              <div class="flex items-center gap-1">
+                <button class="btn-xs bg-slate-200 text-slate-800 hover:bg-slate-300"
+                  data-act="delete" data-id="${u.id}">Delete</button>
+                <button class="btn-xs bg-slate-200 text-slate-800 hover:bg-slate-300"
+                  data-act="deposit" data-id="${u.id}">Add Balance</button>
+              </div>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    // Event delegation for tiny buttons
+    tbody.addEventListener("click", async (e) => {
+      const btn = e.target.closest("button[data-act]");
+      if (!btn) return;
+      const id = btn.getAttribute("data-id");
+      const act = btn.getAttribute("data-act");
+      try {
+        if (act === "inject") {
+          await api("POST", `/api/admin/users/${id}/inject`, {});
+        } else if (act === "reset") {
+          await api("POST", `/api/admin/users/${id}/reset`, {});
+        } else if (act === "freeze") {
+          const isFrozen = btn.textContent.trim() === "Unfreeze" ? false : true;
+          await api("POST", `/api/admin/users/${id}/freeze`, { isFrozen });
+        } else if (act === "deposit") {
+          const amt = prompt("Add balance (USDT):", "5");
+          if (!amt) return;
+          await api("POST", `/api/admin/users/${id}/deposit`, { amount: Number(amt) });
+        } else if (act === "delete") {
+          if (!confirm("Delete this user?")) return;
+          await api("DELETE", `/api/admin/users/${id}`);
+        }
+        await loadUsers();
+      } catch (err) {
+        alert(`Error: ${err.message || err}`);
+      }
+    });
+
+    // Search (compact)
+    search.addEventListener("input", () => {
+      const q = search.value.trim().toLowerCase();
+      if (!q) return render(allUsers);
+      const f = allUsers.filter(u =>
+        String(u.id).includes(q) ||
+        (u.username || "").toLowerCase().includes(q) ||
+        (u.inviteCode || "").toLowerCase().includes(q)
+      );
+      render(f);
+    });
+
+    refreshBtn.addEventListener("click", loadUsers);
+
+    addUserBtn.addEventListener("click", async () => {
+      const username = prompt("Username?");
+      if (!username) return;
+      const inviteCode = prompt("Invite code?");
+      if (!inviteCode) return;
+      const balance = Number(prompt("Initial balance (USDT)?", "0") || 0);
+      try {
+        await api("POST", "/api/admin/users", { username, inviteCode, balance });
+        await loadUsers();
+      } catch (err) {
+        alert(`Error: ${err.message || err}`);
+      }
+    });
+
+    function escapeHTML(s) {
+      return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    // Boot
+    loadUsers().catch(e => alert(e.message || e));
+  </script>
+</body>
+</html>
