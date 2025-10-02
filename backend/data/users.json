@@ -3,7 +3,7 @@
     "id": 1,
     "username": "Number1",
     "password": "123123",
-    "balance": 440.92,
+    "balance": 522.604,
     "createdAt": 1759155600071,
     "inviteCode": "120236",
     "isAdmin": false,
@@ -11,6 +11,107 @@
     "totalCompleted": 0,
     "lastTaskDate": "2025-10-02",
     "history": [
+      {
+        "id": "t_1759420042123",
+        "kind": "single",
+        "orderAmount": 180,
+        "commission": 14.4,
+        "at": 1759420043681,
+        "taskSnapshot": {
+          "id": "t_1759420042123",
+          "store": "alibaba",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 12,
+          "quantity": 15,
+          "orderAmount": 180,
+          "commission": 14.4,
+          "commissionRate": 0.08,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759419994893",
+        "kind": "single",
+        "orderAmount": 413.05,
+        "commission": 16.522,
+        "at": 1759419995949,
+        "taskSnapshot": {
+          "id": "t_1759419994893",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 82.61,
+          "quantity": 5,
+          "orderAmount": 413.05,
+          "commission": 16.522,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759419992967",
+        "kind": "single",
+        "orderAmount": 323.26,
+        "commission": 12.93,
+        "at": 1759419994105,
+        "taskSnapshot": {
+          "id": "t_1759419992967",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 323.26,
+          "quantity": 1,
+          "orderAmount": 323.26,
+          "commission": 12.93,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759419569763",
+        "kind": "single",
+        "orderAmount": 368.1,
+        "commission": 14.724,
+        "at": 1759419806697,
+        "taskSnapshot": {
+          "id": "t_1759419569763",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Valentino Uomo — Intense Noir",
+          "unitPrice": 40.9,
+          "quantity": 9,
+          "orderAmount": 368.1,
+          "commission": 14.724,
+          "commissionRate": 0.04,
+          "deficit": 0,
+          "image": "/products/valentino-uomo-intense-noir.webp.webp"
+        }
+      },
+      {
+        "id": "t_1759419567628",
+        "kind": "single",
+        "orderAmount": 327.7,
+        "commission": 13.108,
+        "at": 1759419568694,
+        "taskSnapshot": {
+          "id": "t_1759419567628",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 11.3,
+          "quantity": 29,
+          "orderAmount": 327.7,
+          "commission": 13.108,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
       {
         "id": "t_1759407383906",
         "kind": "single",
@@ -368,7 +469,43 @@
         "at": 1759161402413
       }
     ],
-    "pending": null,
+    "pending": {
+      "id": "t_1759420045500",
+      "kind": "combine",
+      "type": "combined",
+      "orderAmount": 853.44,
+      "commission": 102.413,
+      "commissionRate": 0.12,
+      "items": [
+        {
+          "title": "Tablet Case",
+          "quantity": 2,
+          "unitPrice": 10.11
+        },
+        {
+          "title": "Power Bank 10k",
+          "quantity": 1,
+          "unitPrice": 22.64
+        },
+        {
+          "title": "Tripod Stand",
+          "quantity": 3,
+          "unitPrice": 15.29
+        },
+        {
+          "title": "Wireless Headphone",
+          "quantity": 1,
+          "unitPrice": 41.69
+        },
+        {
+          "title": "USB-C Cable Pack",
+          "quantity": 3,
+          "unitPrice": 6.54
+        }
+      ],
+      "deficit": 330.836,
+      "__ruleId": "r_1759419975148_uzvx"
+    },
     "staged": null,
     "daily": {
       "2025-09-29": {
@@ -389,14 +526,16 @@
         ]
       },
       "2025-10-02": {
-        "completed": 1,
-        "commission": 11.035,
+        "completed": 3,
+        "commission": 43.852,
         "seenTotalsCents": [
-          27588
+          32326,
+          41305,
+          18000
         ]
       }
     },
-    "overallCommission": 13781.92,
+    "overallCommission": 13853.604,
     "isFrozen": false,
     "wd_pwd_set": true,
     "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
