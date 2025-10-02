@@ -3,7 +3,7 @@
     "id": 1,
     "username": "Number1",
     "password": "123123",
-    "balance": 429.885,
+    "balance": 440.92,
     "createdAt": 1759155600071,
     "inviteCode": "120236",
     "isAdmin": false,
@@ -11,6 +11,26 @@
     "totalCompleted": 0,
     "lastTaskDate": "2025-10-02",
     "history": [
+      {
+        "id": "t_1759407383906",
+        "kind": "single",
+        "orderAmount": 275.88,
+        "commission": 11.035,
+        "at": 1759407384837,
+        "taskSnapshot": {
+          "id": "t_1759407383906",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 25.08,
+          "quantity": 11,
+          "orderAmount": 275.88,
+          "commission": 11.035,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
       {
         "id": "t_1759401493900",
         "kind": "single",
@@ -369,12 +389,14 @@
         ]
       },
       "2025-10-02": {
-        "completed": 0,
-        "commission": 0,
-        "seenTotalsCents": []
+        "completed": 1,
+        "commission": 11.035,
+        "seenTotalsCents": [
+          27588
+        ]
       }
     },
-    "overallCommission": 13770.885,
+    "overallCommission": 13781.92,
     "isFrozen": false,
     "wd_pwd_set": true,
     "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",

@@ -51,11 +51,10 @@ if (!fs.existsSync(RULES_FILE))   fs.writeFileSync(RULES_FILE, "[]", "utf8");
 const DEPOSITS_FILE  = path.join(DATA_DIR, "deposits.json");
 if (!fs.existsSync(DEPOSITS_FILE)) fs.writeFileSync(DEPOSITS_FILE, "[]", "utf8");
 
-/* addresses.json: write to all likely locations, read from first non-empty */
+/* addresses.json: single location inside DATA_DIR */
 const ADDR_PRIMARY = path.join(DATA_DIR, "addresses.json");
-const ADDR_ALT1    = path.resolve(__dirname, "..", "data", "addresses.json");
-const ADDR_ALT2    = path.resolve(process.cwd(), "backend", "data", "addresses.json");
-const ADDR_FILES   = Array.from(new Set([ADDR_PRIMARY, ADDR_ALT1, ADDR_ALT2])).filter(Boolean);
+const ADDR_FILES   = [ADDR_PRIMARY];
+
 
 function ensureAddrFiles() {
   for (const f of ADDR_FILES) {
@@ -260,6 +259,15 @@ app.get("/api/_debug/paths", (_req, res) => {
     walletsExists: fs.existsSync(WALLETS_FILE),
     walletsSize: fs.existsSync(WALLETS_FILE) ? fs.statSync(WALLETS_FILE).size : 0
   });
+});
+// 🔎 disk users quick check
+app.get("/api/debug/users", (_req, res) => {
+  try {
+    const users = readUsers();
+    res.json({ ok:true, count: users.length });
+  } catch (e) {
+    res.status(500).json({ ok:false, error: e.message });
+  }
 });
 
 /* -------------------- AVATAR (DP) SUPPORT -------------------- */
@@ -697,7 +705,19 @@ app.post("/api/complete", (req,res)=>{
   if (!u.daily[key]) u.daily[key] = { completed:0, commission:0, seenTotalsCents:[] };
   u.daily[key].completed  = Number(u.daily[key].completed||0) + 1;
   u.daily[key].commission = Number((Number(u.daily[key].commission||0) + commission).toFixed(3));
-  (u.history ||= []).unshift({ id: orderId, kind: task.kind, orderAmount, commission, at: Date.now() });
+
+  // 🔥 FIX: persist full snapshot so Records render correctly after re-login
+  if (!Array.isArray(u.history)) u.history = [];
+  const snapshot = u.pending || u.staged || task;
+  u.history.unshift({
+    id: orderId,
+    kind: task.kind,
+    orderAmount,
+    commission,
+    at: Date.now(),
+    taskSnapshot: snapshot
+  });
+
   u.pending = null; u.staged = null;
   writeUsers(users);
   res.json({ ok:true });
@@ -904,7 +924,6 @@ app.get("/api/withdrawals/records", (req, res) => { req.url = "/api/withdraw/rec
 app.get("/api/withdrawals", (req, res) => { req.url = "/api/withdraw/records"; app._router.handle(req, res); });
 
 /* -------------------- 🔧 Inject Rules API (ARRAY GET) — SELF-CONTAINED -------------------- */
-/* NOTE: kept BEFORE adminRouter to guarantee correct response shape */
 function _rulesListFor(uidRaw){
   const uid = String(uidRaw||"").replace(/^u/i,"");
   const all = readRules().map(r => ({
@@ -961,7 +980,7 @@ app.patch("/api/admin/inject-rules/:id", (req,res)=>{
   if (b.amountSpec!=null)r.amountSpec = String(b.amountSpec);
   if (b.percent != null) r.percent = Number(b.percent);
   if (b.status  != null) r.status  = String(b.status);
-  if (b.used    != null) r.used    = !!b.used;
+  if (b.used    != null) r.used    = !!r.used;
   if (b.usedAt  != null) r.usedAt  = b.usedAt;
   list[i] = r;
   writeRules(list);
