@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { completeTask, getProgress, getRecords, submitUnpaid } from "./api";
 import { snapshotFromTask, pushCompleted, listCompleted } from "./utils/history";
 import PRODUCTS from "./utils/products"; // ✅ stable product pool (no localStorage dependency)
+import { hydrateFromDisplay } from "./utils/history";
 
 /* ===== helpers ===== */
 const PUB = (typeof process !== "undefined" && process.env && process.env.PUBLIC_URL) || "";

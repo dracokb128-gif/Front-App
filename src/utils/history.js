@@ -1,21 +1,22 @@
 // src/utils/history.js
-const KEY = (uid) => `completedOrders:v1:${uid}`;
 
-function read(uid) {
-  try {
-    return JSON.parse(localStorage.getItem(KEY(uid)) || "[]");
-  } catch {
-    return [];
-  }
-}
-function write(uid, list) {
-  try {
-    localStorage.setItem(KEY(uid), JSON.stringify(list.slice(0, 500)));
-  } catch {}
-}
+// ----- localStorage keys -----
+const COMPLETED_KEY = (uid) => `completedOrders:v1:${uid}`;
+const OD_KEY = (uid) => `orderDisplay:${uid}`; // matches MenuPage / RecordPage
 
+// ----- tiny utils -----
 const stripT = (id = "") => String(id || "").replace(/^t[_-]?/i, "");
 
+function readCompleted(uid) {
+  try { return JSON.parse(localStorage.getItem(COMPLETED_KEY(uid)) || "[]"); }
+  catch { return []; }
+}
+function writeCompleted(uid, list) {
+  try { localStorage.setItem(COMPLETED_KEY(uid), JSON.stringify(list.slice(0, 500))); }
+  catch {}
+}
+
+// ===== public: snapshots =====
 export function snapshotFromTask(task, ts = Date.now()) {
   if (!task) return null;
   const base = {
@@ -25,7 +26,6 @@ export function snapshotFromTask(task, ts = Date.now()) {
     commission: Number(task.commission || 0),
     commissionRate: Number(task.commissionRate || 0),
     ts,
-    taskSnapshot: task.taskSnapshot || null,   // 🔥 added line
   };
 
   if (base.kind === "combine") {
@@ -46,13 +46,40 @@ export function snapshotFromTask(task, ts = Date.now()) {
 
 export function pushCompleted(uid, snap) {
   if (!snap) return;
-  const list = read(uid);
+  const list = readCompleted(uid);
   const i = list.findIndex((x) => x.id === snap.id);
   if (i !== -1) list.splice(i, 1);
   list.unshift(snap);
-  write(uid, list);
+  writeCompleted(uid, list);
 }
 
 export function listCompleted(uid) {
-  return read(uid).sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  return readCompleted(uid).sort((a, b) => (b.ts || 0) - (a.ts || 0));
+}
+
+// ===== public: hydrate unpaid display from orderDisplay:* cache =====
+export function hydrateFromDisplay(raw, uid) {
+  if (!raw) return raw;
+  const id = raw.id || raw.orderId || "";
+  if (!id) return raw;
+
+  let disp = null;
+  try {
+    const map = JSON.parse(localStorage.getItem(OD_KEY(uid)) || "{}");
+    disp = map[id] || null;
+  } catch {
+    disp = null;
+  }
+  if (!disp) return raw;
+
+  const t = { ...raw };
+  if (disp.kind === "single") {
+    t.title = disp.title || t.title;
+    t.image = disp.image || t.image;
+    t.quantity = disp.quantity || t.quantity;
+  } else if (disp.kind === "combine" && Array.isArray(disp.items)) {
+    // keep server pricing/deficit but use the same item visuals we showed on MenuPage
+    t.items = disp.items.map((it) => ({ ...it }));
+  }
+  return t;
 }
