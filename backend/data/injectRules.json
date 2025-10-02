@@ -248,5 +248,16 @@
     "createdAt": "2025-10-02T15:46:15.148Z",
     "used": true,
     "usedAt": "2025-10-02T15:47:47.692Z"
+  },
+  {
+    "id": "r_1759426058616_lks6",
+    "userId": "1",
+    "taskNo": 5,
+    "amountSpec": "1506.55",
+    "percent": 12,
+    "status": "used",
+    "createdAt": "2025-10-02T17:27:38.616Z",
+    "used": true,
+    "usedAt": "2025-10-02T17:28:15.437Z"
   }
 ]

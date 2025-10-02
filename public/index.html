@@ -52,16 +52,31 @@
       (function(){
         const $ov = document.getElementById("__boot_loader_overlay");
 
-        /* ===== ADMIN: disable global loader on /admin routes ===== */
+        /* ---------- SPA nav hook: admin par loader hamesha band ---------- */
+        (function(){
+          function toggleForAdmin(){
+            const isAdmin = /^\/admin(\/|$)/.test(location.pathname);
+            if (isAdmin) {
+              if ($ov && $ov.parentNode) $ov.parentNode.removeChild($ov);   // detach overlay
+              // no-op API so existing calls don't break
+              window.__loader = { show(){}, hide(){}, forceHide(){} };
+            } else {
+              if ($ov && !$ov.parentNode) document.body.appendChild($ov);   // restore when leaving /admin
+            }
+          }
+          ["pushState","replaceState"].forEach(m=>{
+            const orig = history[m];
+            history[m] = function(){ const r = orig.apply(this, arguments); toggleForAdmin(); return r; };
+          });
+          window.addEventListener("popstate", toggleForAdmin);
+        })();
+        /* ---------- end SPA admin hook ---------- */
+
+        /* ===== ADMIN: disable global loader on direct /admin load ===== */
         const IS_ADMIN = /^\/admin(\/|$)/.test(location.pathname);
         if (IS_ADMIN) {
           if ($ov) $ov.remove();
-          // Provide safe no-op API so existing calls don't error
-          window.__loader = {
-            show: () => {},
-            hide: () => {},
-            forceHide: () => {}
-          };
+          window.__loader = { show: () => {}, hide: () => {}, forceHide: () => {} };
           return; // Skip all tracking/patching below for admin pages
         }
         /* ===== END ADMIN SKIP ===== */
@@ -158,8 +173,7 @@
           log("forceHide");
         }
 
-        // 🔧 COMPAT: expose show/hide aliases for legacy calls
-        // Now other code can safely call window.__loader.show() / hide()
+        // 🔧 COMPAT
         window.__loader = {
           show: () => _show(),
           hide: () => forceHide(),
@@ -193,7 +207,7 @@
           const XHR = window.XMLHttpRequest;
           const open = XHR.prototype.open, send = XHR.prototype.send;
 
-        XHR.prototype.open = function(method, url, ...rest){
+          XHR.prototype.open = function(method, url, ...rest){
             this.__urlForLoader = url;
             return open.call(this, method, url, ...rest);
           };
@@ -219,7 +233,7 @@
           };
         }
 
-        // Optional: axios interceptors to respect config.loader === false
+        // Optional: axios interceptors
         if (window.axios && !window.___axiosPatchedGlobal){
           window.___axiosPatchedGlobal = true;
           window.axios.interceptors.request.use(cfg => {

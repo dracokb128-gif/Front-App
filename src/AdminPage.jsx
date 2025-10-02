@@ -21,10 +21,14 @@ import {
   adminFreeze,
 } from "./api";
 
-// ADDED: Manage modal component import
 import AdminManageUser from "./AdminManageUser";
-// NEW: external Withdrawals component (Pending-only UI, no header tabs)
 import AdminWithdrawals from "./admin/AdminWithdrawals";
+
+/* ---------- SAFE API base (no import.meta) ---------- */
+const API_BASE =
+  (typeof window !== "undefined" && (window.API_BASE || window.__API_BASE__)) ||
+  process.env.REACT_APP_API_BASE ||
+  "http://localhost:4000";
 
 /* ------------------------- Modal etc ------------------------- */
 function Modal({ open, title, children, onClose, width = 520 }) {
@@ -152,7 +156,7 @@ function Btn({ tone = "gray", disabled, onClick, children }) {
   );
 }
 
-/* ========================= Inject Modal (updated) ========================= */
+/* ========================= Inject Modal ========================= */
 function InjectModal({ user, open, onClose }) {
   const [rules, setRules] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -263,7 +267,6 @@ function InjectModal({ user, open, onClose }) {
 
   return (
     <Modal open={open} onClose={onClose} title={`Inject rules for u${user?.id}`} width={720}>
-      {/* Top tools: purge + toggle */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
         <button
           className="btn btn-light"
@@ -407,37 +410,10 @@ export default function AdminPage() {
   const [centerOk, setCenterOk] = useState(false);
   const [injectUser, setInjectUser] = useState(null);
 
-  // ADDED: state + handlers for Manage modal
   const [manageOpen, setManageOpen] = useState(false);
   const [manageUser, setManageUser] = useState(null);
-  const openManage = (u) => {
-    setManageUser({ id: u.id, username: u.username });
-    setManageOpen(true);
-  };
-  const closeManage = () => setManageOpen(false);
-  const handleChangeLogin = (u) => {
-    alert(`Change login password for u${u.id} (${u.username})`);
-  };
-  const handleChangeWithdraw = (u) => {
-    alert(`Change withdrawal password for u${u.id} (${u.username})`);
-  };
 
-  // ✅ NEW: Customer Service URL state (persisted in localStorage)
-  const [csUrl, setCsUrl] = useState(() => localStorage.getItem("cs_url") || "");
-  const saveCsUrl = () => {
-    const v = (csUrl || "").trim();
-    if (!v) return alert("Please enter a Telegram/URL");
-    if (!/^https?:\/\//i.test(v)) return alert("URL must start with http:// or https://");
-    localStorage.setItem("cs_url", v);
-    showSuccess();
-  };
-
-  function copyCsUrl() {
-    const v = localStorage.getItem("cs_url") || csUrl || "";
-    if (!v) return alert("No URL to copy");
-    navigator.clipboard?.writeText(v);
-    showSuccess();
-  }
+  const [csUrl, setCsUrl] = useState("");
 
   function showSuccess() {
     setCenterOk(true);
@@ -447,7 +423,46 @@ export default function AdminPage() {
     if (activeTab === "users") load();
   }, [activeTab]);
 
-  // Load + newest first
+  useEffect(() => {
+    if (activeTab !== "settings") return;
+    (async () => {
+      try {
+        const r = await fetch(`${API_BASE}/api/admin/cs-link`, { credentials: "include" });
+        const d = await r.json();
+        setCsUrl((d && d.url) || "");
+      } catch {
+        setCsUrl("");
+      }
+    })();
+  }, [activeTab]);
+
+  async function saveCsUrl() {
+    const v = (csUrl || "").trim();
+    if (!v) return alert("Please enter a Telegram/URL");
+    if (!/^https?:\/\//i.test(v)) return alert("URL must start with http:// or https://");
+    try {
+      const r = await fetch(`${API_BASE}/api/admin/cs-link`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ url: v }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d?.msg || d?.error || "Save failed");
+      setCsUrl(d.url || v);
+      showSuccess();
+    } catch (e) {
+      alert(e.message || "Failed to save CS link");
+    }
+  }
+
+  function copyCsUrl() {
+    const v = (csUrl || "").trim();
+    if (!v) return alert("No URL to copy");
+    navigator.clipboard?.writeText(v);
+    showSuccess();
+  }
+
   async function load() {
     try {
       setBusy(true);
@@ -460,10 +475,8 @@ export default function AdminPage() {
     }
   }
 
-  // ---------- Pagination (20 per page) ----------
   const PER_PAGE = 20;
   const [page, setPage] = useState(1);
-  // search or reload par page = 1
   useEffect(() => setPage(1), [q, users]);
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
@@ -478,9 +491,7 @@ export default function AdminPage() {
   }, [totalPages, page]);
   const start = (page - 1) * PER_PAGE;
   const pageRows = filtered.slice(start, start + PER_PAGE);
-  // ---------------------------------------------
 
-  // Approve/Reset
   async function onReset(u) {
     if (!u) return;
     const ok = window.confirm(`u${u.id} Rest Tasks ?`);
@@ -497,7 +508,6 @@ export default function AdminPage() {
     }
   }
 
-  // Add Balance
   async function onAddBalance(u) {
     const txt = window.prompt(`Add balance for u${u.id} (positive add, negative deduct)`, "100");
     if (txt == null) return;
@@ -515,7 +525,6 @@ export default function AdminPage() {
     }
   }
 
-  // Delete user
   async function onDelete(u) {
     const ok = window.confirm(`Delete u${u.id} (${u.username}) ?`);
     if (!ok) return;
@@ -531,11 +540,10 @@ export default function AdminPage() {
     }
   }
 
-  // Freeze / Unfreeze
   async function onFreeze(u) {
     try {
       setBusy(true);
-      const wantFreeze = !u.isFrozen; // toggle
+      const wantFreeze = !u.isFrozen;
       await adminFreeze(u.id, wantFreeze);
       showSuccess();
       await load();
@@ -622,8 +630,6 @@ export default function AdminPage() {
                 <button className="btn btn-light" onClick={load} disabled={busy}>
                   <span>Refresh</span>
                 </button>
-
-                {/* 🔹 QUICK: Add CS shortcut → jump to settings section */}
                 <button
                   className="btn btn-primary"
                   onClick={() => {
@@ -690,7 +696,10 @@ export default function AdminPage() {
                           <button className="ax ax-gray" onClick={() => onAddBalance(u)} disabled={busy}>
                             Add Balance
                           </button>
-                          <button className="ax ax-gray" onClick={() => openManage(u)} disabled={busy}>
+                          <button className="ax ax-gray" onClick={() => {
+                            setManageUser({ id: u.id, username: u.username });
+                            setManageOpen(true);
+                          }} disabled={busy}>
                             Manage
                           </button>
                         </div>
@@ -700,7 +709,6 @@ export default function AdminPage() {
                 </tbody>
               </table>
 
-              {/* FOOT: range + pagination */}
               <div className="adm-foot" style={{ display: "flex", alignItems: "center" }}>
                 <div>
                   {filtered.length === 0
@@ -708,22 +716,10 @@ export default function AdminPage() {
                     : `${start + 1}-${Math.min(start + pageRows.length, filtered.length)} of ${filtered.length} user(s)`}
                 </div>
                 <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
-                  <button
-                    className="btn btn-light"
-                    onClick={() => setPage(1)}
-                    disabled={page <= 1}
-                    type="button"
-                    title="First page"
-                  >
+                  <button className="btn btn-light" onClick={() => setPage(1)} disabled={page <= 1} type="button" title="First page">
                     «
                   </button>
-                  <button
-                    className="btn btn-light"
-                    onClick={() => setPage((p) => Math.max(1, p - 1))}
-                    disabled={page <= 1}
-                    type="button"
-                    title="Previous"
-                  >
+                  <button className="btn btn-light" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page <= 1} type="button" title="Previous">
                     ‹
                   </button>
 
@@ -731,13 +727,7 @@ export default function AdminPage() {
                     value={page}
                     onChange={(e) => setPage(Number(e.target.value))}
                     disabled={filtered.length === 0}
-                    style={{
-                      padding: "8px 10px",
-                      borderRadius: 10,
-                      border: "1px solid #e2e8f0",
-                      outline: "none",
-                      fontSize: 14,
-                    }}
+                    style={{ padding: "8px 10px", borderRadius: 10, border: "1px solid #e2e8f0", outline: "none", fontSize: 14 }}
                   >
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                       <option key={p} value={p}>
@@ -746,22 +736,10 @@ export default function AdminPage() {
                     ))}
                   </select>
 
-                  <button
-                    className="btn btn-light"
-                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={page >= totalPages}
-                    type="button"
-                    title="Next"
-                  >
+                  <button className="btn btn-light" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page >= totalPages} type="button" title="Next">
                     ›
                   </button>
-                  <button
-                    className="btn btn-light"
-                    onClick={() => setPage(totalPages)}
-                    disabled={page >= totalPages}
-                    type="button"
-                    title="Last page"
-                  >
+                  <button className="btn btn-light" onClick={() => setPage(totalPages)} disabled={page >= totalPages} type="button" title="Last page">
                     »
                   </button>
                 </div>
@@ -770,10 +748,7 @@ export default function AdminPage() {
           </>
         )}
 
-        {/* NEW: Deposits tab render */}
         {activeTab === "deposits" && <DepositsAdmin />}
-
-        {/* NEW: Withdrawals tab render (external) */}
         {activeTab === "withdrawals" && <AdminWithdrawals />}
 
         {activeTab === "settings" && (
@@ -786,20 +761,12 @@ export default function AdminPage() {
               <input type="password" style={inputStyle} value={newPwd} onChange={(e) => setNewPwd(e.target.value)} />
             </Field>
             <Field label="Confirm New Password">
-              <input
-                type="password"
-                style={inputStyle}
-                value={confirmPwd}
-                onChange={(e) => setConfirmPwd(e.target.value)}
-              />
+              <input type="password" style={inputStyle} value={confirmPwd} onChange={(e) => setConfirmPwd(e.target.value)} />
             </Field>
             <RowActions>
-              <Btn tone="primary" onClick={handleChangePassword}>
-                Change Password
-              </Btn>
+              <Btn tone="primary" onClick={handleChangePassword}>Change Password</Btn>
             </RowActions>
 
-            {/* 🔹 CS URL SECTION */}
             <hr style={{ margin: "22px 0" }} />
             <div id="cs-url-section">
               <h3 style={{ marginBottom: 10 }}>Customer Service (Telegram) Link</h3>
@@ -814,10 +781,8 @@ export default function AdminPage() {
               </Field>
               <RowActions>
                 <Btn tone="primary" onClick={saveCsUrl}>Save CS Link</Btn>
-                <Btn onClick={copyCsUrl}>Copy</Btn>
-                <Btn tone="amber" onClick={() => window.open((csUrl || "").trim(), "_blank")}>
-                  Open
-                </Btn>
+                <Btn onClick={() => { const v = (csUrl || "").trim(); if (!v) return alert("No URL to copy"); navigator.clipboard?.writeText(v); showSuccess(); }}>Copy</Btn>
+                <Btn tone="amber" onClick={() => window.open((csUrl || "").trim(), "_blank")}>Open</Btn>
               </RowActions>
               <div style={{ fontSize: 12, color: "#64748b", marginTop: 8 }}>
                 Tip: Save karne ke baad Service → “Online customer service” pe click hote hi ye link open hoga.
@@ -826,21 +791,18 @@ export default function AdminPage() {
 
             <hr style={{ margin: "22px 0" }} />
             <RowActions>
-              <Btn tone="danger" onClick={handleLogout}>
-                Logout
-              </Btn>
+              <Btn tone="danger" onClick={handleLogout}>Logout</Btn>
             </RowActions>
           </div>
         )}
       </main>
 
-      {/* ADDED: Manage modal mount */}
       <AdminManageUser
         open={manageOpen}
         user={manageUser}
-        onClose={closeManage}
-        onChangeLogin={handleChangeLogin}
-        onChangeWithdraw={handleChangeWithdraw}
+        onClose={() => setManageOpen(false)}
+        onChangeLogin={(u) => alert(`Change login password for u${u.id} (${u.username})`)}
+        onChangeWithdraw={(u) => alert(`Change withdrawal password for u${u.id} (${u.username})`)}
       />
 
       <CenterSuccess show={centerOk} />

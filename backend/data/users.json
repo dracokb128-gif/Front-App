@@ -3,14 +3,94 @@
     "id": 1,
     "username": "Number1",
     "password": "123123",
-    "balance": 522.604,
+    "balance": 656.339,
     "createdAt": 1759155600071,
     "inviteCode": "120236",
     "isAdmin": false,
     "completedToday": 0,
     "totalCompleted": 0,
-    "lastTaskDate": "2025-10-02",
+    "lastTaskDate": "2025-10-03",
     "history": [
+      {
+        "id": "t_1759426088362",
+        "kind": "single",
+        "orderAmount": 353.22,
+        "commission": 28.258,
+        "at": 1759426089167,
+        "taskSnapshot": {
+          "id": "t_1759426088362",
+          "store": "alibaba",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 12.18,
+          "quantity": 29,
+          "orderAmount": 353.22,
+          "commission": 28.258,
+          "commissionRate": 0.08,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759426086418",
+        "kind": "single",
+        "orderAmount": 515.84,
+        "commission": 41.267,
+        "at": 1759426087184,
+        "taskSnapshot": {
+          "id": "t_1759426086418",
+          "store": "alibaba",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 32.24,
+          "quantity": 16,
+          "orderAmount": 515.84,
+          "commission": 41.267,
+          "commissionRate": 0.08,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759426084225",
+        "kind": "single",
+        "orderAmount": 481.92,
+        "commission": 38.554,
+        "at": 1759426085441,
+        "taskSnapshot": {
+          "id": "t_1759426084225",
+          "store": "alibaba",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 20.08,
+          "quantity": 24,
+          "orderAmount": 481.92,
+          "commission": 38.554,
+          "commissionRate": 0.08,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759426073092",
+        "kind": "single",
+        "orderAmount": 320.7,
+        "commission": 25.656,
+        "at": 1759426074073,
+        "taskSnapshot": {
+          "id": "t_1759426073092",
+          "store": "alibaba",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 21.38,
+          "quantity": 15,
+          "orderAmount": 320.7,
+          "commission": 25.656,
+          "commissionRate": 0.08,
+          "deficit": 0
+        }
+      },
       {
         "id": "t_1759420042123",
         "kind": "single",
@@ -470,41 +550,41 @@
       }
     ],
     "pending": {
-      "id": "t_1759420045500",
+      "id": "t_1759426090186",
       "kind": "combine",
       "type": "combined",
-      "orderAmount": 853.44,
-      "commission": 102.413,
+      "orderAmount": 1506.55,
+      "commission": 180.786,
       "commissionRate": 0.12,
       "items": [
         {
           "title": "Tablet Case",
-          "quantity": 2,
-          "unitPrice": 10.11
+          "quantity": 3,
+          "unitPrice": 11.05
         },
         {
           "title": "Power Bank 10k",
-          "quantity": 1,
-          "unitPrice": 22.64
+          "quantity": 3,
+          "unitPrice": 24.33
         },
         {
           "title": "Tripod Stand",
-          "quantity": 3,
-          "unitPrice": 15.29
+          "quantity": 2,
+          "unitPrice": 14.53
         },
         {
           "title": "Wireless Headphone",
           "quantity": 1,
-          "unitPrice": 41.69
+          "unitPrice": 43.21
         },
         {
           "title": "USB-C Cable Pack",
           "quantity": 3,
-          "unitPrice": 6.54
+          "unitPrice": 7.48
         }
       ],
-      "deficit": 330.836,
-      "__ruleId": "r_1759419975148_uzvx"
+      "deficit": 850.211,
+      "__ruleId": "r_1759426058616_lks6"
     },
     "staged": null,
     "daily": {
@@ -533,13 +613,24 @@
           41305,
           18000
         ]
+      },
+      "2025-10-03": {
+        "completed": 4,
+        "commission": 133.735,
+        "seenTotalsCents": [
+          32070,
+          48192,
+          51584,
+          35322
+        ]
       }
     },
-    "overallCommission": 13853.604,
+    "overallCommission": 13987.339,
     "isFrozen": false,
     "wd_pwd_set": true,
     "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
-    "wd_pwd_updated_at": "2025-09-29T15:41:03.563Z"
+    "wd_pwd_updated_at": "2025-09-29T15:41:03.563Z",
+    "avatar": "/static/avatars/u_1.jpg"
   },
   {
     "id": 2,
@@ -1110,5 +1201,33 @@
     "wd_pwd_set": true,
     "wd_pwd_hash": "6ce5d724d32bdd2d72867fc3c7c752ec386ef8a3db6e73c7c3932d41f0519987",
     "wd_pwd_updated_at": "2025-09-30T12:53:44.875Z"
+  },
+  {
+    "id": 8,
+    "username": "Newaccount",
+    "password": "123123",
+    "balance": 0,
+    "createdAt": 1759426940521,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-03",
+    "history": [],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-10-03": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      }
+    },
+    "overallCommission": 0,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+    "wd_pwd_updated_at": "2025-10-02T17:42:53.631Z",
+    "avatar": "/static/avatars/u_8.jpg"
   }
 ]

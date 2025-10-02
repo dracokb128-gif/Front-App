@@ -54,17 +54,15 @@ export default function WalletFinal() {
 
   const [info, setInfo] = useState(() => readWalletInfo(uid));
 
-  // guards: ensure password + address set for THIS uid
+  // ✅ Only check whether address exists for THIS uid (password-flag gating removed)
   useEffect(() => {
     if (!uid) return;
-    const pwdSet = localStorage.getItem(`wd:u:${uid}:pwd`) === "1";
     const addrSet =
       localStorage.getItem(`wd:u:${uid}:addr`) === "1" ||
       !!localStorage.getItem(`user_wallet:${uid}`) ||
       !!localStorage.getItem(localWalletKey(uid));
 
-    if (!pwdSet) nav("/wallet", { replace: true });
-    else if (!addrSet) nav("/wallet/bind", { replace: true });
+    if (!addrSet) nav("/wallet/bind", { replace: true });
   }, [nav, uid]);
 
   const refresh = useCallback(() => {

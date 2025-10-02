@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { FiCheckCircle, FiEye, FiEyeOff, FiLock, FiX } from "react-icons/fi";
 import { isBound, wdEnsureFreshOnLogin, syncWalletFromServer } from "./wdStore";
-import { wdSetPassword } from "./api"; // ✅ ADDED: save WD password on server
+import { wdSetPassword } from "./api"; // ✅ still saves WD password on server
 
 /* ---------- UID: strict (NO guessing, NO fallback) ---------- */
 function getUidStrict() {
@@ -43,10 +43,9 @@ export default function Wallet() {
       // Authoritative sync: backend → local mirrors
       await syncWalletFromServer(uid);
 
-      const pwdSet = localStorage.getItem(`wd:u:${uid}:pwd`) === "1";
-      const addrSet = isBound(uid); // single source of truth
-
-      if (pwdSet && addrSet) {
+      // ✅ Redirect ONLY on address presence (password-flag par dependency hata di)
+      const addrSet = isBound(uid);
+      if (addrSet) {
         nav("/wallet/final", { replace: true });
       }
     })();
@@ -179,7 +178,7 @@ export function WalletPassword() {
         if (err?.status !== 409) throw err;
       }
 
-      // Keep the tiny local flag (existing behavior).
+      // Keep the tiny local flag (not used for gating anymore, but harmless).
       localStorage.setItem(`wd:u:${uid}:pwd`, "1");
 
       setOkToast(true);

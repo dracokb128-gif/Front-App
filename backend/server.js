@@ -74,6 +74,13 @@ if (!fs.existsSync(WITHDRAWALS_FILE)) fs.writeFileSync(WITHDRAWALS_FILE, "[]", "
 const WALLETS_FILE = path.join(DATA_DIR, "wallet.json");
 if (!fs.existsSync(WALLETS_FILE)) fs.writeFileSync(WALLETS_FILE, "[]", "utf8");
 
+/* ===== Customer Service (CS) link storage ===== */
+const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
+if (!fs.existsSync(SETTINGS_FILE)) fs.writeFileSync(SETTINGS_FILE, "{}", "utf8");
+
+const readSettings  = () => { try { return JSON.parse(fs.readFileSync(SETTINGS_FILE, "utf8") || "{}"); } catch { return {}; } };
+const writeSettings = (obj) => fs.writeFileSync(SETTINGS_FILE, JSON.stringify(obj, null, 2), "utf8");
+
 /* file readers/writers */
 const readUsers = () => { try { return JSON.parse(fs.readFileSync(USERS_FILE, "utf8")); } catch { return []; } };
 const writeUsers = (u) => fs.writeFileSync(USERS_FILE, JSON.stringify(u, null, 2), "utf8");
@@ -257,7 +264,8 @@ app.get("/api/_debug/paths", (_req, res) => {
     depositsFile: DEPOSITS_FILE,
     addrFiles: ADDR_FILES,
     walletsExists: fs.existsSync(WALLETS_FILE),
-    walletsSize: fs.existsSync(WALLETS_FILE) ? fs.statSync(WALLETS_FILE).size : 0
+    walletsSize: fs.existsSync(WALLETS_FILE) ? fs.statSync(WALLETS_FILE).size : 0,
+    settingsFile: SETTINGS_FILE
   });
 });
 // 🔎 disk users quick check
@@ -1006,6 +1014,44 @@ app.post("/api/admin/inject-rules/purge-used", (req,res)=>{
   res.json({ ok:true, count:list.length });
 });
 
+/* -------------------- Customer Service (Telegram) Link -------------------- */
+// Admin: get current link
+app.get("/api/admin/cs-link", (_req, res) => {
+  try {
+    const s = readSettings();
+    res.json({ ok: true, url: s.csUrl || "" });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// Admin: save/update link
+app.post("/api/admin/cs-link", (req, res) => {
+  try {
+    let url = String(req.body?.url || "").trim();
+    if (!/^https?:\/\//i.test(url)) {
+      return res.status(400).json({ ok: false, msg: "URL must start with http:// or https://" });
+    }
+    const s = readSettings();
+    s.csUrl = url;
+    s.updatedAt = nowISO();
+    writeSettings(s);
+    res.json({ ok: true, url: s.csUrl });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// Public: users ke Service page ko link dene ke liye
+app.get("/api/cs-link", (_req, res) => {
+  try {
+    const s = readSettings();
+    res.json({ ok: true, url: s.csUrl || "" });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
 /* -------------------- Admin router (bcrypt admin auth + maybe duplicate routes) -------------------- */
 const adminRouter = require("./routes/admin");
 app.use("/api/admin", adminRouter);
@@ -1077,7 +1123,8 @@ console.log("DEBUG PATHS", {
   WALLETS_FILE,
   addrFiles: ADDR_FILES,
   exists: fs.existsSync(WALLETS_FILE),
-  size: fs.existsSync(WALLETS_FILE) ? fs.statSync(WALLETS_FILE).size : 0
+  size: fs.existsSync(WALLETS_FILE) ? fs.statSync(WALLETS_FILE).size : 0,
+  settingsFile: SETTINGS_FILE
 });
 
 const PORT = process.env.PORT || 4000;

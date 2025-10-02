@@ -2,11 +2,6 @@ import { persistWalletAll, wdEnsureFreshOnLogin, syncWalletFromServer } from "./
 
 /* ===========================================================
    API base (robust + localhost friendly)
-   - Highest priority: localStorage.API_BASE
-     (run once in console to force dev: localStorage.setItem('API_BASE','http://localhost:4000'))
-   - Next: env (REACT_APP_API_BASE / VITE_API_BASE)
-   - Next: auto-dev guess for localhost → http://localhost:4000
-   - Fallback: Render URL
 =========================================================== */
 const LS_BASE = (() => {
   try { return localStorage.getItem("API_BASE") || ""; } catch { return ""; }
@@ -643,6 +638,28 @@ export const adminRejectWithdrawal = async (id, note = "") => {
 };
 
 /* ===========================================================
+   ✅ Avatar (DP) — server persisted
+=========================================================== */
+const abs = (u) => (u && !/^https?:/i.test(u) ? `${API_BASE}${u}` : u || "");
+export async function getAvatar(userId) {
+  const uid = String(userId).replace(/^u/i, "");
+  const r = await http(`/api/users/${encodeURIComponent(uid)}/avatar`, { method: "GET" });
+  const url = abs(r?.avatar || "");
+  return { ok: true, url };
+}
+export async function setAvatar(userId, dataURL) {
+  const uid = String(userId).replace(/^u/i, "");
+  const r = await http(`/api/users/${encodeURIComponent(uid)}/avatar`, { method: "POST", body: { dataURL } });
+  const url = abs(r?.avatar || "");
+  return { ok: true, url };
+}
+export async function deleteAvatar(userId) {
+  const uid = String(userId).replace(/^u/i, "");
+  await http(`/api/users/${encodeURIComponent(uid)}/avatar`, { method: "DELETE" });
+  return { ok: true };
+}
+
+/* ===========================================================
    Default export (single)
 =========================================================== */
 const API = {
@@ -686,6 +703,9 @@ const API = {
 
   // Admin withdrawals
   adminListWithdrawals, adminApproveWithdrawal, adminRejectWithdrawal,
+
+  // Avatar
+  getAvatar, setAvatar, deleteAvatar,
 
   // helpers
   pickStoreForBalance
