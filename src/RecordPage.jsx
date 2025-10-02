@@ -1,4 +1,3 @@
-// src/RecordPage.jsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { completeTask, getProgress, getRecords, submitUnpaid } from "./api";
@@ -139,7 +138,6 @@ function CenterTip({ show, text, anchor }) {
     document.body
   );
 }
-
 function CompletedCard({ snap }) {
   const f =
     snap.kind === "combine"
@@ -201,7 +199,7 @@ function CompletedCard({ snap }) {
         <div>Commissions</div>
         <div style={{ textAlign: "right" }}>{fmt(snap.commission, 4)} USDT</div>
         <div style={{ fontWeight: 800 }}>Expected income</div>
-        <div style={{ textAlign: "right", color: "#f59e0b", fontWeight: 800 }}>{fmt(expected, 4)}USDT</div>
+        <div style={{ textAlign: "right", color: "#f59e0b", fontWeight: 800 }}>{fmt(expected, 4)} USDT</div>
       </div>
     </div>
   );
@@ -220,7 +218,6 @@ export default function RecordPage() {
   const cardRef = useRef(null);
   const [anchor, setAnchor] = useState(null);
 
-  // NEW: live progress state (for auto refresh)
   const [cashGap, setCashGap] = useState(0);
   const [balance, setBalance] = useState(0);
 
@@ -251,38 +248,30 @@ export default function RecordPage() {
         null;
       setRawUnpaid(hydrateFromDisplay(u || null, userId));
     } catch {}
-    setCompleted(listCompleted(userId)); // local history
+    setCompleted(listCompleted(userId));
   }
 
-  // NEW: progress refresher (single source of truth for deficit/cashGap)
   async function refreshProgress(silent = true) {
     try {
       const p = await getProgress(userId);
       setCashGap(Number(p?.cashGap || 0));
       setBalance(Number(p?.balance || 0));
-      if (p?.unpaid) {
-        // server returns unpaid with fresh deficit -> replace
-        setRawUnpaid(hydrateFromDisplay(p.unpaid, userId));
-      }
+      if (p?.unpaid) setRawUnpaid(hydrateFromDisplay(p.unpaid, userId));
     } catch (e) {
       if (!silent) console.error(e);
     }
   }
 
   useEffect(() => {
-    // initial data
     refreshAll();
     refreshProgress(true);
 
-    // focus/visibility refresh
     const onFocus = () => refreshProgress(true);
     const onVis = () => {
       if (document.visibilityState === "visible") refreshProgress(true);
     };
     window.addEventListener("focus", onFocus);
     document.addEventListener("visibilitychange", onVis);
-
-    // light polling (every 5s)
     const poll = setInterval(() => {
       if (document.visibilityState === "visible") refreshProgress(true);
     }, 5000);
@@ -348,11 +337,8 @@ export default function RecordPage() {
     };
   }, [rawUnpaid]);
 
-  // ====== FIXED: robust submit with proper error handling ======
   async function handleSubmit() {
     if (!task) return;
-
-    // 🔁 get latest deficit before gating
     await refreshProgress(true);
     const latestNeed = Math.max(0, Number(cashGap || task.deficit || 0));
 
@@ -363,26 +349,23 @@ export default function RecordPage() {
 
     setLoading(true);
     try {
-      // Tell backend which unpaid we're submitting (mirrors MenuPage flow)
       if (rawUnpaid) {
         try {
           await submitUnpaid(userId, rawUnpaid);
-        } catch (_) {
-          // ignore — some backends may not require this call
-        }
+        } catch {}
       }
-
       const resp = await completeTask(userId, task.id, "");
       if (resp?.ok) {
-        pushCompleted(userId, snapshotFromTask(task, Date.now())); // local history
+        pushCompleted(userId, snapshotFromTask(task, Date.now()));
         showTip("Succeeded ✓");
         await refreshAll();
         await refreshProgress(true);
       }
     } catch (err) {
       const data = err?.data || {};
-      const need =
-        Number.isFinite(Number(data.deficit)) ? Number(data.deficit) : Math.max(0, Number(cashGap || task.deficit || 0));
+      const need = Number.isFinite(Number(data.deficit))
+        ? Number(data.deficit)
+        : Math.max(0, Number(cashGap || task.deficit || 0));
       if (err?.message === "insufficient_balance" || data.needRecharge) {
         showTip(`Your account balance is not enough, you need to recharge ${need.toFixed(3)} USDT to submit this order`);
       } else {
@@ -397,7 +380,6 @@ export default function RecordPage() {
     <div className="wrap record-page" style={{ paddingBottom: 90 }}>
       <h2 className="menu-title">Record</h2>
 
-      {/* centered tabs (shape fixed) */}
       <div className="rec-tabs">
         <button className={`rec-tab ${tab === "incomplete" ? "active" : ""}`} onClick={() => setTab("incomplete")}>
           Incomplete
@@ -407,7 +389,6 @@ export default function RecordPage() {
         </button>
       </div>
 
-      {/* Incomplete */}
       {tab === "incomplete" &&
         (task ? (
           <div
@@ -418,7 +399,7 @@ export default function RecordPage() {
             <div style={{ color: "#64748b", fontSize: 12, marginTop: 4 }}>Order Nos</div>
             <div style={{ marginBottom: 8, fontWeight: 700 }}>{stripT(task.id)}</div>
 
-            {/* list */}
+            {/* order details */}
             <div style={{ border: "1px solid #eef2f7", borderRadius: 10, padding: 10, marginTop: 6 }}>
               {task.kind === "combine" ? (
                 <div style={{ maxHeight: 200, overflow: "auto", paddingRight: 6 }}>
@@ -481,11 +462,7 @@ export default function RecordPage() {
               ) : (
                 <div style={{ display: "grid", gridTemplateColumns: "64px 1fr auto", gap: 10, alignItems: "center" }}>
                   <div style={{ width: 64, height: 64, borderRadius: 12, overflow: "hidden", background: "#fafafa", border: "1px solid #eee" }}>
-                    <img
-                      src={task.image || `${PUB}/products/1.jpg`}
-                      alt=""
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    />
+                    <img src={task.image || `${PUB}/products/1.jpg`} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontWeight: 600, fontSize: 14, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -498,7 +475,6 @@ export default function RecordPage() {
               )}
             </div>
 
-            {/* totals */}
             <div style={{ marginTop: 14, display: "grid", gridTemplateColumns: "1fr auto", rowGap: 12, columnGap: 10, fontSize: 15.5 }}>
               <div>Order amount</div>
               <div style={{ textAlign: "right" }}>{fmt(task.orderAmount, 2)} USDT</div>
@@ -539,7 +515,6 @@ export default function RecordPage() {
           <div className="card" style={{ padding: 16, borderRadius: 14, background: "#fff" }}>No unpaid order.</div>
         ))}
 
-      {/* Complete — scrollable list */}
       {tab === "complete" && (
         <div className="complete-scroll">
           {completed.length ? (
