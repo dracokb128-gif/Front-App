@@ -7,18 +7,26 @@ const fsp = require("fs/promises");
 const path = require("path");
 
 const {
+  MAX_TASKS_PER_DAY,
   todayKey,
   ensureDaily,
   getNextTask,
   completeTask,
 } = require("../utils/taskEngine.js");
 
-/* ---------- storage ---------- */
-const DATA_DIR = path.join(__dirname, "..", "data");
+/* ---------- storage (match server.js: /var/data fallback) ---------- */
+const DATA_DIR = fs.existsSync("/var/data")
+  ? "/var/data"
+  : path.join(__dirname, "..", "data");
+
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, "[]", "utf8");
+
+/* ---------- helpers ---------- */
+const idKey = (v) => String(v ?? "").trim();
+const sameId = (a, b) => idKey(a).replace(/^u/i, "") === idKey(b).replace(/^u/i, "");
 
 async function readUsers() {
   try {
@@ -46,12 +54,10 @@ router.post("/task/next", async (req, res) => {
   const store = req.body?.store || req.query?.store || null;
 
   const users = await readUsers();
-  const u = users.find((x) => String(x.id) === userId);
+  const u = users.find((x) => sameId(x.id, userId));
   if (!u) return res.status(404).json({ ok: false, error: "user_not_found" });
 
-  // store preference optionally remember
   if (store) u.preferredStore = String(store);
-
   const out = getNextTask(u, store);
   await writeUsers(users);
   return res.json(out);
@@ -63,10 +69,16 @@ router.post("/task/incomplete", async (req, res) => {
   const task = req.body?.task || null;
 
   const users = await readUsers();
-  const u = users.find((x) => String(x.id) === userId);
+  const u = users.find((x) => sameId(x.id, userId));
   if (!u) return res.status(404).json({ ok: false, error: "user_not_found" });
 
-  u.pending = task ? { ...task } : null;
+  if (task) {
+    const bal = Number(u.balance || 0);
+    const need = Math.max(0, Number((Number(task.orderAmount || 0) - bal).toFixed(3)));
+    u.pending = { ...task, deficit: need };
+  } else {
+    u.pending = null;
+  }
   await writeUsers(users);
   return res.json({ ok: true, unpaid: u.pending || null });
 });
@@ -76,21 +88,21 @@ router.post("/task/submit", async (req, res) => {
   const { userId, taskId, note = "" } = req.body || {};
 
   const users = await readUsers();
-  const u = users.find((x) => String(x.id) === String(userId));
+  const u = users.find((x) => sameId(x.id, userId));
   if (!u) return res.status(404).json({ ok: false, error: "user_not_found" });
 
   const out = completeTask(u, taskId, note);
   await writeUsers(users);
 
   if (!out || !out.ok) return res.status(400).json(out || { ok: false });
-  return res.json({ ok: true, user: pub(u), summary: out.summary });
+  return res.json({ ok: true, user: pub(u), finished: out.finished || null });
 });
 
 // POST /api/task/reset-daily { userId }
 router.post("/task/reset-daily", async (req, res) => {
   const userId = String(req.body?.userId || "");
   const users = await readUsers();
-  const u = users.find((x) => String(x.id) === userId);
+  const u = users.find((x) => sameId(x.id, userId));
   if (!u) return res.status(404).json({ ok: false, error: "user_not_found" });
 
   ensureDaily(u);
@@ -105,7 +117,7 @@ router.post("/task/reset-daily", async (req, res) => {
 router.post("/task/full-reset", async (req, res) => {
   const userId = String(req.body?.userId || "");
   const users = await readUsers();
-  const u = users.find((x) => String(x.id) === userId);
+  const u = users.find((x) => sameId(x.id, userId));
   if (!u) return res.status(404).json({ ok: false, error: "user_not_found" });
 
   u.cursor = 0;
@@ -123,20 +135,32 @@ router.post("/task/full-reset", async (req, res) => {
 router.get("/task/progress", async (req, res) => {
   const userId = String(req.query?.userId || "");
   const users = await readUsers();
-  const u = users.find((x) => String(x.id) === userId);
+  const u = users.find((x) => sameId(x.id, userId));
   if (!u) return res.status(404).json({ ok: false, error: "user_not_found" });
 
-  ensureDaily(u);
-  await writeUsers(users);
+  const key = ensureDaily(u);
+  const day = u.daily[key] || (u.daily[key] = { completed: 0, commission: 0, seenTotalsCents: [] });
+
+  // keep deficit live like server.js
+  let liveGap = 0;
+  if (u.pending && Number(u.pending.orderAmount)) {
+    liveGap = Math.max(0, Number(u.pending.orderAmount) - Number(u.balance || 0));
+    u.pending.deficit = Number(liveGap.toFixed(3));
+    await writeUsers(users);
+  }
 
   return res.json({
     ok: true,
+    completedToday: Number(day.completed || 0),
+    totalCompleted: Number((u.history || []).length || 0),
+    maxTasksPerDay: MAX_TASKS_PER_DAY || 25,
     balance: Number(u.balance || 0),
-    cursor: u.cursor || 0,
-    completedToday: u.completedToday || 0,
-    totalCompleted: u.totalCompleted || 0,
-    lastTaskDate: u.lastTaskDate || null,
-    unpaidTask: u.pending || null,
+    todayCommission: Number(day.commission || 0),
+    overallCommission: Number(u.overallCommission || 0),
+    cashGap: Number(liveGap || 0),
+    unpaid: u.pending || null,
+    isFrozen: !!u.isFrozen,
+    wdPwdSet: !!u.wd_pwd_set,
   });
 });
 

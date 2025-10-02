@@ -2,48 +2,77 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const { ensureDaily, getNextTask, completeTask, todayKey, MAX_TASKS_PER_DAY } = require("../utils/taskEngine");
+const {
+  ensureDaily,
+  getNextTask,
+  completeTask,
+  todayKey,
+  MAX_TASKS_PER_DAY,
+} = require("../utils/taskEngine");
 
 const router = express.Router();
 
-const DATA_DIR   = path.join(__dirname, "..", "data");
+/* ---- STORAGE PATHS (match server.js) ---- */
+const DATA_DIR = fs.existsSync("/var/data")
+  ? "/var/data"
+  : path.join(__dirname, "..", "data");
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 const RULES_FILE = path.join(DATA_DIR, "injectRules.json");
 
-function readUsers() { try { return JSON.parse(fs.readFileSync(USERS_FILE,"utf8")); } catch { return []; } }
-function writeUsers(v){ fs.writeFileSync(USERS_FILE, JSON.stringify(v, null, 2), "utf8"); }
-function readRules() { try { return JSON.parse(fs.readFileSync(RULES_FILE,"utf8")); } catch { return []; } }
-function writeRules(v){ fs.writeFileSync(RULES_FILE, JSON.stringify(v, null, 2), "utf8"); }
+function readUsers() {
+  try {
+    return JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
+  } catch {
+    return [];
+  }
+}
+function writeUsers(v) {
+  fs.writeFileSync(USERS_FILE, JSON.stringify(v, null, 2), "utf8");
+}
+function readRules() {
+  try {
+    return JSON.parse(fs.readFileSync(RULES_FILE, "utf8"));
+  } catch {
+    return [];
+  }
+}
+function writeRules(v) {
+  fs.writeFileSync(RULES_FILE, JSON.stringify(v, null, 2), "utf8");
+}
 
 const idKey = (v) => String(v ?? "").trim();
-const sameId = (a,b) => idKey(a).replace(/^u/i,"") === idKey(b).replace(/^u/i,"");
+const sameId = (a, b) =>
+  idKey(a).replace(/^u/i, "") === idKey(b).replace(/^u/i, "");
 
 // -------- helper to create combine from a rule
 function pickAmount(spec) {
   const s = String(spec || "").trim();
   if (!s) return 0;
   if (s.includes("-")) {
-    const [a,b] = s.split("-").map(n => Number(n.trim()));
-    const lo = Math.min(a,b), hi = Math.max(a,b);
-    return Math.round(lo + Math.random()*(hi-lo));
+    const [a, b] = s.split("-").map((n) => Number(n.trim()));
+    const lo = Math.min(a, b),
+      hi = Math.max(a, b);
+    return Math.round(lo + Math.random() * (hi - lo));
   }
   return Number(s);
 }
 function rateByAmount(v) {
   if (v >= 901) return 0.12;
   if (v >= 499) return 0.08;
-  if (v >=  20) return 0.04;
+  if (v >= 20) return 0.04;
   return 0.04;
 }
 function combineFromRule(rule, balance) {
   const amount = pickAmount(rule.amountSpec);
-  const rate = rule.percent != null ? Number(rule.percent) / 100 : rateByAmount(amount);
+  const rate =
+    rule.percent != null ? Number(rule.percent) / 100 : rateByAmount(amount);
   const commission = +Number(amount * rate).toFixed(3);
 
-  // ✅ FIX: agar rule.items diye gaye hain to wahi use karo
-  const items = Array.isArray(rule.items) && rule.items.length
-    ? rule.items
-    : [{ title:"Custom Combined Order", quantity:1, unitPrice:amount }];
+  // ✅ Use items from rule if provided; otherwise default
+  const items =
+    Array.isArray(rule.items) && rule.items.length
+      ? rule.items
+      : [{ title: "Custom Combined Order", quantity: 1, unitPrice: amount }];
 
   return {
     id: `t_${Date.now()}`,
@@ -59,13 +88,16 @@ function combineFromRule(rule, balance) {
 }
 function makeUnpaidFromTask(u, bodyTask) {
   const amount = Number(bodyTask?.orderAmount || bodyTask?.amount || 0);
-  const rate   = Number(bodyTask?.commissionRate || 0.04);
-  const commission = Number(bodyTask?.commission ?? (amount * rate).toFixed(3));
+  const rate = Number(bodyTask?.commissionRate || 0.04);
+  const commission = Number(
+    bodyTask?.commission ?? (amount * rate).toFixed(3)
+  );
 
-  // ✅ FIX: agar bodyTask.items hain to wahi use karo
-  const items = Array.isArray(bodyTask?.items) && bodyTask.items.length
-    ? bodyTask.items
-    : [{ title:"Custom Combined Order", quantity:1, unitPrice:amount }];
+  // ✅ Preserve incoming items if present
+  const items =
+    Array.isArray(bodyTask?.items) && bodyTask.items.length
+      ? bodyTask.items
+      : [{ title: "Custom Combined Order", quantity: 1, unitPrice: amount }];
 
   const t = {
     id: bodyTask?.id || `t_${Date.now()}`,
@@ -77,7 +109,10 @@ function makeUnpaidFromTask(u, bodyTask) {
     items,
     __ruleId: String(bodyTask?.__ruleId || ""),
   };
-  const deficit = Math.max(0, Number((amount - Number(u.balance || 0)).toFixed(3)));
+  const deficit = Math.max(
+    0,
+    Number((amount - Number(u.balance || 0)).toFixed(3))
+  );
   u.pending = { ...t, status: "unpaid", requiredRecharge: deficit };
   u.history = Array.isArray(u.history) ? u.history : [];
   u.history.unshift({ ...u.pending, createdAt: Date.now() });
@@ -87,7 +122,7 @@ function makeUnpaidFromTask(u, bodyTask) {
 router.get("/progress", (req, res) => {
   const id = String(req.query.userId || "");
   const users = readUsers();
-  const u = users.find(x => sameId(x.id, id));
+  const u = users.find((x) => sameId(x.id, id));
   if (!u) return res.status(404).json({ ok: false, message: "User not found" });
   const key = ensureDaily(u);
   const d = u.daily[key] || { completed: 0, commission: 0 };
@@ -108,7 +143,7 @@ router.get("/progress", (req, res) => {
 router.get("/records", (req, res) => {
   const id = String(req.query.userId || "");
   const users = readUsers();
-  const u = users.find(x => sameId(x.id, id));
+  const u = users.find((x) => sameId(x.id, id));
   if (!u) return res.status(404).json({ ok: false, message: "User not found" });
   ensureDaily(u);
   writeUsers(users);
@@ -120,36 +155,43 @@ router.get("/records", (req, res) => {
 // ---------- NEXT (with inject slots)
 router.post("/task/next", (req, res) => {
   const userId = String(req.body?.userId || req.query.userId || "");
-  const store  = String(req.body?.store  || req.query.store  || "amazon");
+  const store = String(req.body?.store || req.query.store || "amazon");
   const users = readUsers();
-  const u = users.find(x => sameId(x.id, userId));
+  const u = users.find((x) => sameId(x.id, userId));
   if (!u) return res.status(404).json({ ok: false, error: "user_not_found" });
 
   const key = ensureDaily(u);
   const day = u.daily[key] || { completed: 0, commission: 0 };
   const nextNo = Number(day.completed || 0) + 1;
 
-  if (u.pending) { writeUsers(users); return res.json({ ok: true, unpaid: u.pending, redirectToRecord: true }); }
+  if (u.pending) {
+    writeUsers(users);
+    return res.json({ ok: true, unpaid: u.pending, redirectToRecord: true });
+  }
 
   const rules = readRules();
-  const rule = rules.find(r =>
-    String(r.userId).replace(/^u/i,"") === String(userId).replace(/^u/i,"") &&
-    Number(r.taskNo) === nextNo &&
-    ["confirmed","staged"].includes(String(r.status||"").toLowerCase())
+  const rule = rules.find(
+    (r) =>
+      String(r.userId).replace(/^u/i, "") ===
+        String(userId).replace(/^u/i, "") &&
+      Number(r.taskNo) === nextNo &&
+      ["confirmed", "staged"].includes(String(r.status || "").toLowerCase())
   );
 
   if (rule && String(rule.status).toLowerCase() === "confirmed") {
     const t = combineFromRule(rule, u.balance);
     rule.status = "staged";
-    writeRules(rules); writeUsers(users);
+    writeRules(rules);
+    writeUsers(users);
     return res.json({ ok: true, task: t });
   }
 
   if (rule && String(rule.status).toLowerCase() === "staged") {
     const t = combineFromRule(rule, u.balance);
     makeUnpaidFromTask(u, t);
-    const left = rules.filter(x => String(x.id) !== String(rule.id));
-    writeRules(left); writeUsers(users);
+    const left = rules.filter((x) => String(x.id) !== String(rule.id));
+    writeRules(left);
+    writeUsers(users);
     return res.json({ ok: true, unpaid: u.pending, redirectToRecord: true });
   }
 
@@ -162,14 +204,14 @@ router.post("/task/next", (req, res) => {
 router.post("/task/mark-unpaid", (req, res) => {
   const userId = String(req.body?.userId || "");
   const users = readUsers();
-  const u = users.find(x => sameId(x.id, userId));
+  const u = users.find((x) => sameId(x.id, userId));
   if (!u) return res.status(404).json({ ok: false, error: "user_not_found" });
   if (u.pending) return res.json({ ok: true, unpaid: u.pending });
 
   makeUnpaidFromTask(u, req.body?.task || {});
   if (req.body?.task && req.body.task.__ruleId) {
     const rid = String(req.body.task.__ruleId);
-    const left = readRules().filter(r => String(r.id) !== rid);
+    const left = readRules().filter((r) => String(r.id) !== rid);
     writeRules(left);
   }
   writeUsers(users);
@@ -180,15 +222,21 @@ router.post("/task/mark-unpaid", (req, res) => {
 router.post("/task/submit", (req, res) => {
   const { userId, taskId, note = "" } = req.body || {};
   const users = readUsers();
-  const u = users.find(x => sameId(x.id, userId));
+  const u = users.find((x) => sameId(x.id, userId));
   if (!u) return res.status(404).json({ ok: false, error: "user_not_found" });
 
-  const usedRuleId = u.pending && u.pending.__ruleId ? String(u.pending.__ruleId) : null;
+  const usedRuleId =
+    u.pending && u.pending.__ruleId ? String(u.pending.__ruleId) : null;
   const out = completeTask(u, taskId, note);
-  if (!out || !out.ok) { writeUsers(users); return res.status(400).json(out || { ok:false, error:"submit_failed" }); }
+  if (!out || !out.ok) {
+    writeUsers(users);
+    return res
+      .status(400)
+      .json(out || { ok: false, error: "submit_failed" });
+  }
 
   if (usedRuleId) {
-    const left = readRules().filter(r => String(r.id) !== usedRuleId);
+    const left = readRules().filter((r) => String(r.id) !== usedRuleId);
     writeRules(left);
   }
 

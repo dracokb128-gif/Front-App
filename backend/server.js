@@ -1,4 +1,4 @@
-// backend/server.js — FULL (A→Z) with TRC, deposits, tasks, withdrawals, wallet, and Inject Rules FIX
+// backend/server.js — FINAL (A→Z) with Inject Rules API restored (array GET), tasks, deposits, withdrawals, wallet, avatar
 
 const express = require("express");
 const cors = require("cors");
@@ -8,7 +8,7 @@ const crypto = require("crypto");
 const { ensureDaily, todayKey, MAX_TASKS_PER_DAY } = require("./utils/taskEngine.js");
 
 /* -------------------- helpers -------------------- */
-function readJSON(p){ return JSON.parse(fs.readFileSync(p, "utf8") || "[]"); }
+function readJSON(p){ try { return JSON.parse(fs.readFileSync(p, "utf8") || "[]"); } catch { return []; } }
 function writeJSON(p, v){ fs.writeFileSync(p, JSON.stringify(v, null, 2), "utf8"); }
 function nowISO(){ return new Date().toISOString(); }
 
@@ -28,22 +28,24 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json());
+// ⬇️ allow big base64 images
+app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 /* optional: simple root health */
 app.get("/", (_req, res) => res.send("OK"));
 
-/* -------------------- storage paths -------------------- */
-const DATA_DIR = fs.existsSync("/var/data") ? "/var/data" : path.join(__dirname, "data");
+/* -------------------- storage paths (UNIFIED) -------------------- */
+const DATA_DIR =
+  process.env.DATA_DIR ||
+  (fs.existsSync("/var/data") ? "/var/data" : path.join(__dirname, "data"));
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 const RULES_FILE = path.join(DATA_DIR, "injectRules.json");
-const ADMIN_FILE = path.join(DATA_DIR, "admin.json");
+
 
 if (!fs.existsSync(DATA_DIR))     fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(USERS_FILE))   fs.writeFileSync(USERS_FILE, "[]", "utf8");
 if (!fs.existsSync(RULES_FILE))   fs.writeFileSync(RULES_FILE, "[]", "utf8");
-if (!fs.existsSync(ADMIN_FILE))   fs.writeFileSync(ADMIN_FILE, "{}", "utf8");
 
 /* deposits / addresses */
 const DEPOSITS_FILE  = path.join(DATA_DIR, "deposits.json");
@@ -80,9 +82,6 @@ const writeUsers = (u) => fs.writeFileSync(USERS_FILE, JSON.stringify(u, null, 2
 const readRules = () => { try { return JSON.parse(fs.readFileSync(RULES_FILE, "utf8")); } catch { return []; } };
 const writeRules = (r) => fs.writeFileSync(RULES_FILE, JSON.stringify(r, null, 2), "utf8");
 
-const readAdmin = () => { try { return JSON.parse(fs.readFileSync(ADMIN_FILE, "utf8")); } catch { return {}; } };
-const writeAdmin = (a) => fs.writeFileSync(ADMIN_FILE, JSON.stringify(a || {}, null, 2), "utf8");
-
 function readAddrs() {
   for (const f of ADDR_FILES) {
     try {
@@ -91,7 +90,7 @@ function readAddrs() {
       if (Array.isArray(arr) && arr.length) return arr;
     } catch {}
   }
-  try { return JSON.parse(fs.readFileSync(ADDR_PRIMARY, "utf8") || "[]"); } catch { return []; }
+  return readJSON(ADDR_PRIMARY);
 }
 function writeAddrs(v) {
   for (const f of ADDR_FILES) {
@@ -99,13 +98,13 @@ function writeAddrs(v) {
   }
 }
 
-const readDepos  = () => { try { return readJSON(DEPOSITS_FILE); } catch { return []; } };
+const readDepos  = () => readJSON(DEPOSITS_FILE);
 const writeDepos = (v) => writeJSON(DEPOSITS_FILE, v);
 
-const readWithdrawals  = () => { try { return readJSON(WITHDRAWALS_FILE); } catch { return []; } };
+const readWithdrawals  = () => readJSON(WITHDRAWALS_FILE);
 const writeWithdrawals = (v) => writeJSON(WITHDRAWALS_FILE, v);
 
-const readWallets  = () => { try { return readJSON(WALLETS_FILE); } catch { return []; } };
+const readWallets  = () => readJSON(WALLETS_FILE);
 const writeWallets = (v) => writeJSON(WALLETS_FILE, v);
 
 /* utils */
@@ -169,10 +168,12 @@ function makeCombineItems(amount) {
   let left = Number(amount) || 80;
   for (let i=0;i<5;i++){
     const s = stock[i%stock.length];
-    const theQty = 1 + Math.floor(Math.random()*3);
-    const unit = Math.round(s.price*(0.9+Math.random()*0.25)*100)/100;
-    out.push({ title:s.title, quantity:theQty, unitPrice:unit });
-    left -= unit*theQty;
+    {
+      const theQty = 1 + Math.floor(Math.random()*3);
+      const unit = Math.round(s.price*(0.9+Math.random()*0.25)*100)/100;
+      out.push({ title:s.title, quantity:theQty, unitPrice:unit });
+      left -= unit*theQty;
+    }
     if (left <= 5) break;
   }
   return out;
@@ -261,6 +262,53 @@ app.get("/api/_debug/paths", (_req, res) => {
   });
 });
 
+/* -------------------- AVATAR (DP) SUPPORT -------------------- */
+const AVATAR_DIR = path.join(DATA_DIR, "avatars");
+if (!fs.existsSync(AVATAR_DIR)) fs.mkdirSync(AVATAR_DIR, { recursive: true });
+app.use("/static", express.static(DATA_DIR));
+function saveBase64Image(dataURL, outName) {
+  const m = dataURL.match(/^data:(.+);base64,(.+)$/);
+  if (!m) throw new Error("Bad image");
+  const meta = m[1];
+  const base64 = m[2];
+  const ext = meta.includes("png") ? "png" : "jpg";
+  const file = path.join(AVATAR_DIR, `${outName}.${ext}`);
+  fs.writeFileSync(file, Buffer.from(base64, "base64"));
+  return `/static/avatars/${outName}.${ext}`;
+}
+app.post("/api/users/:uid/avatar", (req,res)=>{
+  try {
+    const uid = String(req.params.uid);
+    const { dataURL } = req.body || {};
+    if (!dataURL) return res.status(400).json({ error:"Missing image" });
+    const url = saveBase64Image(dataURL, `u_${uid}`);
+    const users = readUsers();
+    const i = users.findIndex(u => sameId(u.id, uid));
+    if (i >= 0) users[i].avatar = url; else users.push({ id: uid, avatar: url });
+    writeUsers(users);
+    res.json({ ok:true, avatar:url });
+  } catch(e){ res.status(500).json({ error:e.message }); }
+});
+app.get("/api/users/:uid/avatar", (req,res)=>{
+  const uid = String(req.params.uid);
+  const users = readUsers();
+  const u = users.find(x => sameId(x.id, uid));
+  res.json({ avatar: u?.avatar || null });
+});
+app.delete("/api/users/:uid/avatar", (req,res)=>{
+  const uid = String(req.params.uid);
+  try {
+    const p1 = path.join(AVATAR_DIR, `u_${uid}.jpg`);
+    const p2 = path.join(AVATAR_DIR, `u_${uid}.png`);
+    [p1,p2].forEach(p=>{ if (fs.existsSync(p)) fs.unlinkSync(p); });
+    const users = readUsers();
+    const i = users.findIndex(u => sameId(u.id, uid));
+    if (i>=0) delete users[i].avatar;
+    writeUsers(users);
+    res.json({ ok:true });
+  } catch(e){ res.status(500).json({ error:e.message }); }
+});
+
 /* -------------------- auth -------------------- */
 const INVITE_ONLY = "120236";
 app.post("/api/register", (req,res)=>{
@@ -325,60 +373,7 @@ app.post("/api/change-password", (req, res) => {
   res.json({ ok:true });
 });
 
-/* -------------------- admin auth -------------------- */
-app.post("/api/admin/setup", (req, res) => {
-  const { username, password } = req.body || {};
-  if (!username || !password) return res.status(400).json({ ok:false, msg:"Username & password required" });
-  const a = readAdmin();
-  if (a && a.username) return res.status(400).json({ ok:false, msg:"Admin already setup" });
-  writeAdmin({ username: String(username), password: String(password) });
-  res.json({ ok:true });
-});
-app.post("/api/admin/login", (req, res) => {
-  const { username, password } = req.body || {};
-  const a = readAdmin();
-  if (!a || !a.username) return res.status(400).json({ ok:false, msg:"Admin not setup" });
-  if (String(a.username) !== String(username) || String(a.password) !== String(password)) {
-    return res.status(401).json({ ok:false, msg:"Invalid credentials" });
-  }
-  res.json({ ok:true, token:"admintoken123" });
-});
-app.post("/api/admin/change-password", (req, res) => {
-  const b = req.body || {};
-  if (typeof b.oldPassword === "string" && typeof b.newPassword === "string") {
-    const a = readAdmin();
-    if (!a || !a.username) return res.status(400).json({ ok:false, msg:"Admin not setup" });
-    if (String(a.password) !== String(b.oldPassword)) return res.status(401).json({ ok:false, msg:"Old password is incorrect" });
-    a.password = String(b.newPassword);
-    writeAdmin(a);
-    return res.json({ ok:true });
-  }
-  if (b.newPassword && (b.userId != null || (b.username && String(b.username).length))) {
-    const users = readUsers();
-    let u = null;
-    if (b.userId != null) u = users.find(x => sameId(x.id, b.userId));
-    if (!u && b.username) u = users.find(x => String(x.username).toLowerCase() === String(b.username).toLowerCase());
-    if (!u) return res.status(404).json({ ok:false, msg:"User not found" });
-    u.password = String(b.newPassword);
-    writeUsers(users);
-    return res.json({ ok:true });
-  }
-  return res.status(400).json({ ok:false, msg:"Invalid payload" });
-});
-app.post("/api/admin/change-user-password", (req, res) => {
-  const b = req.body || {};
-  const userId = b.userId != null ? String(b.userId) : "";
-  const newPassword = String(b.newPassword || "");
-  if (!userId || !newPassword) return res.status(400).json({ ok:false, message:"userId & newPassword required" });
-  const users = readUsers();
-  const u = users.find(x => sameId(x.id, userId));
-  if (!u) return res.status(404).json({ ok:false, message:"User not found" });
-  u.password = newPassword;
-  writeUsers(users);
-  return res.json({ ok:true, user: pub(u) });
-});
-
-/* -------------------- admin user ops -------------------- */
+/* -------------------- admin user ops (NON-auth; auth handled inside routes/admin.js) -------------------- */
 app.get("/api/admin/users", (_req,res)=>{
   const out = readUsers().map(u => ({
     id:u.id, username:u.username, balance:Number(u.balance||0),
@@ -626,7 +621,7 @@ app.post("/api/task/next", (req,res)=>{
 
   const currentTaskNo = Number(day.completed || 0) + 1;
   const rules = readRules()
-    .filter(r => sameId(r.userId, userId) && String(r.status)==="confirmed")
+    .filter(r => sameId(r.userId, userId) && String(r.status || "").toLowerCase() === "confirmed")
     .sort((a,b)=> (a.taskNo||0) - (b.taskNo||0));
   const exact = rules.find(r => Number(r.taskNo||0) === currentTaskNo);
   const task = exact ? buildCombineTaskFromRule(exact, u.balance) : buildNormalPreview(u, store);
@@ -908,7 +903,91 @@ app.get("/api/withdraw/records", (req, res) => {
 app.get("/api/withdrawals/records", (req, res) => { req.url = "/api/withdraw/records"; app._router.handle(req, res); });
 app.get("/api/withdrawals", (req, res) => { req.url = "/api/withdraw/records"; app._router.handle(req, res); });
 
-/* -------------------- Admin router (your existing routes) -------------------- */
+/* -------------------- 🔧 Inject Rules API (ARRAY GET) — SELF-CONTAINED -------------------- */
+/* NOTE: kept BEFORE adminRouter to guarantee correct response shape */
+function _rulesListFor(uidRaw){
+  const uid = String(uidRaw||"").replace(/^u/i,"");
+  const all = readRules().map(r => ({
+    id: r.id,
+    userId: String(r.userId),
+    taskNo: Number(r.taskNo||0),
+    amountSpec: String(r.amountSpec||""),
+    percent: r.percent==null ? null : Number(r.percent),
+    status: String(r.status||"draft"),
+    createdAt: r.createdAt || nowISO(),
+    usedAt: r.usedAt || null,
+    used: !!r.used
+  }));
+  const items = uid ? all.filter(r => String(r.userId) === uid) : all;
+  items.sort((a,b)=> (a.taskNo||0)-(b.taskNo||0) || new Date(a.createdAt)-new Date(b.createdAt));
+  return items;
+}
+app.get("/api/admin/inject-rules", (req,res)=>{
+  const items = _rulesListFor(req.query.userId);
+  return res.json(items); // UI expects ARRAY
+});
+app.post("/api/admin/inject-rules", (req,res)=>{
+  const b = req.body || {};
+  const userId = String(b.userId || "").replace(/^u/i,"");
+  const taskNo = Number(b.taskNo || 0);
+  const amountSpec = String(b.amountSpec || "").trim();
+  const percent = b.percent==null ? null : Number(b.percent);
+  if (!userId || !taskNo || !amountSpec) return res.status(400).json({ ok:false, msg:"userId, taskNo, amountSpec required" });
+
+  const list = readRules();
+  const rule = {
+    id: "r_" + Date.now() + "_" + Math.random().toString(36).slice(2,6),
+    userId, taskNo, amountSpec,
+    percent: percent==null || Number.isNaN(percent) ? null : percent,
+    status: "draft",
+    createdAt: nowISO(),
+    used: false,
+    usedAt: null
+  };
+  list.push(rule);
+  writeRules(list);
+  res.json({ ok:true, rule });
+});
+app.patch("/api/admin/inject-rules/:id", (req,res)=>{
+  const id = String(req.params.id || "");
+  const b = req.body || {};
+  const list = readRules();
+  const i = list.findIndex(r => String(r.id) === id);
+  if (i < 0) return res.status(404).json({ ok:false, msg:"Not found" });
+
+  const r = list[i];
+  if (b.userId != null)  r.userId = String(b.userId).replace(/^u/i,"");
+  if (b.taskNo != null)  r.taskNo = Number(b.taskNo);
+  if (b.amountSpec!=null)r.amountSpec = String(b.amountSpec);
+  if (b.percent != null) r.percent = Number(b.percent);
+  if (b.status  != null) r.status  = String(b.status);
+  if (b.used    != null) r.used    = !!b.used;
+  if (b.usedAt  != null) r.usedAt  = b.usedAt;
+  list[i] = r;
+  writeRules(list);
+  res.json({ ok:true, rule: r });
+});
+app.delete("/api/admin/inject-rules/:id", (req,res)=>{
+  const id = String(req.params.id || "");
+  const list = readRules();
+  const left = list.filter(r => String(r.id) !== id);
+  writeRules(left);
+  res.json({ ok:true });
+});
+app.post("/api/admin/inject-rules/purge-used", (req,res)=>{
+  const uid = String(req.body?.userId || req.query?.userId || "").replace(/^u/i,"");
+  let list = readRules();
+  list = list.filter(r => {
+    const usedLike = String(r.status||"").toLowerCase()==="used" || r.used===true || r.applied===true || r.status==="consumed";
+    if (!usedLike) return true;
+    if (uid && String(r.userId)!==uid) return true; // keep others if filtering
+    return false;
+  });
+  writeRules(list);
+  res.json({ ok:true, count:list.length });
+});
+
+/* -------------------- Admin router (bcrypt admin auth + maybe duplicate routes) -------------------- */
 const adminRouter = require("./routes/admin");
 app.use("/api/admin", adminRouter);
 
@@ -970,34 +1049,6 @@ app.get("/api/deposit/records", (req, res) => {
     .map(d => ({ id:d.id, userId:d.userId, amount:Number(d.amount||0), status:d.status, address:d.address, createdAt:d.createdAt || d.time }));
   res.json({ ok:true, items });
 });
-
-/* -------------------- 🔧 Inject Rules FIX block -------------------- */
-/* UI expects GET /api/admin/inject-rules => ARRAY */
-function _listRulesArray(userIdRaw){
-  const uid = String(userIdRaw||"").replace(/^u/i,"");
-  const all = readRules().map(r => ({
-    id: r.id,
-    userId: String(r.userId),
-    taskNo: Number(r.taskNo||0),
-    amountSpec: String(r.amountSpec||""),
-    percent: r.percent==null ? null : Number(r.percent),
-    status: String(r.status||"confirmed"),
-    createdAt: r.createdAt || nowISO(),
-    usedAt: r.usedAt || null
-  }));
-  const items = uid ? all.filter(r => String(r.userId) === uid) : all;
-  items.sort((a,b)=> (a.taskNo||0)-(b.taskNo||0) || new Date(a.createdAt)-new Date(b.createdAt));
-  return items;
-}
-app.get("/api/admin/inject-rules", (req,res)=>{
-  const items = _listRulesArray(req.query.userId);
-  return res.json(items); // important: array
-});
-app.post("/api/admin/inject-rules", (req,res)=> { req.url="/api/admin/rules"; app._router.handle(req,res); });
-app.patch("/api/admin/inject-rules/:id", (req,res)=> { req.url="/api/admin/rules/"+req.params.id; app._router.handle(req,res); });
-app.delete("/api/admin/inject-rules/:id", (req,res)=> { req.url="/api/admin/rules/"+req.params.id; app._router.handle(req,res); });
-app.post("/api/admin/inject-rules/purge-used", (req,res)=> { req.url="/api/admin/rules/purge-used"; app._router.handle(req,res); });
-/* -------------------- end Inject Rules FIX -------------------- */
 
 /* -------------------- start -------------------- */
 console.log("DEBUG PATHS", {

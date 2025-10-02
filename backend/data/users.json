@@ -3,14 +3,42 @@
     "id": 1,
     "username": "Number1",
     "password": "123123",
-    "balance": 391.996,
+    "balance": 429.885,
     "createdAt": 1759155600071,
     "inviteCode": "120236",
     "isAdmin": false,
     "completedToday": 0,
     "totalCompleted": 0,
-    "lastTaskDate": "2025-10-01",
+    "lastTaskDate": "2025-10-02",
     "history": [
+      {
+        "id": "t_1759401493900",
+        "kind": "single",
+        "orderAmount": 272.58,
+        "commission": 10.903,
+        "at": 1759401494735
+      },
+      {
+        "id": "t_1759401491716",
+        "kind": "single",
+        "orderAmount": 172.08,
+        "commission": 6.883,
+        "at": 1759401492712
+      },
+      {
+        "id": "t_1759401489744",
+        "kind": "single",
+        "orderAmount": 385.23,
+        "commission": 15.409,
+        "at": 1759401490710
+      },
+      {
+        "id": "t_1759401429212",
+        "kind": "single",
+        "orderAmount": 117.36,
+        "commission": 4.694,
+        "at": 1759401430311
+      },
       {
         "id": "t_1759320284098",
         "kind": "single",
@@ -339,9 +367,14 @@
         "seenTotalsCents": [
           7578
         ]
+      },
+      "2025-10-02": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
       }
     },
-    "overallCommission": 13732.996,
+    "overallCommission": 13770.885,
     "isFrozen": false,
     "wd_pwd_set": true,
     "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",

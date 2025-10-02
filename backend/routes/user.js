@@ -1,86 +1,109 @@
 // backend/routes/user.js
-// @ts-nocheck
 const express = require("express");
-import {
-  users,            // in-memory array / persisted store
-  addUser,          // (if you already have) create user helper
-} from "../data/store.js";
+const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
+const { ensureDaily } = require("../utils/taskEngine.js");
 
 const r = express.Router();
 
-/* ---------- utils ---------- */
-function pub(u) {
-  // kabhi galti se password leak na ho
-  const { password, ...safe } = u || {};
-  return safe;
-}
-function nextId() {
-  // simple id like "u5"
-  const n = (users?.length || 0) + 1;
-  return `u${n}`;
-}
+/* ---------- storage (same as server.js) ---------- */
+const DATA_DIR = fs.existsSync("/var/data")
+  ? "/var/data"
+  : path.join(__dirname, "..", "data");
+const USERS_FILE = path.join(DATA_DIR, "users.json");
+
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, "[]", "utf8");
+
+const readUsers  = () => { try { return JSON.parse(fs.readFileSync(USERS_FILE, "utf8")); } catch { return []; } };
+const writeUsers = (v) => fs.writeFileSync(USERS_FILE, JSON.stringify(v, null, 2), "utf8");
+
+/* ---------- helpers ---------- */
+const INVITE_ONLY = "120236";
+const pub = (u) => { if (!u) return u; const { password, ...rest } = u; return rest; };
+const idKey  = (v) => String(v ?? "").trim();
+const sameId = (a,b) => idKey(a).replace(/^u/i,"") === idKey(b).replace(/^u/i,"");
+
+const wdHash = (s) => crypto.createHash("sha256").update(String(s || "")).digest("hex");
+const ensureWd = (u) => {
+  if (!u) return;
+  if (typeof u.wd_pwd_set  === "undefined") u.wd_pwd_set  = false;
+  if (typeof u.wd_pwd_hash === "undefined") u.wd_pwd_hash = null;
+};
 
 /* ---------- POST /api/register ---------- */
 r.post("/register", (req, res) => {
-  const { username = "", password = "", inviteCode = "" } = req.body || {};
-  const uname = String(username).trim();
-  const unameKey = uname.toLowerCase();
+  const b = req.body || {};
+  const username   = String(b.username || "").trim();
+  const password   = String(b.password || "").trim();
+  const inviteCode = String(b.inviteCode || "").trim();
 
-  if (!uname || !password || !inviteCode) {
-    return res.status(400).json({ ok: false, error: "Missing fields" });
-  }
+  if (!username || !password) return res.status(400).json({ ok:false, message:"Username & password required" });
+  if (inviteCode !== INVITE_ONLY) return res.status(400).json({ ok:false, message:"Invalid invitation code" });
 
-  // case-insensitive exists check
-  const exists = (users || []).find(
-    (u) => String(u.username || "").toLowerCase() === unameKey
-  );
-  if (exists) {
-    return res.status(400).json({ ok: false, error: "Username already exists" });
-  }
+  const users = readUsers();
+  if (users.some(u => String(u.username).toLowerCase() === username.toLowerCase()))
+    return res.status(409).json({ ok:false, message:"Username already exists" });
 
-  const now = new Date().toISOString();
-
-  const newUser = {
-    id: nextId(),
-    username: uname,                 // original casing save karo
-    password: String(password),      // plain compare (no hash)
-    inviteCode: String(inviteCode),
-    createdAt: now,
-    balance: 0,
-    history: [],
-    completedToday: 0,
-    totalCompleted: 0,
-    lastTaskDate: null,
+  const user = {
+    id: users.reduce((m,u)=>Math.max(m, Number(u.id)||0),0)+1,
+    username, password, balance:0, createdAt: Date.now(), inviteCode,
+    isAdmin:false, completedToday:0, totalCompleted:0, lastTaskDate:null,
+    history:[], pending:null, staged:null, daily:{}, overallCommission:0,
+    isFrozen:false,
+    wd_pwd_set:false, wd_pwd_hash:null, wd_pwd_updated_at:null,
   };
+  ensureDaily(user);
+  ensureWd(user);
 
-  if (typeof addUser === "function") addUser(newUser);
-  else (users || []).push(newUser);
-
-  return res.json({ ok: true, user: pub(newUser) });
+  users.push(user);
+  writeUsers(users);
+  res.json({ ok:true, user: pub(user) });
 });
 
 /* ---------- POST /api/login ---------- */
 r.post("/login", (req, res) => {
-  const { username = "", password = "" } = req.body || {};
-  const uname = String(username).trim();
-  const unameKey = uname.toLowerCase();
+  const b = req.body || {};
+  const username = String(b.username||"").trim();
+  const password = String(b.password||"").trim();
+  if (!username || !password) return res.status(400).json({ ok:false, message:"Username & password required" });
 
-  const list = users || [];
-  // case-insensitive + trimmed username match
-  const u = list.find(
-    (x) => String(x.username || "").toLowerCase() === unameKey
-  );
+  const users = readUsers();
+  const u = users.find(x => String(x.username).toLowerCase() === username.toLowerCase());
+  if (!u) return res.status(404).json({ ok:false, message:"User not found" });
+  if (String(u.password) !== password) return res.status(401).json({ ok:false, message:"Wrong password" });
 
-  if (!u || String(u.password) !== String(password)) {
-    return res.status(400).json({ ok: false, error: "Invalid username or password" });
-  }
-
-  return res.json({ ok: true, user: pub(u) });
+  ensureDaily(u);
+  ensureWd(u);
+  writeUsers(users);
+  res.json({ ok:true, user: pub(u) });
 });
 
-/* ---------- GET /api/users (list) ---------- */
+/* ---------- POST /api/change-password ---------- */
+r.post("/change-password", (req, res) => {
+  const b = req.body || {};
+  const oldPassword = String(b.oldPassword || "");
+  const newPassword = String(b.newPassword || "");
+  const userId = b.userId != null ? String(b.userId) : "";
+  const username = String(b.username || "");
+  if (!oldPassword || !newPassword) return res.status(400).json({ ok:false, message:"Old & new passwords required" });
+
+  const users = readUsers();
+  let u = null;
+  if (userId) u = users.find(x => sameId(x.id, userId));
+  if (!u && username) u = users.find(x => String(x.username).toLowerCase() === username.toLowerCase());
+  if (!u) return res.status(404).json({ ok:false, message:"User not found" });
+  if (String(u.password) !== oldPassword) return res.status(401).json({ ok:false, message:"Old password incorrect" });
+  u.password = String(newPassword);
+  writeUsers(users);
+  res.json({ ok:true });
+});
+
+/* ---------- GET /api/users (limited public list) ---------- */
 r.get("/users", (_req, res) => {
-  res.json({ ok: true, users: (users || []).map(pub) });
+  const out = readUsers().map(u => ({ id:u.id, username:u.username, balance:Number(u.balance||0), createdAt:u.createdAt }));
+  res.json({ ok:true, users: out });
 });
 
-export default r;
+module.exports = r;
