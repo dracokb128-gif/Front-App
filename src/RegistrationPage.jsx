@@ -117,6 +117,50 @@ export default function RegistrationPage() {
 
   const [busy, setBusy] = useState(false);
 
+  /* =====================  ADDED: auto-fill invite from URL/localStorage  ===================== */
+  useEffect(() => {
+    // support multiple param names + HashRouter
+    const NAMES = ["invite", "inviteCode", "code", "ref", "r", "i"];
+    let found = "";
+
+    try {
+      const url = new URL(window.location.href);
+      for (const k of NAMES) { found = found || url.searchParams.get(k); }
+
+      // if using #/register?invite=... (hash router)
+      if (!found && url.hash) {
+        const qIndex = url.hash.indexOf("?");
+        if (qIndex >= 0) {
+          const sp = new URLSearchParams(url.hash.slice(qIndex + 1));
+          for (const k of NAMES) { found = found || sp.get(k); }
+        }
+      }
+    } catch {}
+
+    found = (found || "").trim();
+
+    // fallback to stored value (if user came from invite link before)
+    if (!found) {
+      try {
+        found =
+          (localStorage.getItem("inviteCode") ||
+            localStorage.getItem("invite") ||
+            localStorage.getItem("ref")) || "";
+        found = found.trim();
+      } catch {}
+    }
+
+    if (found) {
+      setInvite(found);
+      try {
+        localStorage.setItem("inviteCode", found);
+        localStorage.setItem("invite", found);
+        localStorage.setItem("ref", found);
+      } catch {}
+    }
+  }, []);
+  /* =========================================================================================== */
+
   const reUser = /^[A-Za-z0-9]{6,16}$/;
   const rePass = /^[A-Za-z0-9]{6,16}$/;
 
