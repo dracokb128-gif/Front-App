@@ -4,25 +4,24 @@ import React, { useMemo, useState } from "react";
 export default function InvitePage() {
   const [copied, setCopied] = useState(false);
 
-  // invite code: later tum apna set kar lena; abhi LS se try + fallback
+  // Invite code: current user se lo; fallback = "120236"
   const rawUser = (() => {
     try { return JSON.parse(localStorage.getItem("user") || "{}"); } catch { return {}; }
   })();
-  const inviteCode = useMemo(() => {
-    return (
-      rawUser?.user?.inviteCode ||
-      rawUser?.inviteCode ||
-      localStorage.getItem("inviteCode") ||
-      "275440" // placeholder
-    );
-  }, [rawUser]);
+  const inviteCode =
+    rawUser?.user?.inviteCode ||
+    rawUser?.inviteCode ||
+    localStorage.getItem("inviteCode") ||
+    "120236";
 
-  // share link (hash-route style)
-  const shareLink = useMemo(() => {
-    const base = (window.location && window.location.origin) || "https://example.com";
-    return `${base.replace(/\/$/, "")}/#/register?code=${encodeURIComponent(inviteCode)}`;
-  }, [inviteCode]);
+  // ✅ Share link: fixed host + param name `invite`
+  const SHARE_BASE = "https://www.dhwin.app";
+  const shareLink = useMemo(
+    () => `${SHARE_BASE.replace(/\/$/, "")}/register?invite=${encodeURIComponent(inviteCode)}`,
+    [inviteCode]
+  );
 
+  // QR uses the same shareLink
   const qrUrl = useMemo(
     () =>
       `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(
@@ -43,7 +42,7 @@ export default function InvitePage() {
 
   return (
     <div className="page" style={{ background: "#f6f7fb", minHeight: "100%" }}>
-      {/* topbar (same pattern) */}
+      {/* topbar */}
       <header className="dep-topbar" style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <button
           className="dep-back dep-back--tint"
