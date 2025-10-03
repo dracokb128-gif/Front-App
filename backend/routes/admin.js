@@ -8,12 +8,15 @@ const router = express.Router();
 /* ---------- DATA DIR (Render disk-safe) ---------- */
 const DATA_DIR = fs.existsSync("/var/data") ? "/var/data" : path.join(__dirname, "..", "data");
 const RULES_FILE = path.join(DATA_DIR, "injectRules.json");
+/* ⬇️ users.json bhi yahin rakhen (server.js ke hi jaisa path) */
+const USERS_FILE = path.join(DATA_DIR, "users.json");
 
 /* ---------- ensure files ---------- */
 function ensure() {
   try {
     if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
     if (!fs.existsSync(RULES_FILE)) fs.writeFileSync(RULES_FILE, "[]", "utf8");
+    if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, "[]", "utf8");
   } catch (e) {
     console.error("ensure() failed:", e);
   }
@@ -36,14 +39,25 @@ function writeRules(v) {
   ensure();
   fs.writeFileSync(RULES_FILE, JSON.stringify(v || [], null, 2), "utf8");
 }
+function readUsers() {
+  ensure();
+  try {
+    const txt = fs.readFileSync(USERS_FILE, "utf8") || "[]";
+    const arr = JSON.parse(txt);
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+function writeUsers(v) {
+  ensure();
+  fs.writeFileSync(USERS_FILE, JSON.stringify(v || [], null, 2), "utf8");
+}
 const idKey = (v) => String(v ?? "").trim();
 const sameId = (a, b) => idKey(a).replace(/^u/i, "") === idKey(b).replace(/^u/i, "");
 
 /* =========================================================================
    INJECT RULES CRUD
-   NOTE:
-   - server.js maps POST/PATCH/DELETE from /api/admin/inject-rules -> /api/admin/rules
-   - Keep endpoints here at /rules to match that mapping.
    =======================================================================*/
 
 /** List rules (optionally for a specific userId) */
@@ -115,7 +129,6 @@ router.patch("/rules/:id", (req, res) => {
     r.usedAt = nowISO();
   }
 
-  // If explicitly marked used, optionally remove from file (keep behavior simple: keep but flagged used)
   list[idx] = r;
   writeRules(list);
   res.json({ ok: true, rule: r });
@@ -135,6 +148,45 @@ router.post("/rules/purge-used", (_req, res) => {
   const after = before.filter((r) => String(r.status || "") !== "used");
   writeRules(after);
   res.json({ ok: true, removed: before.length - after.length, left: after.length });
+});
+
+/* =========================================================================
+   ✅ NEW: Admin change password (self OR any user)
+   Frontend ke 2 calls yahin aayenge:
+   - POST /api/admin/change-password  { oldPassword, newPassword }        -> admin apna
+   - POST /api/admin/change-password  { userId, newPassword }             -> Manage User
+   =======================================================================*/
+router.post("/change-password", (req, res) => {
+  const { userId, newPassword, oldPassword } = req.body || {};
+
+  if (!newPassword || String(newPassword).length < 6) {
+    return res.status(400).json({ ok: false, message: "min_6" });
+  }
+
+  const users = readUsers();
+
+  // A) Specific user (Manage dialog)
+  if (userId) {
+    const uid = String(userId).replace(/^u/i, "");
+    const idx = users.findIndex((u) => String(u.id) === uid);
+    if (idx < 0) return res.status(404).json({ ok: false, message: "user_not_found" });
+
+    users[idx].password = String(newPassword);
+    writeUsers(users);
+    return res.json({ ok: true, userId: users[idx].id });
+  }
+
+  // B) Admin apna password (Settings tab)
+  const admin = users.find((u) => u && u.isAdmin);
+  if (!admin) return res.status(404).json({ ok: false, message: "admin_not_found" });
+
+  if (String(admin.password) !== String(oldPassword || "")) {
+    return res.status(400).json({ ok: false, message: "old_password_wrong" });
+  }
+
+  admin.password = String(newPassword);
+  writeUsers(users);
+  res.json({ ok: true });
 });
 
 module.exports = router;

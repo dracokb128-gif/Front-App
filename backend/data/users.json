@@ -1824,7 +1824,7 @@
   {
     "id": 8,
     "username": "Newaccount",
-    "password": "123123",
+    "password": "112233",
     "balance": 0,
     "createdAt": 1759426940521,
     "inviteCode": "120236",
@@ -1846,7 +1846,7 @@
     "isFrozen": false,
     "wd_pwd_set": true,
     "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
-    "wd_pwd_updated_at": "2025-10-02T17:42:53.631Z",
+    "wd_pwd_updated_at": "2025-10-03T15:13:11.980Z",
     "avatar": "/static/avatars/u_8.jpg"
   }
 ]
