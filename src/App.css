@@ -20,11 +20,8 @@ html, body{
   --ink:#1e293b;
   --hero-solid: linear-gradient(90deg, #c24d87 0%, #d85f22 100%);
 }
-html, body, #root, .page {
-  min-height: 100vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* ← yahin likhna hai */
-}
+*{ box-sizing:border-box; }
+html,body,#root,.page{ height:100%; }
 body{ margin:0; background:linear-gradient(#eef2ff,#f5f7ff); }
 .wrap{ max-width:var(--maxw); padding:0 var(--page-x); margin:0 auto; }
 .content{ padding-bottom:80px; }
