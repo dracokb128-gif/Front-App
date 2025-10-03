@@ -143,29 +143,74 @@ function hasTaskPayload(resp) {
   return !!(resp?.task || resp?.unpaid || resp?.noMore || resp?.ok || resp?.redirectToRecord);
 }
 
+/* 🔒 Frontend guard (so even old servers can’t bypass tiers) */
+function localTierGate(store, balance) {
+  const b = Number(balance || 0);
+  const s = String(store || "amazon").toLowerCase();
+
+  if (s === "amazon"   && b > 498) return {
+    blocked: true,
+    message: "Your balance is more than 498 USDT. Please continue with Alibaba or AliExpress."
+  };
+  if (s === "alibaba"  && (b < 499 || b >= 901)) return {
+    blocked: true,
+    message: b < 499
+      ? "Alibaba requires a balance between 499–900 USDT."
+      : "Your balance is 901+ USDT. Please continue with AliExpress."
+  };
+  if (s === "aliexpress" && b < 901) return {
+    blocked: true,
+    message: "AliExpress requires a balance of 901+ USDT."
+  };
+  return { blocked:false };
+}
+
 /* ===========================================================
    User-facing: progress / records / tasks
 =========================================================== */
 export const getProgress = (userId) => http(`/api/progress?userId=${encodeURIComponent(userId)}`);
 export const getRecords  = (userId) => http(`/api/records?userId=${encodeURIComponent(userId)}`);
 
+/**
+ * taskNext — STRICT:
+ * - If store === 'auto' => we may fallback to other stores.
+ * - If store is explicit (amazon/alibaba/aliexpress) => NO fallback; apply local guard first.
+ */
 export async function taskNext(userId, store = "auto") {
   const uid = String(userId).replace(/^u/i, "");
   let balance = 0;
   try { const prog = await getProgress(uid); balance = Number(prog?.balance || 0); } catch {}
-  const first = pickStoreForBalance(balance, store);
-  const fallbacks = ["amazon", "alibaba", "aliexpress"].filter((s) => s !== first);
+
+  const normalized = String(store || "auto").toLowerCase();
+  const resolved = normalized === "auto" ? pickStoreForBalance(balance, store) : normalized;
+
+  // Strict local tier guard for explicit pages
+  if (normalized !== "auto") {
+    const gate = localTierGate(resolved, balance);
+    if (gate.blocked) {
+      return { notEligible: true, message: gate.message, suggestUpgrade: true, suggestMessage: gate.message };
+    }
+  }
+
   const tryOnce = async (st) =>
     http(`/api/task/next`, { method: "POST", body: { userId: uid, store: String(st || "").toLowerCase() || "amazon" } });
-  let resp = await tryOnce(first);
+
+  // First attempt with the resolved store
+  let resp = await tryOnce(resolved);
   if (hasTaskPayload(resp) && !resp.notEligible) return resp;
-  for (const st of fallbacks) {
-    try {
-      const r = await tryOnce(st);
-      if (hasTaskPayload(r) && !r.notEligible) return r;
-      resp = r;
-    } catch {}
+
+  // Only fallback when caller asked for 'auto'
+  if (normalized === "auto") {
+    const fallbacks = ["amazon", "alibaba", "aliexpress"].filter((s) => s !== resolved);
+    for (const st of fallbacks) {
+      try {
+        const r = await tryOnce(st);
+        if (hasTaskPayload(r) && !r.notEligible) return r;
+        resp = r;
+      } catch {}
+    }
   }
+
   return resp;
 }
 

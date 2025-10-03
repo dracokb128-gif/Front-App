@@ -1,4 +1,4 @@
-// backend/server.js — FINAL (A→Z) with Inject Rules API restored (array GET), tasks, deposits, withdrawals, wallet, avatar
+// backend/server.js — strict tier gating + tasks, deposits, withdrawals, wallet, avatar
 
 const express = require("express");
 const cors = require("cors");
@@ -42,7 +42,6 @@ const DATA_DIR =
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 const RULES_FILE = path.join(DATA_DIR, "injectRules.json");
 
-
 if (!fs.existsSync(DATA_DIR))     fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(USERS_FILE))   fs.writeFileSync(USERS_FILE, "[]", "utf8");
 if (!fs.existsSync(RULES_FILE))   fs.writeFileSync(RULES_FILE, "[]", "utf8");
@@ -54,7 +53,6 @@ if (!fs.existsSync(DEPOSITS_FILE)) fs.writeFileSync(DEPOSITS_FILE, "[]", "utf8")
 /* addresses.json: single location inside DATA_DIR */
 const ADDR_PRIMARY = path.join(DATA_DIR, "addresses.json");
 const ADDR_FILES   = [ADDR_PRIMARY];
-
 
 function ensureAddrFiles() {
   for (const f of ADDR_FILES) {
@@ -268,7 +266,6 @@ app.get("/api/_debug/paths", (_req, res) => {
     settingsFile: SETTINGS_FILE
   });
 });
-// 🔎 disk users quick check
 app.get("/api/debug/users", (_req, res) => {
   try {
     const users = readUsers();
@@ -389,7 +386,7 @@ app.post("/api/change-password", (req, res) => {
   res.json({ ok:true });
 });
 
-/* -------------------- admin user ops (NON-auth; auth handled inside routes/admin.js) -------------------- */
+/* -------------------- admin user ops -------------------- */
 app.get("/api/admin/users", (_req,res)=>{
   const out = readUsers().map(u => ({
     id:u.id, username:u.username, balance:Number(u.balance||0),
@@ -617,21 +614,21 @@ app.post("/api/task/next", (req,res)=>{
 
   const bal = Number(u.balance || 0);
   if (store === "amazon" && bal > 498) {
-    const msg = "Your Balance Is More Than 498 You Can Continue With AliBaba or AliExpress ";
+    const msg = " is more than 498 USDT. Please continue with Alibaba or AliExpressYour balance.";
     return res.json({ notEligible:true, message: msg, suggestUpgrade:true, suggestMessage: msg });
   }
   if (store === "alibaba") {
     if (bal < 499) {
-      const msg = "Alibaba requires a balance between 499–899 USDT to grab orders.";
+      const msg = "Alibaba requires a balance between 499–900 USDT.";
       return res.json({ notEligible:true, message: msg, suggestUpgrade:true, suggestMessage: msg });
     }
-    if (bal > 900) {
-      const msg = "Your Balance Is More Than 901 You Can Continue With Ali Express.";
+    if (bal >= 901) {
+      const msg = "Your Balnce is more than 900 USDT Please continue with Alibaba or AliExpress";
       return res.json({ notEligible:true, message: msg, suggestUpgrade:true, suggestMessage: msg });
     }
   }
   if (store === "aliexpress" && bal < 901) {
-    const msg = "AliExpress requires a balance between 499–899 USDT to grab orders";
+    const msg = "AliExpress requires a balance of 901 USDT.";
     return res.json({ notEligible:true, message: msg, suggestUpgrade:true, suggestMessage: msg });
   }
 
@@ -714,7 +711,6 @@ app.post("/api/complete", (req,res)=>{
   u.daily[key].completed  = Number(u.daily[key].completed||0) + 1;
   u.daily[key].commission = Number((Number(u.daily[key].commission||0) + commission).toFixed(3));
 
-  // 🔥 FIX: persist full snapshot so Records render correctly after re-login
   if (!Array.isArray(u.history)) u.history = [];
   const snapshot = u.pending || u.staged || task;
   u.history.unshift({
@@ -746,7 +742,7 @@ app.post("/api/wd/set-password", (req, res) => {
   if (!u) return res.status(404).json({ ok:false, msg:"User not found" });
   ensureWd(u);
   if (u.wd_pwd_set) return res.status(409).json({ ok:false, msg:"Already set" });
-  u.wd_pwd_hash = wdHash(password);
+  u.wd_pwd_hash = crypto.createHash("sha256").update(String(password)).digest("hex");
   u.wd_pwd_set = true;
   u.wd_pwd_updated_at = nowISO();
   writeUsers(users);
@@ -760,8 +756,9 @@ app.post("/api/wd/change-password", (req, res) => {
   if (!u) return res.status(404).json({ ok:false, msg:"User not found" });
   ensureWd(u);
   if (!u.wd_pwd_set || !u.wd_pwd_hash) return res.status(400).json({ ok:false, msg:"Not set yet" });
-  if (u.wd_pwd_hash !== wdHash(oldPassword)) return res.status(401).json({ ok:false, msg:"Old password wrong" });
-  u.wd_pwd_hash = wdHash(newPassword);
+  if (u.wd_pwd_hash !== crypto.createHash("sha256").update(String(oldPassword)).digest("hex"))
+    return res.status(401).json({ ok:false, msg:"Old password wrong" });
+  u.wd_pwd_hash = crypto.createHash("sha256").update(String(newPassword)).digest("hex");
   u.wd_pwd_updated_at = nowISO();
   writeUsers(users);
   res.json({ ok:true });
@@ -773,7 +770,7 @@ app.post("/api/wd/verify", (req, res) => {
   const u = users.find(x => sameId(x.id, userId));
   ensureWd(u);
   if (!u) return res.status(404).json({ ok:false, msg:"User not found" });
-  const ok = !!u.wd_pwd_set && u.wd_pwd_hash === wdHash(password);
+  const ok = !!u.wd_pwd_set && u.wd_pwd_hash === crypto.createHash("sha256").update(String(password)).digest("hex");
   return ok ? res.json({ ok:true }) : res.status(401).json({ ok:false, msg:"Invalid password" });
 });
 app.post("/api/admin/wd/set", (req, res) => {
@@ -783,7 +780,7 @@ app.post("/api/admin/wd/set", (req, res) => {
   const u = users.find(x => sameId(x.id, userId));
   if (!u) return res.status(404).json({ ok:false, msg:"User not found" });
   ensureWd(u);
-  u.wd_pwd_hash = wdHash(newPassword);
+  u.wd_pwd_hash = crypto.createHash("sha256").update(String(newPassword)).digest("hex");
   u.wd_pwd_set = true;
   u.wd_pwd_updated_at = nowISO();
   writeUsers(users);
@@ -931,7 +928,7 @@ app.get("/api/withdraw/records", (req, res) => {
 app.get("/api/withdrawals/records", (req, res) => { req.url = "/api/withdraw/records"; app._router.handle(req, res); });
 app.get("/api/withdrawals", (req, res) => { req.url = "/api/withdraw/records"; app._router.handle(req, res); });
 
-/* -------------------- 🔧 Inject Rules API (ARRAY GET) — SELF-CONTAINED -------------------- */
+/* -------------------- 🔧 Inject Rules API (ARRAY GET) -------------------- */
 function _rulesListFor(uidRaw){
   const uid = String(uidRaw||"").replace(/^u/i,"");
   const all = readRules().map(r => ({
@@ -951,7 +948,7 @@ function _rulesListFor(uidRaw){
 }
 app.get("/api/admin/inject-rules", (req,res)=>{
   const items = _rulesListFor(req.query.userId);
-  return res.json(items); // UI expects ARRAY
+  return res.json(items);
 });
 app.post("/api/admin/inject-rules", (req,res)=>{
   const b = req.body || {};
@@ -1007,7 +1004,7 @@ app.post("/api/admin/inject-rules/purge-used", (req,res)=>{
   list = list.filter(r => {
     const usedLike = String(r.status||"").toLowerCase()==="used" || r.used===true || r.applied===true || r.status==="consumed";
     if (!usedLike) return true;
-    if (uid && String(r.userId)!==uid) return true; // keep others if filtering
+    if (uid && String(r.userId)!==uid) return true;
     return false;
   });
   writeRules(list);
@@ -1015,7 +1012,6 @@ app.post("/api/admin/inject-rules/purge-used", (req,res)=>{
 });
 
 /* -------------------- Customer Service (Telegram) Link -------------------- */
-// Admin: get current link
 app.get("/api/admin/cs-link", (_req, res) => {
   try {
     const s = readSettings();
@@ -1024,8 +1020,6 @@ app.get("/api/admin/cs-link", (_req, res) => {
     res.status(500).json({ ok: false, error: e.message });
   }
 });
-
-// Admin: save/update link
 app.post("/api/admin/cs-link", (req, res) => {
   try {
     let url = String(req.body?.url || "").trim();
@@ -1041,8 +1035,6 @@ app.post("/api/admin/cs-link", (req, res) => {
     res.status(500).json({ ok: false, error: e.message });
   }
 });
-
-// Public: users ke Service page ko link dene ke liye
 app.get("/api/cs-link", (_req, res) => {
   try {
     const s = readSettings();
@@ -1052,7 +1044,7 @@ app.get("/api/cs-link", (_req, res) => {
   }
 });
 
-/* -------------------- Admin router (bcrypt admin auth + maybe duplicate routes) -------------------- */
+/* -------------------- Admin router (bcrypt admin auth etc.) -------------------- */
 const adminRouter = require("./routes/admin");
 app.use("/api/admin", adminRouter);
 

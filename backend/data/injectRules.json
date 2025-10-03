@@ -259,5 +259,27 @@
     "createdAt": "2025-10-02T17:27:38.616Z",
     "used": true,
     "usedAt": "2025-10-02T17:28:15.437Z"
+  },
+  {
+    "id": "r_1759480860819_u1c6",
+    "userId": "1",
+    "taskNo": 10,
+    "amountSpec": "3510.445",
+    "percent": 19,
+    "status": "used",
+    "createdAt": "2025-10-03T08:41:00.819Z",
+    "used": true,
+    "usedAt": "2025-10-03T08:41:12.479Z"
+  },
+  {
+    "id": "r_1759496745655_ayml",
+    "userId": "1",
+    "taskNo": 5,
+    "amountSpec": "90.11",
+    "percent": 11,
+    "status": "used",
+    "createdAt": "2025-10-03T13:05:45.655Z",
+    "used": true,
+    "usedAt": "2025-10-03T13:06:01.622Z"
   }
 ]
