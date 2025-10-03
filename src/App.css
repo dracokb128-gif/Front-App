@@ -6855,3 +6855,49 @@ button.primary.loading { opacity:.8; }
   padding: 4px 12px;
   border-radius: 12px;
 }
+body { 
+  margin-bottom: 20% !important;
+}/* 1) Record → combine items list ka inner scroll */
+.items-scroll{
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  /* optional: scrollbar chhupana (mobile look clean) */
+}
+.items-scroll::-webkit-scrollbar{ width: 0; height: 0; }
+
+/* 2) Animated tabs container ko scrollable banao */
+.content.tab-stage{
+  position: relative;
+  overflow: hidden;            /* parent clip */
+}
+.content.tab-stage > div{
+  height: 100%;
+  overflow: auto;              /* yeh actual scroll hai */
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 90px;        /* bottom bar ke upar space (Submit btn visible) */
+}
+
+/* 3) Safety: helper space jahan use hua hai */
+.bottom-space{ height: 90px; }  /* MinePage me already lagta hai */
+:root{
+  /* bottom nav ki height – aapke UI ke hisaab se 64–72px */
+  --bottom-nav-h: 72px;
+}
+
+/* page layout */
+.page{ position: relative; min-height:100svh; }
+
+/* content area ko bottom nav ki jagah chhor do (sirf yahin se) */
+.content.tab-stage{
+  min-height: 100svh;
+  padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px));
+}
+
+/* bottom nav fixed at bottom */
+.bottom{
+  position: fixed; left:0; right:0; bottom:0;
+  height: var(--bottom-nav-h);
+}
+
+/* safety: agar kahin bottom-space reh bhi gaya ho */
+.bottom-space{ display:none; height:0; }

@@ -1825,15 +1825,82 @@
     "id": 8,
     "username": "Newaccount",
     "password": "112233",
-    "balance": 0,
+    "balance": 20.777,
     "createdAt": 1759426940521,
     "inviteCode": "120236",
     "isAdmin": false,
     "completedToday": 0,
     "totalCompleted": 0,
     "lastTaskDate": "2025-10-04",
-    "history": [],
-    "pending": null,
+    "history": [
+      {
+        "id": "t_1759523513812",
+        "kind": "single",
+        "orderAmount": 6.32,
+        "commission": 0.253,
+        "at": 1759523515053,
+        "taskSnapshot": {
+          "id": "t_1759523513812",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 6.32,
+          "quantity": 1,
+          "orderAmount": 6.32,
+          "commission": 0.253,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759523511215",
+        "kind": "single",
+        "orderAmount": 13.09,
+        "commission": 0.524,
+        "at": 1759523512199,
+        "taskSnapshot": {
+          "id": "t_1759523511215",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 1.19,
+          "quantity": 11,
+          "orderAmount": 13.09,
+          "commission": 0.524,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      }
+    ],
+    "pending": {
+      "id": "t_1759523516157",
+      "kind": "combine",
+      "type": "combined",
+      "orderAmount": 90,
+      "commission": 0,
+      "commissionRate": 0,
+      "items": [
+        {
+          "title": "Tablet Case",
+          "quantity": 3,
+          "unitPrice": 9.66
+        },
+        {
+          "title": "Power Bank 10k",
+          "quantity": 2,
+          "unitPrice": 24.35
+        },
+        {
+          "title": "Tripod Stand",
+          "quantity": 1,
+          "unitPrice": 15.71
+        }
+      ],
+      "deficit": 69.223,
+      "__ruleId": "r_1759523500605_plfn"
+    },
     "staged": null,
     "daily": {
       "2025-10-03": {
@@ -1842,12 +1909,15 @@
         "seenTotalsCents": []
       },
       "2025-10-04": {
-        "completed": 0,
-        "commission": 0,
-        "seenTotalsCents": []
+        "completed": 2,
+        "commission": 0.777,
+        "seenTotalsCents": [
+          1309,
+          632
+        ]
       }
     },
-    "overallCommission": 0,
+    "overallCommission": 0.777,
     "isFrozen": false,
     "wd_pwd_set": true,
     "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",

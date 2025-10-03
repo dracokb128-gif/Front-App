@@ -88,7 +88,6 @@ function avatarKey() {
 }
 function getAvatar() {
   try {
-    // prefer per-user key; never fall back to someone else’s photo
     const v = localStorage.getItem(avatarKey());
     return v || DEFAULT_AVATAR_URL;
   } catch {
@@ -104,17 +103,13 @@ function AvatarRound() {
 
   useEffect(() => {
     const sync = () => { setSrc(getAvatar()); setBroken(false); };
-
     const onStorage = (e) => {
       if (!e || !e.key) return;
-      // react when current user's key changes
       if (e.key === avatarKey() || e.key.startsWith("avatar_src:")) sync();
     };
-
     window.addEventListener("storage", onStorage);
     window.addEventListener("avatar:changed", sync);
     window.addEventListener("uid:changed", sync);
-
     return () => {
       window.removeEventListener("storage", onStorage);
       window.removeEventListener("avatar:changed", sync);
@@ -161,7 +156,6 @@ function MinePage() {
         found = users[0] || null;
         if (found) {
           localStorage.setItem("uid", String(found.id));
-          // let avatar widget refresh in the same tab
           window.dispatchEvent(new Event("uid:changed"));
         }
       }
@@ -172,19 +166,14 @@ function MinePage() {
     }
   }
 
-  function handleDeposit() {
-    nav("/deposit");
+  function handleDeposit() { nav("/deposit"); }
+  function getVipFromBalance(bal) {
+    if (bal >= 901) return 3;
+    if (bal >= 499) return 2;
+    if (bal >= 20) return 1;
+    return 0;
   }
-function getVipFromBalance(bal) {
-  if (bal >= 901) return 3;
-  if (bal >= 499) return 2;
-  if (bal >= 20) return 1;
-  return 0;
-}
-
-  function handleWithdraw() {
-    nav("/withdrawal");
-  }
+  function handleWithdraw() { nav("/withdrawal"); }
 
   const username = me?.username ?? "—";
   const invite = me?.inviteCode ?? "—";
