@@ -1824,8 +1824,8 @@
   {
     "id": 8,
     "username": "Newaccount",
-    "password": "112233",
-    "balance": 20.777,
+    "password": "123123",
+    "balance": 21.54,
     "createdAt": 1759426940521,
     "inviteCode": "120236",
     "isAdmin": false,
@@ -1833,6 +1833,46 @@
     "totalCompleted": 0,
     "lastTaskDate": "2025-10-04",
     "history": [
+      {
+        "id": "t_1759567341893",
+        "kind": "single",
+        "orderAmount": 15.73,
+        "commission": 0.629,
+        "at": 1759567342885,
+        "taskSnapshot": {
+          "id": "t_1759567341893",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 15.73,
+          "quantity": 1,
+          "orderAmount": 15.73,
+          "commission": 0.629,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759567339903",
+        "kind": "single",
+        "orderAmount": 3.34,
+        "commission": 0.134,
+        "at": 1759567340796,
+        "taskSnapshot": {
+          "id": "t_1759567339903",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 3.34,
+          "quantity": 1,
+          "orderAmount": 3.34,
+          "commission": 0.134,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
       {
         "id": "t_1759523513812",
         "kind": "single",
@@ -1875,31 +1915,36 @@
       }
     ],
     "pending": {
-      "id": "t_1759523516157",
+      "id": "t_1759567343918",
       "kind": "combine",
       "type": "combined",
       "orderAmount": 90,
-      "commission": 0,
-      "commissionRate": 0,
+      "commission": 10.8,
+      "commissionRate": 0.12,
       "items": [
         {
           "title": "Tablet Case",
-          "quantity": 3,
-          "unitPrice": 9.66
+          "quantity": 2,
+          "unitPrice": 10.4
         },
         {
           "title": "Power Bank 10k",
-          "quantity": 2,
-          "unitPrice": 24.35
+          "quantity": 1,
+          "unitPrice": 23.93
         },
         {
           "title": "Tripod Stand",
           "quantity": 1,
-          "unitPrice": 15.71
+          "unitPrice": 15.32
+        },
+        {
+          "title": "Wireless Headphone",
+          "quantity": 1,
+          "unitPrice": 36.62
         }
       ],
-      "deficit": 69.223,
-      "__ruleId": "r_1759523500605_plfn"
+      "deficit": 68.46,
+      "__ruleId": "r_1759567306468_4fwx"
     },
     "staged": null,
     "daily": {
@@ -1910,14 +1955,14 @@
       },
       "2025-10-04": {
         "completed": 2,
-        "commission": 0.777,
+        "commission": 0.763,
         "seenTotalsCents": [
-          1309,
-          632
+          334,
+          1573
         ]
       }
     },
-    "overallCommission": 0.777,
+    "overallCommission": 1.54,
     "isFrozen": false,
     "wd_pwd_set": true,
     "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",

@@ -284,5 +284,16 @@
     "createdAt": "2025-10-03T20:31:40.605Z",
     "used": true,
     "usedAt": "2025-10-03T20:32:00.937Z"
+  },
+  {
+    "id": "r_1759567306468_4fwx",
+    "userId": "8",
+    "taskNo": 3,
+    "amountSpec": "90",
+    "percent": 12,
+    "status": "used",
+    "createdAt": "2025-10-04T08:41:46.468Z",
+    "used": true,
+    "usedAt": "2025-10-04T08:42:27.115Z"
   }
 ]
