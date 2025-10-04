@@ -6920,7 +6920,7 @@ body {
   width: 100%;
   max-width: 440px;
   margin: 0 auto;          /* card center */
-  padding: 4px;           /* symmetric padding */
+  padding: 16px;           /* symmetric padding */
   box-sizing: border-box;
 }
 
