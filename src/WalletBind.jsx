@@ -81,7 +81,7 @@ export default function WalletBind() {
 
       // Backend persist
       try {
-        await fetch(`https://backend-app-jqla.onrender.com/api/wallet/set`, {
+        await fetch(`/api/wallet/set`, { credentials: "include",
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId: uid, address: addr, network: protocol, walletName: name }),

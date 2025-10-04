@@ -172,7 +172,7 @@ const API_BASE =
   (typeof process !== "undefined" &&
     process.env &&
     (process.env.REACT_APP_API_BASE || process.env.VITE_API_BASE)) ||
-  "https://backend-app-jqla.onrender.com";
+  "";
 
 /** GET /api/wallet/address?userId=UID -> { address, network?, walletName?, owner? } */
 async function fetchServerWallet(uid) {

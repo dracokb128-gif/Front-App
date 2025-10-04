@@ -16,7 +16,7 @@ const AUTO_DEV_BASE =
     /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname))
     ? "http://localhost:4000"
     : "";
-export const API_BASE = LS_BASE || ENV_BASE || AUTO_DEV_BASE || "https://backend-app-jqla.onrender.com";
+export const API_BASE = LS_BASE || ENV_BASE || AUTO_DEV_BASE || "";
 
 /* Optional custom wallet endpoints via env */
 const WALLET_SET_PATH =
