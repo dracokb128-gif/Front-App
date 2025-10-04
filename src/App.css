@@ -6909,63 +6909,43 @@ body {
   word-break: break-all;
 }
 .dep2-qr img{max-width:240px; width:100%; height:auto;}
-/* ==== DepositConfirm (QR page only) ==== */
-.dep-confirm{
-  min-height: 100dvh;
-  overflow-x: hidden;                 /* left-right scroll band */
-}
-
+/* === Deposit Confirm (QR page) only === */
 .dep-confirm .dep-main{
-  display: flex;                      /* content ko center lane ke liye */
-  justify-content: center;
-  padding: 16px 12px 96px;
-  overflow-x: hidden;                 /* safety */
+  max-width: 480px;
+  margin: 0 auto;          /* pure page center */
+  padding: 0 16px;         /* equal L/R gutter */
 }
 
 .dep-confirm .dep2-card{
   width: 100%;
-  max-width: 420px;                   /* page width lock */
-  margin: 0 auto;                     /* center */
+  max-width: 440px;
+  margin: 0 auto;          /* card center */
+  padding: 4px;           /* symmetric padding */
   box-sizing: border-box;
 }
 
-.dep-confirm .dep2-qr{
-  display: flex;
-  justify-content: center;
+/* inner sections centered */
+.dep-confirm .dep2-head,
+.dep-confirm .dep2-onetime,
+.dep-confirm .dep2-qr,
+.dep-confirm .dep2-addr,
+.dep-confirm .dep2-wait{
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
+/* QR size & centering */
 .dep-confirm .dep2-qr img{
-  width: min(210px, 70vw);            /* QR size control (bada nahi hoga) */
+  display: block;
+  width: min(260px, 80vw);   /* no overgrow */
   height: auto;
-  aspect-ratio: 1 / 1;
+  margin: 0 auto;
 }
 
-.dep-confirm .dep2-addr{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+/* address row layout */
+.dep-confirm .dep2-addr{ display:flex; align-items:center; gap:10px; }
+.dep-confirm .dep2-addr-box{ flex:1 1 auto; text-align:left; }
 
-.dep-confirm .dep2-addr-box{
-  flex: 1;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;            /* long address trim */
-}
-/* 1) Main ko perfect center pe lao */
-.dep-confirm .dep-main{
-  display: grid;
-  place-items: start center;   /* horizontally center */
-  padding-inline: 3px;        /* left/right gutter equal; adjust 12–20px */
-}
-
-/* 2) Card ko fixed max width + true center */
-.dep-confirm .dep2-card{
-  max-width: 400px;            /* 380–420 try kar sakte ho */
-  margin-inline: auto;         /* center horizontally */
-  box-sizing: border-box;
-}
-
-/* 3) Safety: koi horizontal scroll ya shift na aaye */
-.dep-confirm{ overflow-x:hidden; }
+/* safety: no horizontal scroll */
+html, body, .dep-confirm { overflow-x: hidden; }
