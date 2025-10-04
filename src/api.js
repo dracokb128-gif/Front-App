@@ -18,6 +18,7 @@ const AUTO_DEV_BASE =
     : "";
 export const API_BASE = LS_BASE || ENV_BASE || AUTO_DEV_BASE || "";
 
+
 /* Optional custom wallet endpoints via env */
 const WALLET_SET_PATH =
   (typeof process !== "undefined" &&

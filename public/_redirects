@@ -1,11 +1,11 @@
-# --- force www (non-www -> www)
-http://dhwin.app/*   https://www.dhwin.app/:splat 301!
-https://dhwin.app/*  https://www.dhwin.app/:splat 301!
+# --- Canonical: force HTTPS + www ---
+http://dhwin.app/*        https://www.dhwin.app/:splat 301!
+http://www.dhwin.app/*    https://www.dhwin.app/:splat 301!
+https://dhwin.app/*       https://www.dhwin.app/:splat 301!
 
-# --- API proxy (Netlify -> Render backend)
-# tumhara external URL:
-# https://backend-app-jqla.onrender.com
-/api/*  https://backend-app-jqla.onrender.com/:splat 200
+# --- API proxy (Netlify -> Render backend) ---
+# /api/...  ->  https://backend-app-jqla.onrender.com/api/...
+/api/*                      https://backend-app-jqla.onrender.com/api/:splat 200
 
-# --- SPA fallback
-/*  /index.html 200
+# --- SPA fallback (React Router) ---
+/*                        /index.html 200
