@@ -6901,3 +6901,71 @@ body {
 
 /* safety: agar kahin bottom-space reh bhi gaya ho */
 .bottom-space{ display:none; height:0; }
+/* DepositConfirm */
+.dep2-addr { display:flex; gap:12px; align-items:center; }
+.dep2-addr-box{
+  flex:1; max-width:100%;
+  overflow-wrap:anywhere;      /* or word-break: break-all; */
+  word-break: break-all;
+}
+.dep2-qr img{max-width:240px; width:100%; height:auto;}
+/* ==== DepositConfirm (QR page only) ==== */
+.dep-confirm{
+  min-height: 100dvh;
+  overflow-x: hidden;                 /* left-right scroll band */
+}
+
+.dep-confirm .dep-main{
+  display: flex;                      /* content ko center lane ke liye */
+  justify-content: center;
+  padding: 16px 12px 96px;
+  overflow-x: hidden;                 /* safety */
+}
+
+.dep-confirm .dep2-card{
+  width: 100%;
+  max-width: 420px;                   /* page width lock */
+  margin: 0 auto;                     /* center */
+  box-sizing: border-box;
+}
+
+.dep-confirm .dep2-qr{
+  display: flex;
+  justify-content: center;
+}
+
+.dep-confirm .dep2-qr img{
+  width: min(210px, 70vw);            /* QR size control (bada nahi hoga) */
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.dep-confirm .dep2-addr{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dep-confirm .dep2-addr-box{
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;            /* long address trim */
+}
+/* 1) Main ko perfect center pe lao */
+.dep-confirm .dep-main{
+  display: grid;
+  place-items: start center;   /* horizontally center */
+  padding-inline: 3px;        /* left/right gutter equal; adjust 12–20px */
+}
+
+/* 2) Card ko fixed max width + true center */
+.dep-confirm .dep2-card{
+  max-width: 400px;            /* 380–420 try kar sakte ho */
+  margin-inline: auto;         /* center horizontally */
+  box-sizing: border-box;
+}
+
+/* 3) Safety: koi horizontal scroll ya shift na aaye */
+.dep-confirm{ overflow-x:hidden; }

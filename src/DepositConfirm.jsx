@@ -136,7 +136,7 @@ export default function DepositConfirm() {
   }, [userId, nav]);
 
   return (
-    <div className="dep-wrap">
+    <div className="dep-wrap dep-confirm">
       {/* topbar */}
       <header className="dep-topbar">
         <button className="dep-back dep-back--tint" type="button" onClick={() => nav(-1)} aria-label="Back">
