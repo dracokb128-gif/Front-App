@@ -30,8 +30,15 @@ function downscale(dataURL, maxSide = 640, quality = 0.9) {
   });
 }
 
+// make API-relative urls absolute
 const abs = (u) => (u && !/^https?:/i.test(u) ? `${API_BASE}${u}` : u || "");
+// cache-bust
 const bust = (u) => (u ? `${u}${u.includes("?") ? "&" : "?"}v=${Date.now()}` : u);
+// avoid mixed-content when site is HTTPS (eslint-safe)
+const httpsify = (u) =>
+  u && window.location.protocol === "https:" && /^http:\/\//i.test(u)
+    ? u.replace(/^http:/i, "https:")
+    : u;
 
 // ✅ key helpers
 function avatarKey() {
@@ -51,7 +58,7 @@ export default function ProfilePage() {
       try {
         const r = await getAvatar(uid);
         if (r?.url) {
-          const url = bust(r.url);
+          const url = httpsify(bust(abs(r.url)));
           localStorage.setItem(key, url);
           setSrc(url);
         }
@@ -74,7 +81,7 @@ export default function ProfilePage() {
 
       // save to server disk
       const saved = await setAvatar(uid, small);
-      const url = bust(saved?.url || "");
+      const url = httpsify(bust(abs(saved?.url || "")));
       if (url) {
         localStorage.setItem(key, url);   // store URL (not data:)
         setSrc(url);
