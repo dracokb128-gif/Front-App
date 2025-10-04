@@ -1,10 +1,11 @@
+// src/ProfilePage.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { FiChevronLeft, FiCamera, FiTrash2 } from "react-icons/fi";
 import { API_BASE, getAvatar, setAvatar, deleteAvatar } from "./api";
 
 const DEFAULT_AVATAR_URL = "/photo_2025-09-12_21-00-08.jpg";
 
-/* helpers */
+/* ------------ helpers ------------ */
 function fileToDataURL(file) {
   return new Promise((resolve, reject) => {
     const r = new FileReader();
@@ -34,13 +35,13 @@ function downscale(dataURL, maxSide = 640, quality = 0.9) {
 const abs = (u) => (u && !/^https?:/i.test(u) ? `${API_BASE}${u}` : u || "");
 // cache-bust
 const bust = (u) => (u ? `${u}${u.includes("?") ? "&" : "?"}v=${Date.now()}` : u);
-// avoid mixed-content when site is HTTPS (eslint-safe)
+// avoid mixed-content when site is HTTPS
 const httpsify = (u) =>
-  u && window.location.protocol === "https:" && /^http:\/\//i.test(u)
+  (u && typeof window !== "undefined" && window.location?.protocol === "https:" && /^http:\/\//i.test(u)
     ? u.replace(/^http:/i, "https:")
-    : u;
+    : u);
 
-// ✅ key helpers
+// per-user LS key
 function avatarKey() {
   const uid = localStorage.getItem("uid") || "guest";
   return `avatar_src:${uid}`;
@@ -52,7 +53,7 @@ export default function ProfilePage() {
   const [src, setSrc] = useState(() => localStorage.getItem(key) || DEFAULT_AVATAR_URL);
   const inputRef = useRef(null);
 
-  // Load from server on mount (so history clear ke baad bhi aa jaye)
+  // Load from server on mount
   useEffect(() => {
     (async () => {
       try {
@@ -71,27 +72,34 @@ export default function ProfilePage() {
   const onBack = () => window.history.back();
   const pickFile = () => inputRef.current?.click();
 
+  // ✅ Optimistic preview + background save
   const onChoose = async (e) => {
     const f = e.target.files?.[0];
     if (!f) return;
     if (!f.type.startsWith("image/")) { alert("Please select an image."); return; }
+
     try {
       const raw = await fileToDataURL(f);
       const small = await downscale(raw, 720, 0.9);
 
-      // save to server disk
-      const saved = await setAvatar(uid, small);
-      const url = httpsify(bust(abs(saved?.url || "")));
-      if (url) {
-        localStorage.setItem(key, url);   // store URL (not data:)
-        setSrc(url);
-        window.dispatchEvent(new Event("avatar:changed"));
-      } else {
-        // fallback: local only
-        localStorage.setItem(key, small);
-        setSrc(small);
-        window.dispatchEvent(new Event("avatar:changed"));
-      }
+      // 1) Instant local preview
+      const preview = bust(small);
+      localStorage.setItem(key, preview);
+      setSrc(preview);
+      try { window.dispatchEvent(new Event("avatar:changed")); } catch {}
+
+      // 2) Background server save (replace with URL if server returns one)
+      setAvatar(uid, small)
+        .then((saved) => {
+          const url = httpsify(bust(abs(saved?.url || "")));
+          if (url) {
+            localStorage.setItem(key, url);
+            setSrc(url);
+            try { window.dispatchEvent(new Event("avatar:changed")); } catch {}
+          }
+        })
+        .catch(() => { /* keep local preview */ });
+
     } catch {
       alert("Could not load image.");
     } finally {
@@ -103,7 +111,7 @@ export default function ProfilePage() {
     try { await deleteAvatar(uid); } catch {}
     localStorage.removeItem(key);
     setSrc(DEFAULT_AVATAR_URL);
-    window.dispatchEvent(new Event("avatar:changed"));
+    try { window.dispatchEvent(new Event("avatar:changed")); } catch {}
   };
 
   return (
