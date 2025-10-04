@@ -395,6 +395,11 @@ function InjectModal({ user, open, onClose }) {
 
 /* ========================= Admin Page ========================= */
 export default function AdminPage() {
+  useEffect(() => {
+    document.body.classList.add('admin-noload');
+    window.__loader?.forceHide?.();
+    return () => document.body.classList.remove('admin-noload');
+  }, []);
   if (typeof window !== "undefined" && !localStorage.getItem("adminToken")) {
     // window.location.replace("/admin-login");
   }
