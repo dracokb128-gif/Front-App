@@ -35,7 +35,10 @@
       }
       #__boot_loader_overlay .loader:after{ transform:rotate(60deg); }
       @keyframes l26 { 100% { transform:rotate(1turn) } }
+
+      /* hide global loader on admin pages */
       body.admin-noload #__boot_loader_overlay { display: none !important; }
+      body.admin-noload #__boot_loader_overlay .loader { display: none !important; }
     </style>
   </head>
   <body>
