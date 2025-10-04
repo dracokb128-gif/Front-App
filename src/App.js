@@ -43,7 +43,6 @@ import { wdEnsureFreshOnLogin } from "./wdStore";
 wdEnsureFreshOnLogin();
 
 /* 🔹 API base for avatar URL normalization */
-import { API_BASE } from "./api";
 
 /* ====== DEFAULT AVATAR (view-only) ====== */
 const DEFAULT_AVATAR_URL = "/photo_2025-09-12_21-00-08.jpg";
