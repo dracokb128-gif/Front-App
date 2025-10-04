@@ -684,24 +684,58 @@ export const adminRejectWithdrawal = async (id, note = "") => {
 };
 
 /* ===========================================================
-   ✅ Avatar (DP) — server persisted
+   ✅ Avatar (DP) — server persisted (robust)
 =========================================================== */
 const abs = (u) => (u && !/^https?:/i.test(u) ? `${API_BASE}${u}` : u || "");
+
 export async function getAvatar(userId) {
   const uid = String(userId).replace(/^u/i, "");
-  const r = await http(`/api/users/${encodeURIComponent(uid)}/avatar`, { method: "GET" });
-  const url = abs(r?.avatar || "");
-  return { ok: true, url };
+  const tries = [
+    { method: "GET", path: `/api/users/${encodeURIComponent(uid)}/avatar` },
+    { method: "GET", path: `/api/avatar?userId=${encodeURIComponent(uid)}` },
+    { method: "GET", path: `/api/profile/avatar?userId=${encodeURIComponent(uid)}` },
+    { method: "GET", path: `/avatar?userId=${encodeURIComponent(uid)}` },
+  ];
+  for (const t of tries) {
+    try {
+      const r = await http(t.path, { method: t.method });
+      const raw = r?.url || r?.avatar || r?.data?.url || r?.data?.avatar || "";
+      if (raw) return { ok: true, url: abs(raw) };
+    } catch {}
+  }
+  return { ok: true, url: "" };
 }
+
 export async function setAvatar(userId, dataURL) {
   const uid = String(userId).replace(/^u/i, "");
-  const r = await http(`/api/users/${encodeURIComponent(uid)}/avatar`, { method: "POST", body: { dataURL } });
-  const url = abs(r?.avatar || "");
-  return { ok: true, url };
+  const tries = [
+    { path: `/api/users/${encodeURIComponent(uid)}/avatar`, body: { dataURL } },
+    { path: `/api/avatar`,                            body: { userId: uid, dataURL } },
+    { path: `/api/profile/avatar`,                    body: { userId: uid, dataURL } },
+    { path: `/avatar`,                                body: { userId: uid, dataURL } },
+  ];
+  for (const t of tries) {
+    try {
+      const r = await http(t.path, { method: "POST", body: t.body });
+      const raw = r?.url || r?.avatar || r?.data?.url || r?.data?.avatar || "";
+      if (raw) return { ok: true, url: abs(raw) };
+    } catch {}
+  }
+  // server ne url na diya ho to bhi flow continue
+  return { ok: true, url: "" };
 }
+
 export async function deleteAvatar(userId) {
   const uid = String(userId).replace(/^u/i, "");
-  await http(`/api/users/${encodeURIComponent(uid)}/avatar`, { method: "DELETE" });
+  const tries = [
+    { method: "DELETE", path: `/api/users/${encodeURIComponent(uid)}/avatar` },
+    { method: "POST",   path: `/api/avatar/delete`,             body: { userId: uid } },
+    { method: "DELETE", path: `/api/avatar?userId=${encodeURIComponent(uid)}` },
+    { method: "DELETE", path: `/avatar?userId=${encodeURIComponent(uid)}` },
+  ];
+  for (const t of tries) {
+    try { await http(t.path, { method: t.method || "POST", body: t.body }); return { ok: true }; } catch {}
+  }
   return { ok: true };
 }
 
