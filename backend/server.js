@@ -1,5 +1,5 @@
 // backend/server.js — strict tier gating + tasks, deposits, withdrawals, wallet, avatar
-
+const { readJSONCached, writeJSONCached } = require("./cache");
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
@@ -8,8 +8,8 @@ const crypto = require("crypto");
 const { ensureDaily, todayKey, MAX_TASKS_PER_DAY } = require("./utils/taskEngine.js");
 
 /* -------------------- helpers -------------------- */
-function readJSON(p){ try { return JSON.parse(fs.readFileSync(p, "utf8") || "[]"); } catch { return []; } }
-function writeJSON(p, v){ fs.writeFileSync(p, JSON.stringify(v, null, 2), "utf8"); }
+function readJSON(p){ return readJSONCached(p); }
+function writeJSON(p,v){ return writeJSONCached(p,v); }
 function nowISO(){ return new Date().toISOString(); }
 
 /* -------------------- app -------------------- */
