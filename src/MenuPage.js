@@ -236,7 +236,6 @@ function LoaderOverlay({ show, label = "Please wait…" }) {
 
 /* ===================== Task Popup ===================== */
 function TaskPopup({ task, onClose, onSubmit, submitting, onAnchorReady }) {
-  // Display OrderNo without any leading "t", "t_", "t-"
   const displayOrderNo = String(task?.id ?? task?.orderNo ?? "").replace(/^t[_-]?/i, "");
 
   const cardRef = useRef(null);
@@ -559,17 +558,6 @@ function synthesizeItems(task) {
   return items;
 }
 
-/* ===================== unpaid fetch (PARALLEL + SINGLE SHOT) ===================== */
-async function fetchUnpaid(userId) {
-  try {
-    const [p, r] = await Promise.all([getProgress(userId), getRecords(userId)]);
-    if (p?.unpaid) return p.unpaid;
-    if (r?.unpaid) return r.unpaid;
-    if (Array.isArray(r?.incomplete) && r.incomplete.length) return r.incomplete[0];
-  } catch {}
-  return null;
-}
-
 /* ===== Brand-specific Hints ===== */
 const HINTS = {
   amazon: [
@@ -632,11 +620,40 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
     isFrozen: false,
   });
 
+  /* ---------- Coalescer + TTL cache (3s) ---------- */
+  function makeFetcher(fn, ttlMs = 3000) {
+    const state = { inFlight: null, ts: 0, data: null };
+    return () => {
+      const now = Date.now();
+      if (state.inFlight) return state.inFlight;
+      if (now - state.ts < ttlMs && state.data) return Promise.resolve(state.data);
+      state.inFlight = Promise.resolve()
+        .then(fn)
+        .then((res) => {
+          state.data = res;
+          state.ts = Date.now();
+          return res;
+        })
+        .finally(() => {
+          state.inFlight = null;
+        });
+      return state.inFlight;
+    };
+  }
+
+  const progressFetch = useRef(null);
+  const recordsFetch = useRef(null);
+
+  useEffect(() => {
+    progressFetch.current = makeFetcher(() => getProgress(userId), 3000);
+    recordsFetch.current = makeFetcher(() => getRecords(userId), 3000);
+  }, [userId]);
+
   // --- progress fetch with de-dupe ---
   const progressLock = useRef(false);
   const refreshProgress = async () => {
     try {
-      const p = await getProgress(userId);
+      const p = await (progressFetch.current ? progressFetch.current() : getProgress(userId));
       setProg({
         completedToday: Number(p?.completedToday || 0),
         balance: Number(p?.balance || 0),
@@ -654,7 +671,6 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
     Promise.resolve()
       .then(refreshProgress)
       .finally(() => {
-        // small cooldown to absorb rapid multiple calls
         setTimeout(() => (progressLock.current = false), 250);
       });
   };
@@ -737,21 +753,31 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
         quantity: popupTask.quantity,
       });
     } else {
-      saveDisplay(
-        userId,
-        popupTask.id,
-        {
-          kind: "combine",
-          items: popupTask.items.map(({ title, image, quantity, unitPrice }) => ({
-            title,
-            image,
-            quantity,
-            unitPrice,
-          })),
-        }
-      );
+      saveDisplay(userId, popupTask.id, {
+        kind: "combine",
+        items: popupTask.items.map(({ title, image, quantity, unitPrice }) => ({
+          title,
+          image,
+          quantity,
+          unitPrice,
+        })),
+      });
     }
   }, [popupTask, userId]);
+
+  // ------- unpaid fetch uses coalesced fetchers -------
+  async function fetchUnpaid() {
+    try {
+      const [p, r] = await Promise.all([
+        progressFetch.current ? progressFetch.current() : getProgress(userId),
+        recordsFetch.current ? recordsFetch.current() : getRecords(userId),
+      ]);
+      if (p?.unpaid) return p.unpaid;
+      if (r?.unpaid) return r.unpaid;
+      if (Array.isArray(r?.incomplete) && r.incomplete.length) return r.incomplete[0];
+    } catch {}
+    return null;
+  }
 
   async function handleClosePopup() {
     setShowCard(false);
@@ -774,7 +800,6 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
     if (loading) return;
     setLoading(true);
     try {
-      // 0) Local balance guard before any server call
       const store = String(brandKey || "").toLowerCase();
       const need = MIN_REQUIRED[store] ?? 0;
       const curBal = Number(prog.balance || 0);
@@ -784,8 +809,7 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
         return;
       }
 
-      // 1) Unpaid check (PARALLEL inside)
-      const unpaid = await fetchUnpaid(userId);
+      const unpaid = await fetchUnpaid();
       if (unpaid) {
         setTaskResp(null);
         setShowCard(false);
@@ -796,7 +820,6 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
         return;
       }
 
-      // 2) Fetch task
       const data = await getNextTask(userId, store);
 
       if (data?.notEligible) {
@@ -833,9 +856,7 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
       if (def > 0)
         setTimeout(() => {
           showTip(
-            `Your account balance is not enough, you need to recharge ${def.toFixed(
-              3
-            )} USDT to submit this order`
+            `Your account balance is not enough, you need to recharge ${def.toFixed(3)} USDT to submit this order`
           );
         }, 0);
 
@@ -850,9 +871,7 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
     if (popupTask.kind === "combine" && Number(popupTask.deficit || 0) > 0) {
       const need = Number(popupTask.deficit || 0);
       showTip(
-        `Your account balance is not enough, you need to recharge ${need.toFixed(
-          3
-        )} USDT to submit this order`
+        `Your account balance is not enough, you need to recharge ${need.toFixed(3)} USDT to submit this order`
       );
       return;
     }
@@ -874,9 +893,7 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
       if (data.needRecharge) {
         const need = Number.isFinite(Number(data.deficit)) ? Number(data.deficit) : 0;
         showTip(
-          `Your account balance is not enough, you need to recharge ${need.toFixed(
-            3
-          )} USDT to submit this order`
+          `Your account balance is not enough, you need to recharge ${need.toFixed(3)} USDT to submit this order`
         );
       }
     } finally {
@@ -885,8 +902,6 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
   }
 
   const showCardFlag = showCard && popupTask;
-
-  // pick brand-specific hints; default fallback shows nothing if brand not mapped
   const hintLines = HINTS[String(brandKey).toLowerCase()] || [];
 
   return (
