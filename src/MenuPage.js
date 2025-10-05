@@ -559,14 +559,11 @@ function synthesizeItems(task) {
   return items;
 }
 
-/* ===================== unpaid fetch ===================== */
+/* ===================== unpaid fetch (PARALLEL + SINGLE SHOT) ===================== */
 async function fetchUnpaid(userId) {
   try {
-    const p = await getProgress(userId);
+    const [p, r] = await Promise.all([getProgress(userId), getRecords(userId)]);
     if (p?.unpaid) return p.unpaid;
-  } catch {}
-  try {
-    const r = await getRecords(userId);
     if (r?.unpaid) return r.unpaid;
     if (Array.isArray(r?.incomplete) && r.incomplete.length) return r.incomplete[0];
   } catch {}
@@ -632,9 +629,11 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
     overallCommission: 0,
     maxTasksPerDay: 25,
     cashGap: 0,
-    isFrozen: false, // ✅ NEW
+    isFrozen: false,
   });
 
+  // --- progress fetch with de-dupe ---
+  const progressLock = useRef(false);
   const refreshProgress = async () => {
     try {
       const p = await getProgress(userId);
@@ -645,13 +644,24 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
         overallCommission: Number(p?.overallCommission || 0),
         maxTasksPerDay: Number(p?.maxTasksPerDay || 25),
         cashGap: Number(p?.cashGap || 0),
-        isFrozen: !!p?.isFrozen, // 🔹 NEW
+        isFrozen: !!p?.isFrozen,
       });
     } catch {}
   };
+  const refreshProgressOnce = () => {
+    if (progressLock.current) return;
+    progressLock.current = true;
+    Promise.resolve()
+      .then(refreshProgress)
+      .finally(() => {
+        // small cooldown to absorb rapid multiple calls
+        setTimeout(() => (progressLock.current = false), 250);
+      });
+  };
+
   useEffect(() => {
-    refreshProgress();
-  }, []);
+    refreshProgressOnce(); // mount par single shot
+  }, []); // eslint-disable-line
 
   const rawTask = taskResp?.task || null;
 
@@ -664,7 +674,7 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
       Number(rawTask?.deficit) > 0;
 
     if (isCombine) {
-      const items = synthesizeItems(rawTask); // always real items
+      const items = synthesizeItems(rawTask);
       const normalized = items.map((it, idx) => ({
         ...it,
         unitPrice: toNum(it.unitPrice ?? it.price ?? 0),
@@ -749,7 +759,7 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
       if (rawTask) await submitUnpaid(userId, rawTask);
     } catch {}
     setLocalLock(userId, true);
-    refreshProgress();
+    refreshProgressOnce();
   }
 
   // 🔹 brand-wise minimums
@@ -761,6 +771,7 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
   };
 
   async function handleGrab() {
+    if (loading) return;
     setLoading(true);
     try {
       // 0) Local balance guard before any server call
@@ -773,14 +784,14 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
         return;
       }
 
-      // 1) Unpaid check
+      // 1) Unpaid check (PARALLEL inside)
       const unpaid = await fetchUnpaid(userId);
       if (unpaid) {
         setTaskResp(null);
         setShowCard(false);
         setLocalLock(userId, true);
         showTip("Unpaid order");
-        await refreshProgress();
+        refreshProgressOnce();
         setLoading(false);
         return;
       }
@@ -790,7 +801,7 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
 
       if (data?.notEligible) {
         showTip(data.message || "Your balance is too low for this tier.");
-        await refreshProgress();
+        refreshProgressOnce();
         setLoading(false);
         return;
       }
@@ -806,12 +817,12 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
       if (data?.unpaid) {
         showTip("Unpaid order");
         setLocalLock(userId, true);
-        await refreshProgress();
+        refreshProgressOnce();
         setLoading(false);
         return;
       }
       if (!data?.task) {
-        await refreshProgress();
+        refreshProgressOnce();
         setLoading(false);
         return;
       }
@@ -828,7 +839,7 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
           );
         }, 0);
 
-      await refreshProgress();
+      refreshProgressOnce();
     } catch {} finally {
       setLoading(false);
     }
@@ -853,10 +864,10 @@ function BrandDetail({ onBack, title, brandKey = "Order" }) {
       if (resp?.ok) {
         __pushDone(userId, __snap(popupTask, Date.now()));
         showTip("Success ✓");
-        await refreshProgress();
         clearLocalLock(userId);
         setTaskResp(null);
         setShowCard(false);
+        refreshProgressOnce();
       }
     } catch (err) {
       const data = err?.data || {};

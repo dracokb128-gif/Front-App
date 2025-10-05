@@ -1831,7 +1831,7 @@
     "isAdmin": false,
     "completedToday": 0,
     "totalCompleted": 0,
-    "lastTaskDate": "2025-10-05",
+    "lastTaskDate": "2025-10-04",
     "history": [
       {
         "id": "t_1759567341893",
@@ -1960,11 +1960,6 @@
           334,
           1573
         ]
-      },
-      "2025-10-05": {
-        "completed": 0,
-        "commission": 0,
-        "seenTotalsCents": []
       }
     },
     "overallCommission": 1.54,

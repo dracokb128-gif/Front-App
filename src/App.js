@@ -22,7 +22,7 @@ import HomePage from "./HomePage_tmp.jsx";
 import LoginPage from "./LoginPage";
 import { Routes, Route, Navigate, useNavigate, useParams } from "react-router-dom";
 import { isAuthed, logout } from "./auth";
- import { getUsers, /* patchBalance, */ API_BASE } from "./api";
+import { getUsers /*, patchBalance*/ } from "./api";
 import { useLoader } from "./Loader/LoaderProvider";
 import { AnimatePresence, motion } from "framer-motion";
 import RegistrationPage from "./RegistrationPage";
@@ -42,18 +42,8 @@ import ServicePage from "./ServicePage";
 import { wdEnsureFreshOnLogin } from "./wdStore";
 wdEnsureFreshOnLogin();
 
-/* 🔹 API base for avatar URL normalization */
-
 /* ====== DEFAULT AVATAR (view-only) ====== */
 const DEFAULT_AVATAR_URL = "/photo_2025-09-12_21-00-08.jpg";
-
-/* 🔧 helpers to make avatar src absolute + HTTPS-safe */
-const abs = (u) => (u && !/^https?:/i.test(u) ? `${API_BASE}${u}` : u || "");
-const httpsify = (u) =>
-  (u && window.location?.protocol === "https:" && /^http:\/\//i.test(u))
-    ? u.replace(/^http:/i, "https:")
-    : u;
-const normalizeAvatar = (u) => httpsify(abs(u || DEFAULT_AVATAR_URL));
 
 /* ===== small USDT coin -> PNG ===== */
 const USDTIcon = () => (
@@ -99,7 +89,7 @@ function avatarKey() {
 function getAvatar() {
   try {
     const v = localStorage.getItem(avatarKey());
-    return normalizeAvatar(v || DEFAULT_AVATAR_URL);
+    return v || DEFAULT_AVATAR_URL;
   } catch {
     return DEFAULT_AVATAR_URL;
   }
@@ -108,10 +98,11 @@ function getAvatar() {
 /* ===== Round Avatar (reads per-user, reacts to changes) ===== */
 function AvatarRound() {
   const [src, setSrc] = useState(getAvatar());
+  const [broken, setBroken] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const sync = () => setSrc(getAvatar());
+    const sync = () => { setSrc(getAvatar()); setBroken(false); };
     const onStorage = (e) => {
       if (!e || !e.key) return;
       if (e.key === avatarKey() || e.key.startsWith("avatar_src:")) sync();
@@ -128,13 +119,15 @@ function AvatarRound() {
 
   return (
     <>
-      <button type="button" className="avatar" onClick={() => setOpen(true)}>
-        <img
-          src={src}
-          alt="Profile"
-          onError={(e) => { e.currentTarget.src = DEFAULT_AVATAR_URL; }}
-          crossOrigin="anonymous"
-        />
+      <button type="button" className="avatar" onClick={() => !broken && setOpen(true)}>
+        {!broken && (
+          <img
+            src={src}
+            alt="Profile"
+            onError={() => setBroken(true)}
+            crossOrigin="anonymous"
+          />
+        )}
       </button>
       {open && (
         <div className="pic-viewer" onClick={() => setOpen(false)} role="dialog" aria-modal="true">
