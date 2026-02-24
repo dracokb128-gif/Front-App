@@ -1,0 +1,16 @@
+[
+  {
+    "id": "a_1771966842852_g643av",
+    "address": "TNRaQap1rnLHG486ZHd16bYEMznDKxGqRU",
+    "isAssigned": false,
+    "currentDepositId": null,
+    "createdAt": "2026-02-24T21:00:42.853Z"
+  },
+  {
+    "id": "a_1759569869721_6okadx",
+    "address": "Tbhndwuiqefuuuuuuuuuuuuueffwwew",
+    "isAssigned": true,
+    "currentDepositId": "d_1759569878171_ujrf",
+    "createdAt": "2025-10-04T09:24:29.721Z"
+  }
+]

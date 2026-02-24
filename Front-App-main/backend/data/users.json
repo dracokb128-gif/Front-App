@@ -1,0 +1,2232 @@
+[
+  {
+    "id": 1,
+    "username": "Harry",
+    "password": "123123",
+    "balance": 104.448,
+    "createdAt": 1759155600071,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-03",
+    "history": [
+      {
+        "id": "t_1759496942332",
+        "kind": "single",
+        "orderAmount": 78.98,
+        "commission": 3.159,
+        "at": 1759496943981,
+        "taskSnapshot": {
+          "id": "t_1759496942332",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 3.59,
+          "quantity": 22,
+          "orderAmount": 78.98,
+          "commission": 3.159,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759496750785",
+        "kind": "combine",
+        "orderAmount": 90.11,
+        "commission": 9.912,
+        "at": 1759496923541,
+        "taskSnapshot": {
+          "id": "t_1759496750785",
+          "kind": "combine",
+          "type": "combined",
+          "orderAmount": 90.11,
+          "commission": 9.912,
+          "commissionRate": 0.11,
+          "items": [
+            {
+              "title": "Valentino Uomo — Intense Noir",
+              "image": "/products/valentino-uomo-intense-noir.webp.webp",
+              "quantity": 3,
+              "unitPrice": 7.83
+            },
+            {
+              "title": "Truekind Supportive Comfort — Wireless Shaping Bra",
+              "image": "/products/nwt-truekind-supportive-comfort-wireless-shaping-bra.webp.webp",
+              "quantity": 3,
+              "unitPrice": 9.24
+            },
+            {
+              "title": "Valitic — Kojic Acid Dark Spot Remover (Soap Bars)",
+              "image": "/products/valitic-kojic-acid-dark-spot-remover-soap-bars.webp-1.jpg",
+              "quantity": 1,
+              "unitPrice": 22.4
+            },
+            {
+              "title": "Armor All Car Cleaning Wipes - For Interior & Exterior (90 Wipes Each)",
+              "image": "/products/15.jpg",
+              "quantity": 2,
+              "unitPrice": 22.41
+            }
+          ],
+          "deficit": 0,
+          "__ruleId": "r_1759496745655_ayml"
+        }
+      },
+      {
+        "id": "t_1759496748603",
+        "kind": "single",
+        "orderAmount": 59.8,
+        "commission": 2.392,
+        "at": 1759496749485,
+        "taskSnapshot": {
+          "id": "t_1759496748603",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 2.3,
+          "quantity": 26,
+          "orderAmount": 59.8,
+          "commission": 2.392,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759496710737",
+        "kind": "single",
+        "orderAmount": 44.6,
+        "commission": 1.784,
+        "at": 1759496730797,
+        "taskSnapshot": {
+          "id": "t_1759496710737",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 2.23,
+          "quantity": 20,
+          "orderAmount": 44.6,
+          "commission": 1.784,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759496702729",
+        "kind": "single",
+        "orderAmount": 24.72,
+        "commission": 0.989,
+        "at": 1759496709548,
+        "taskSnapshot": {
+          "id": "t_1759496702729",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 6.18,
+          "quantity": 4,
+          "orderAmount": 24.72,
+          "commission": 0.989,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759496697752",
+        "kind": "single",
+        "orderAmount": 31.4,
+        "commission": 1.256,
+        "at": 1759496698989,
+        "taskSnapshot": {
+          "id": "t_1759496697752",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 3.14,
+          "quantity": 10,
+          "orderAmount": 31.4,
+          "commission": 1.256,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759496638864",
+        "kind": "single",
+        "orderAmount": 4043.75,
+        "commission": 485.25,
+        "at": 1759496643091,
+        "taskSnapshot": {
+          "id": "t_1759496638864",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Blue Tees GPS Player+ Magnetic Bluetooth Speaker - Choose Color",
+          "unitPrice": 808.75,
+          "quantity": 5,
+          "orderAmount": 4043.75,
+          "commission": 485.25,
+          "commissionRate": 0.12,
+          "deficit": 0,
+          "image": "/products/2.jpg"
+        }
+      },
+      {
+        "id": "t_1759496630358",
+        "kind": "single",
+        "orderAmount": 2620.8,
+        "commission": 314.496,
+        "at": 1759496636532,
+        "taskSnapshot": {
+          "id": "t_1759496630358",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Guaranteed PlayStation 2 Console — Wireless Controllers (US Seller)",
+          "unitPrice": 87.36,
+          "quantity": 30,
+          "orderAmount": 2620.8,
+          "commission": 314.496,
+          "commissionRate": 0.12,
+          "deficit": 0,
+          "image": "/products/guaranteed-playstation-2-ps2-game-console-wireless-controllers-us-seller.webp.webp"
+        }
+      },
+      {
+        "id": "t_1759496586787",
+        "kind": "single",
+        "orderAmount": 3345.12,
+        "commission": 401.414,
+        "at": 1759496628949,
+        "taskSnapshot": {
+          "id": "t_1759496586787",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 418.14,
+          "quantity": 8,
+          "orderAmount": 3345.12,
+          "commission": 401.414,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759496584288",
+        "kind": "single",
+        "orderAmount": 2326.91,
+        "commission": 279.229,
+        "at": 1759496585207,
+        "taskSnapshot": {
+          "id": "t_1759496584288",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 101.17,
+          "quantity": 23,
+          "orderAmount": 2326.91,
+          "commission": 279.229,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759495529925",
+        "kind": "single",
+        "orderAmount": 885.3,
+        "commission": 106.236,
+        "at": 1759495530788,
+        "taskSnapshot": {
+          "id": "t_1759495529925",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 88.53,
+          "quantity": 10,
+          "orderAmount": 885.3,
+          "commission": 106.236,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759494605059",
+        "kind": "single",
+        "orderAmount": 1424.77,
+        "commission": 170.972,
+        "at": 1759494606080,
+        "taskSnapshot": {
+          "id": "t_1759494605059",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 49.13,
+          "quantity": 29,
+          "orderAmount": 1424.77,
+          "commission": 170.972,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759494302684",
+        "kind": "single",
+        "orderAmount": 1941.8,
+        "commission": 233.016,
+        "at": 1759494303524,
+        "taskSnapshot": {
+          "id": "t_1759494302684",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 97.09,
+          "quantity": 20,
+          "orderAmount": 1941.8,
+          "commission": 233.016,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759494296736",
+        "kind": "single",
+        "orderAmount": 985.32,
+        "commission": 118.238,
+        "at": 1759494297806,
+        "taskSnapshot": {
+          "id": "t_1759494296736",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 164.22,
+          "quantity": 6,
+          "orderAmount": 985.32,
+          "commission": 118.238,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759494290589",
+        "kind": "single",
+        "orderAmount": 1231.35,
+        "commission": 147.762,
+        "at": 1759494291594,
+        "taskSnapshot": {
+          "id": "t_1759494290589",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 410.45,
+          "quantity": 3,
+          "orderAmount": 1231.35,
+          "commission": 147.762,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759494279689",
+        "kind": "single",
+        "orderAmount": 1135.26,
+        "commission": 136.231,
+        "at": 1759494281110,
+        "taskSnapshot": {
+          "id": "t_1759494279689",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 66.78,
+          "quantity": 17,
+          "orderAmount": 1135.26,
+          "commission": 136.231,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759494276640",
+        "kind": "single",
+        "orderAmount": 2022.9,
+        "commission": 242.748,
+        "at": 1759494277819,
+        "taskSnapshot": {
+          "id": "t_1759494276640",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 67.43,
+          "quantity": 30,
+          "orderAmount": 2022.9,
+          "commission": 242.748,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759494273328",
+        "kind": "single",
+        "orderAmount": 1262.25,
+        "commission": 151.47,
+        "at": 1759494274999,
+        "taskSnapshot": {
+          "id": "t_1759494273328",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 84.15,
+          "quantity": 15,
+          "orderAmount": 1262.25,
+          "commission": 151.47,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759494264019",
+        "kind": "single",
+        "orderAmount": 1210.72,
+        "commission": 145.286,
+        "at": 1759494265057,
+        "taskSnapshot": {
+          "id": "t_1759494264019",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 52.64,
+          "quantity": 23,
+          "orderAmount": 1210.72,
+          "commission": 145.286,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759494232770",
+        "kind": "single",
+        "orderAmount": 256.83,
+        "commission": 30.82,
+        "at": 1759494235152,
+        "taskSnapshot": {
+          "id": "t_1759494232770",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 12.23,
+          "quantity": 21,
+          "orderAmount": 256.83,
+          "commission": 30.82,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759491223786",
+        "kind": "single",
+        "orderAmount": 1490.6,
+        "commission": 178.872,
+        "at": 1759491227148,
+        "taskSnapshot": {
+          "id": "t_1759491223786",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 149.06,
+          "quantity": 10,
+          "orderAmount": 1490.6,
+          "commission": 178.872,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759491217969",
+        "kind": "single",
+        "orderAmount": 884,
+        "commission": 106.08,
+        "at": 1759491222368,
+        "taskSnapshot": {
+          "id": "t_1759491217969",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 34,
+          "quantity": 26,
+          "orderAmount": 884,
+          "commission": 106.08,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759491211122",
+        "kind": "single",
+        "orderAmount": 473.76,
+        "commission": 56.851,
+        "at": 1759491214933,
+        "taskSnapshot": {
+          "id": "t_1759491211122",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 22.56,
+          "quantity": 21,
+          "orderAmount": 473.76,
+          "commission": 56.851,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759491201706",
+        "kind": "single",
+        "orderAmount": 224.88,
+        "commission": 26.986,
+        "at": 1759491207843,
+        "taskSnapshot": {
+          "id": "t_1759491201706",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 18.74,
+          "quantity": 12,
+          "orderAmount": 224.88,
+          "commission": 26.986,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759491198769",
+        "kind": "single",
+        "orderAmount": 1087.06,
+        "commission": 130.447,
+        "at": 1759491200194,
+        "taskSnapshot": {
+          "id": "t_1759491198769",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 41.81,
+          "quantity": 26,
+          "orderAmount": 1087.06,
+          "commission": 130.447,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759480863333",
+        "kind": "single",
+        "orderAmount": 2203.36,
+        "commission": 264.403,
+        "at": 1759480864743,
+        "taskSnapshot": {
+          "id": "t_1759480863333",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 137.71,
+          "quantity": 16,
+          "orderAmount": 2203.36,
+          "commission": 264.403,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759480843792",
+        "kind": "single",
+        "orderAmount": 1709.76,
+        "commission": 205.171,
+        "at": 1759480845801,
+        "taskSnapshot": {
+          "id": "t_1759480843792",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 65.76,
+          "quantity": 26,
+          "orderAmount": 1709.76,
+          "commission": 205.171,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759480841153",
+        "kind": "single",
+        "orderAmount": 708.7,
+        "commission": 85.044,
+        "at": 1759480842346,
+        "taskSnapshot": {
+          "id": "t_1759480841153",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 37.3,
+          "quantity": 19,
+          "orderAmount": 708.7,
+          "commission": 85.044,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759480838424",
+        "kind": "single",
+        "orderAmount": 1706.74,
+        "commission": 204.809,
+        "at": 1759480839977,
+        "taskSnapshot": {
+          "id": "t_1759480838424",
+          "store": "aliexpress",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 121.91,
+          "quantity": 14,
+          "orderAmount": 1706.74,
+          "commission": 204.809,
+          "commissionRate": 0.12,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759426090186",
+        "kind": "combine",
+        "orderAmount": 1506.55,
+        "commission": 180.786,
+        "at": 1759480833766,
+        "taskSnapshot": {
+          "id": "t_1759426090186",
+          "kind": "combine",
+          "type": "combined",
+          "orderAmount": 1506.55,
+          "commission": 180.786,
+          "commissionRate": 0.12,
+          "items": [
+            {
+              "title": "Accutime Sanrio Hello Kitty Girls' Digital LCD Quartz Watch — Pink Strap, Colorful Bezel",
+              "image": "/products/25.jpg",
+              "quantity": 2,
+              "unitPrice": 16.4
+            },
+            {
+              "title": "Markwort VETTEX Double Mouthguard with Strap and Lip Guard - Adult or Youth",
+              "image": "/products/6.webp",
+              "quantity": 3,
+              "unitPrice": 29.03
+            },
+            {
+              "title": "Women’s 925 Sterling Silver — Large Round Hoop (2\")",
+              "image": "/products/womens-925-sterling-silver-classic-2-inch-large-round-hoop.webp.webp",
+              "quantity": 2,
+              "unitPrice": 11.32
+            },
+            {
+              "title": "US Seller — Jello Jello Peel-Off Base Gel (10ml, One Kill)",
+              "image": "/products/us-seller-jello-jello-peel-off-base-gel-10ml-one-kill.webp-1.jpg",
+              "quantity": 2,
+              "unitPrice": 16.92
+            },
+            {
+              "title": "Dixie Medium Paper Plates, 8.5 in, 90 Count – Microwave-Safe, Soak-Proof, Cut Resistant",
+              "image": "/products/99.jpg",
+              "quantity": 1,
+              "unitPrice": 15.99
+            }
+          ],
+          "deficit": 0,
+          "__ruleId": "r_1759426058616_lks6"
+        }
+      },
+      {
+        "id": "t_1759426088362",
+        "kind": "single",
+        "orderAmount": 353.22,
+        "commission": 28.258,
+        "at": 1759426089167,
+        "taskSnapshot": {
+          "id": "t_1759426088362",
+          "store": "alibaba",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 12.18,
+          "quantity": 29,
+          "orderAmount": 353.22,
+          "commission": 28.258,
+          "commissionRate": 0.08,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759426086418",
+        "kind": "single",
+        "orderAmount": 515.84,
+        "commission": 41.267,
+        "at": 1759426087184,
+        "taskSnapshot": {
+          "id": "t_1759426086418",
+          "store": "alibaba",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 32.24,
+          "quantity": 16,
+          "orderAmount": 515.84,
+          "commission": 41.267,
+          "commissionRate": 0.08,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759426084225",
+        "kind": "single",
+        "orderAmount": 481.92,
+        "commission": 38.554,
+        "at": 1759426085441,
+        "taskSnapshot": {
+          "id": "t_1759426084225",
+          "store": "alibaba",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 20.08,
+          "quantity": 24,
+          "orderAmount": 481.92,
+          "commission": 38.554,
+          "commissionRate": 0.08,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759426073092",
+        "kind": "single",
+        "orderAmount": 320.7,
+        "commission": 25.656,
+        "at": 1759426074073,
+        "taskSnapshot": {
+          "id": "t_1759426073092",
+          "store": "alibaba",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 21.38,
+          "quantity": 15,
+          "orderAmount": 320.7,
+          "commission": 25.656,
+          "commissionRate": 0.08,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759420042123",
+        "kind": "single",
+        "orderAmount": 180,
+        "commission": 14.4,
+        "at": 1759420043681,
+        "taskSnapshot": {
+          "id": "t_1759420042123",
+          "store": "alibaba",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 12,
+          "quantity": 15,
+          "orderAmount": 180,
+          "commission": 14.4,
+          "commissionRate": 0.08,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759419994893",
+        "kind": "single",
+        "orderAmount": 413.05,
+        "commission": 16.522,
+        "at": 1759419995949,
+        "taskSnapshot": {
+          "id": "t_1759419994893",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 82.61,
+          "quantity": 5,
+          "orderAmount": 413.05,
+          "commission": 16.522,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759419992967",
+        "kind": "single",
+        "orderAmount": 323.26,
+        "commission": 12.93,
+        "at": 1759419994105,
+        "taskSnapshot": {
+          "id": "t_1759419992967",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 323.26,
+          "quantity": 1,
+          "orderAmount": 323.26,
+          "commission": 12.93,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759419569763",
+        "kind": "single",
+        "orderAmount": 368.1,
+        "commission": 14.724,
+        "at": 1759419806697,
+        "taskSnapshot": {
+          "id": "t_1759419569763",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Valentino Uomo — Intense Noir",
+          "unitPrice": 40.9,
+          "quantity": 9,
+          "orderAmount": 368.1,
+          "commission": 14.724,
+          "commissionRate": 0.04,
+          "deficit": 0,
+          "image": "/products/valentino-uomo-intense-noir.webp.webp"
+        }
+      },
+      {
+        "id": "t_1759419567628",
+        "kind": "single",
+        "orderAmount": 327.7,
+        "commission": 13.108,
+        "at": 1759419568694,
+        "taskSnapshot": {
+          "id": "t_1759419567628",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 11.3,
+          "quantity": 29,
+          "orderAmount": 327.7,
+          "commission": 13.108,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759407383906",
+        "kind": "single",
+        "orderAmount": 275.88,
+        "commission": 11.035,
+        "at": 1759407384837,
+        "taskSnapshot": {
+          "id": "t_1759407383906",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 25.08,
+          "quantity": 11,
+          "orderAmount": 275.88,
+          "commission": 11.035,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759401493900",
+        "kind": "single",
+        "orderAmount": 272.58,
+        "commission": 10.903,
+        "at": 1759401494735
+      },
+      {
+        "id": "t_1759401491716",
+        "kind": "single",
+        "orderAmount": 172.08,
+        "commission": 6.883,
+        "at": 1759401492712
+      },
+      {
+        "id": "t_1759401489744",
+        "kind": "single",
+        "orderAmount": 385.23,
+        "commission": 15.409,
+        "at": 1759401490710
+      },
+      {
+        "id": "t_1759401429212",
+        "kind": "single",
+        "orderAmount": 117.36,
+        "commission": 4.694,
+        "at": 1759401430311
+      },
+      {
+        "id": "t_1759320284098",
+        "kind": "single",
+        "orderAmount": 75.78,
+        "commission": 3.031,
+        "at": 1759320285122
+      },
+      {
+        "id": "t_1759312574453",
+        "kind": "single",
+        "orderAmount": 281.75,
+        "commission": 11.27,
+        "at": 1759312575623
+      },
+      {
+        "id": "t_1759312571435",
+        "kind": "single",
+        "orderAmount": 44.72,
+        "commission": 1.789,
+        "at": 1759312572578
+      },
+      {
+        "id": "t_1759312544722",
+        "kind": "single",
+        "orderAmount": 305.04,
+        "commission": 12.202,
+        "at": 1759312545542
+      },
+      {
+        "id": "t_1759312542773",
+        "kind": "single",
+        "orderAmount": 280.56,
+        "commission": 11.222,
+        "at": 1759312543852
+      },
+      {
+        "id": "t_1759312540013",
+        "kind": "single",
+        "orderAmount": 268.43,
+        "commission": 10.737,
+        "at": 1759312541396
+      },
+      {
+        "id": "t_1759312537615",
+        "kind": "single",
+        "orderAmount": 135.72,
+        "commission": 5.429,
+        "at": 1759312539008
+      },
+      {
+        "id": "t_1759312535705",
+        "kind": "single",
+        "orderAmount": 30.03,
+        "commission": 1.201,
+        "at": 1759312536451
+      },
+      {
+        "id": "t_1759312532655",
+        "kind": "single",
+        "orderAmount": 310.5,
+        "commission": 12.42,
+        "at": 1759312533902
+      },
+      {
+        "id": "t_1759279491617",
+        "kind": "single",
+        "orderAmount": 106.48,
+        "commission": 4.259,
+        "at": 1759279492648
+      },
+      {
+        "id": "t_1759279489664",
+        "kind": "single",
+        "orderAmount": 28.62,
+        "commission": 1.145,
+        "at": 1759279490623
+      },
+      {
+        "id": "t_1759279353479",
+        "kind": "single",
+        "orderAmount": 5.48,
+        "commission": 0.219,
+        "at": 1759279354570
+      },
+      {
+        "id": "t_1759279351436",
+        "kind": "single",
+        "orderAmount": 117.99,
+        "commission": 4.72,
+        "at": 1759279352437
+      },
+      {
+        "id": "t_1759279208258",
+        "kind": "combine",
+        "orderAmount": 141.44,
+        "commission": 16.973,
+        "at": 1759279344172
+      },
+      {
+        "id": "t_1759279206256",
+        "kind": "single",
+        "orderAmount": 63.08,
+        "commission": 2.523,
+        "at": 1759279207251
+      },
+      {
+        "id": "t_1759279203856",
+        "kind": "single",
+        "orderAmount": 46.48,
+        "commission": 1.859,
+        "at": 1759279205197
+      },
+      {
+        "id": "t_1759279184490",
+        "kind": "single",
+        "orderAmount": 58.7,
+        "commission": 2.348,
+        "at": 1759279185437
+      },
+      {
+        "id": "t_1759279182300",
+        "kind": "single",
+        "orderAmount": 12.1,
+        "commission": 0.484,
+        "at": 1759279183270
+      },
+      {
+        "id": "t_1759278835068",
+        "kind": "single",
+        "orderAmount": 17069.98,
+        "commission": 2048.398,
+        "at": 1759278836070
+      },
+      {
+        "id": "t_1759278832077",
+        "kind": "single",
+        "orderAmount": 232.25,
+        "commission": 27.87,
+        "at": 1759278833987
+      },
+      {
+        "id": "t_1759278825828",
+        "kind": "single",
+        "orderAmount": 16132.22,
+        "commission": 1935.866,
+        "at": 1759278830638
+      },
+      {
+        "id": "t_1759278821991",
+        "kind": "single",
+        "orderAmount": 2435.76,
+        "commission": 292.291,
+        "at": 1759278823238
+      },
+      {
+        "id": "t_1759278819484",
+        "kind": "single",
+        "orderAmount": 12515.72,
+        "commission": 1501.886,
+        "at": 1759278820650
+      },
+      {
+        "id": "t_1759278788868",
+        "kind": "single",
+        "orderAmount": 5247.58,
+        "commission": 629.71,
+        "at": 1759278789908
+      },
+      {
+        "id": "t_1759278717580",
+        "kind": "single",
+        "orderAmount": 10081.21,
+        "commission": 1209.745,
+        "at": 1759278720510
+      },
+      {
+        "id": "t_1759278715115",
+        "kind": "combine",
+        "orderAmount": 8922.44,
+        "commission": 1070.693,
+        "at": 1759278716463
+      },
+      {
+        "id": "t_1759278710563",
+        "kind": "single",
+        "orderAmount": 9184.3,
+        "commission": 1102.116,
+        "at": 1759278714059
+      },
+      {
+        "id": "t_1759278685540",
+        "kind": "single",
+        "orderAmount": 8486.06,
+        "commission": 1018.327,
+        "at": 1759278689477
+      },
+      {
+        "id": "t_1759277637062",
+        "kind": "combine",
+        "orderAmount": 8536.45,
+        "commission": 1280.467,
+        "at": 1759278682127
+      },
+      {
+        "id": "t_1759277468309",
+        "kind": "single",
+        "orderAmount": 1672.4,
+        "commission": 200.688,
+        "at": 1759277469215
+      },
+      {
+        "id": "t_1759277466496",
+        "kind": "single",
+        "orderAmount": 550.92,
+        "commission": 66.11,
+        "at": 1759277467371
+      },
+      {
+        "id": "t_1759277449332",
+        "kind": "single",
+        "orderAmount": 203.58,
+        "commission": 24.43,
+        "at": 1759277450182
+      },
+      {
+        "id": "t_1759276921117",
+        "kind": "single",
+        "orderAmount": 560.3,
+        "commission": 67.236,
+        "at": 1759276922099
+      },
+      {
+        "id": "t_1759276267894",
+        "kind": "combine",
+        "orderAmount": 3565.54,
+        "commission": 677.453,
+        "at": 1759276707793
+      },
+      {
+        "id": "t_1759276265887",
+        "kind": "single",
+        "orderAmount": 394.91,
+        "commission": 47.389,
+        "at": 1759276266803
+      },
+      {
+        "id": "t_1759276263726",
+        "kind": "single",
+        "orderAmount": 943.11,
+        "commission": 113.173,
+        "at": 1759276264602
+      },
+      {
+        "id": "t_1759276261426",
+        "kind": "single",
+        "orderAmount": 703.68,
+        "commission": 84.442,
+        "at": 1759276262777
+      },
+      {
+        "id": "t_1759275058744",
+        "kind": "single",
+        "orderAmount": 468.45,
+        "commission": 56.214,
+        "at": 1759275059739
+      },
+      {
+        "id": "t_1759223842926",
+        "kind": "single",
+        "orderAmount": 32.5,
+        "commission": 3.9,
+        "at": 1759223843918
+      },
+      {
+        "id": "t_1759223840946",
+        "kind": "single",
+        "orderAmount": 394.17,
+        "commission": 47.3,
+        "at": 1759223841798
+      },
+      {
+        "id": "t_1759222214152",
+        "kind": "single",
+        "orderAmount": 1002.4,
+        "commission": 120.288,
+        "at": 1759222214955
+      },
+      {
+        "id": "t_1759176551911",
+        "kind": "single",
+        "orderAmount": 25.44,
+        "commission": 1.018,
+        "at": 1759176553147
+      },
+      {
+        "id": "t_1759176550146",
+        "kind": "single",
+        "orderAmount": 35.53,
+        "commission": 1.421,
+        "at": 1759176550812
+      },
+      {
+        "id": "t_1759161401674",
+        "kind": "single",
+        "orderAmount": 18.34,
+        "commission": 0.734,
+        "at": 1759161402413
+      }
+    ],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-29": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      },
+      "2025-09-30": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      },
+      "2025-10-01": {
+        "completed": 1,
+        "commission": 3.031,
+        "seenTotalsCents": [
+          7578
+        ]
+      },
+      "2025-10-02": {
+        "completed": 3,
+        "commission": 43.852,
+        "seenTotalsCents": [
+          32326,
+          41305,
+          18000
+        ]
+      },
+      "2025-10-03": {
+        "completed": 6,
+        "commission": 19.492,
+        "seenTotalsCents": [
+          3140,
+          2472,
+          4460,
+          5980,
+          7898
+        ]
+      }
+    },
+    "overallCommission": 18409.448,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+    "wd_pwd_updated_at": "2025-09-29T15:41:03.563Z",
+    "avatar": "/static/avatars/u_1.jpg"
+  },
+  {
+    "id": 2,
+    "username": "Number2",
+    "password": "123123",
+    "balance": 2608.084,
+    "createdAt": 1759155652359,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-01",
+    "history": [
+      {
+        "id": "t_1759276230760",
+        "kind": "single",
+        "orderAmount": 1519.61,
+        "commission": 182.353,
+        "at": 1759276232026
+      },
+      {
+        "id": "t_1759274332572",
+        "kind": "combine",
+        "orderAmount": 1536.563,
+        "commission": 291.947,
+        "at": 1759274536988
+      },
+      {
+        "id": "t_1759274330583",
+        "kind": "single",
+        "orderAmount": 31.62,
+        "commission": 1.265,
+        "at": 1759274331585
+      },
+      {
+        "id": "t_1759274328684",
+        "kind": "single",
+        "orderAmount": 123.68,
+        "commission": 4.947,
+        "at": 1759274329645
+      },
+      {
+        "id": "t_1759274326741",
+        "kind": "single",
+        "orderAmount": 44.37,
+        "commission": 1.775,
+        "at": 1759274327704
+      },
+      {
+        "id": "t_1759274324885",
+        "kind": "single",
+        "orderAmount": 36.3,
+        "commission": 1.452,
+        "at": 1759274325682
+      },
+      {
+        "id": "t_1759258524369",
+        "kind": "single",
+        "orderAmount": 72.72,
+        "commission": 2.909,
+        "at": 1759258525829
+      },
+      {
+        "id": "t_1759221661432",
+        "kind": "single",
+        "orderAmount": 35.91,
+        "commission": 1.436,
+        "at": 1759221662169
+      }
+    ],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-29": {
+        "completed": 0,
+        "commission": 0
+      },
+      "2025-09-30": {
+        "completed": 2,
+        "commission": 4.345,
+        "seenTotalsCents": [
+          3591,
+          7272
+        ]
+      },
+      "2025-10-01": {
+        "completed": 6,
+        "commission": 483.739,
+        "seenTotalsCents": [
+          3630,
+          4437,
+          12368,
+          3162,
+          151961
+        ]
+      }
+    },
+    "overallCommission": 488.084,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+    "wd_pwd_updated_at": "2025-09-29T15:53:10.781Z"
+  },
+  {
+    "id": 3,
+    "username": "Number3",
+    "password": "123123",
+    "balance": 50.709,
+    "createdAt": 1759155712564,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-01",
+    "history": [
+      {
+        "id": "t_1759222088260",
+        "kind": "single",
+        "orderAmount": 17.72,
+        "commission": 0.709,
+        "at": 1759222089216
+      }
+    ],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-29": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      },
+      "2025-09-30": {
+        "completed": 1,
+        "commission": 0.709,
+        "seenTotalsCents": [
+          1772
+        ]
+      },
+      "2025-10-01": {
+        "completed": 0,
+        "commission": 0
+      }
+    },
+    "overallCommission": 0.709,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+    "wd_pwd_updated_at": "2025-09-29T16:29:20.430Z"
+  },
+  {
+    "id": 4,
+    "username": "userno4",
+    "password": "112233",
+    "balance": 10,
+    "createdAt": 1759174731440,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-09-30",
+    "history": [],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-29": {
+        "completed": 0,
+        "commission": 0
+      },
+      "2025-09-30": {
+        "completed": 0,
+        "commission": 0
+      }
+    },
+    "overallCommission": 0,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "e0bc60c82713f64ef8a57c0c40d02ce24fd0141d5cc3086259c19b1e62a62bea",
+    "wd_pwd_updated_at": "2025-09-29T19:45:50.845Z"
+  },
+  {
+    "id": 5,
+    "username": "shera1",
+    "password": "123123",
+    "balance": 183.215,
+    "createdAt": 1759227237766,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-01",
+    "history": [
+      {
+        "id": "t_1759306648319",
+        "kind": "single",
+        "orderAmount": 33.88,
+        "commission": 1.355,
+        "at": 1759306649564
+      },
+      {
+        "id": "t_1759306646520",
+        "kind": "single",
+        "orderAmount": 39.55,
+        "commission": 1.582,
+        "at": 1759306647458
+      },
+      {
+        "id": "t_1759306644662",
+        "kind": "single",
+        "orderAmount": 99.51,
+        "commission": 3.98,
+        "at": 1759306645671
+      },
+      {
+        "id": "t_1759306361589",
+        "kind": "single",
+        "orderAmount": 57.42,
+        "commission": 2.297,
+        "at": 1759306363725
+      },
+      {
+        "id": "t_1759227329941",
+        "kind": "combine",
+        "orderAmount": 160.56,
+        "commission": 32.112,
+        "at": 1759227375787
+      },
+      {
+        "id": "t_1759227327977",
+        "kind": "single",
+        "orderAmount": 36.72,
+        "commission": 1.469,
+        "at": 1759227328735
+      },
+      {
+        "id": "t_1759227302922",
+        "kind": "single",
+        "orderAmount": 44.85,
+        "commission": 1.794,
+        "at": 1759227303919
+      },
+      {
+        "id": "t_1759227300694",
+        "kind": "single",
+        "orderAmount": 16.35,
+        "commission": 0.654,
+        "at": 1759227301597
+      },
+      {
+        "id": "t_1759227298906",
+        "kind": "single",
+        "orderAmount": 24.3,
+        "commission": 0.972,
+        "at": 1759227299831
+      }
+    ],
+    "pending": {
+      "id": "t_1759306650584",
+      "kind": "combine",
+      "type": "combined",
+      "orderAmount": 563,
+      "commission": 67.56,
+      "commissionRate": 0.12,
+      "items": [
+        {
+          "title": "Tablet Case",
+          "quantity": 2,
+          "unitPrice": 10.4
+        },
+        {
+          "title": "Power Bank 10k",
+          "quantity": 1,
+          "unitPrice": 21.95
+        },
+        {
+          "title": "Tripod Stand",
+          "quantity": 1,
+          "unitPrice": 14.97
+        },
+        {
+          "title": "Wireless Headphone",
+          "quantity": 3,
+          "unitPrice": 36.87
+        },
+        {
+          "title": "USB-C Cable Pack",
+          "quantity": 2,
+          "unitPrice": 7.57
+        }
+      ],
+      "deficit": 379.785,
+      "__ruleId": "rule_1759306638140"
+    },
+    "staged": null,
+    "daily": {
+      "2025-09-30": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      },
+      "2025-10-01": {
+        "completed": 4,
+        "commission": 9.214,
+        "seenTotalsCents": [
+          5742,
+          9951,
+          3955,
+          3388
+        ]
+      }
+    },
+    "overallCommission": 46.215,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "e0bc60c82713f64ef8a57c0c40d02ce24fd0141d5cc3086259c19b1e62a62bea",
+    "wd_pwd_updated_at": "2025-10-01T08:14:13.727Z"
+  },
+  {
+    "id": 6,
+    "username": "New123r",
+    "password": "123123",
+    "balance": 50,
+    "createdAt": 1759235775827,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-09-30",
+    "history": [],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-30": {
+        "completed": 0,
+        "commission": 0
+      }
+    },
+    "overallCommission": 0,
+    "isFrozen": false,
+    "wd_pwd_set": false,
+    "wd_pwd_hash": null,
+    "wd_pwd_updated_at": null
+  },
+  {
+    "id": 7,
+    "username": "Bnb111",
+    "password": "123123",
+    "balance": 3129.663,
+    "createdAt": 1759236735629,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-01",
+    "history": [
+      {
+        "id": "t_1759259680627",
+        "kind": "combine",
+        "orderAmount": 2651.637,
+        "commission": 477.295,
+        "at": 1759260654197
+      },
+      {
+        "id": "t_1759259678672",
+        "kind": "single",
+        "orderAmount": 814.08,
+        "commission": 97.69,
+        "at": 1759259679528
+      },
+      {
+        "id": "t_1759259205786",
+        "kind": "combine",
+        "orderAmount": 786.763,
+        "commission": 149.485,
+        "at": 1759259669799
+      },
+      {
+        "id": "t_1759259201211",
+        "kind": "single",
+        "orderAmount": 186.24,
+        "commission": 7.45,
+        "at": 1759259204106
+      },
+      {
+        "id": "t_1759259182333",
+        "kind": "single",
+        "orderAmount": 292.35,
+        "commission": 11.694,
+        "at": 1759259183406
+      },
+      {
+        "id": "t_1759249201657",
+        "kind": "combine",
+        "orderAmount": 250.56,
+        "commission": 47.606,
+        "at": 1759259178263
+      },
+      {
+        "id": "t_1759249199679",
+        "kind": "single",
+        "orderAmount": 32.25,
+        "commission": 1.29,
+        "at": 1759249200298
+      },
+      {
+        "id": "t_1759249197621",
+        "kind": "single",
+        "orderAmount": 120.12,
+        "commission": 4.805,
+        "at": 1759249198559
+      },
+      {
+        "id": "t_1759249195576",
+        "kind": "single",
+        "orderAmount": 120.02,
+        "commission": 4.801,
+        "at": 1759249196198
+      },
+      {
+        "id": "t_1759249193629",
+        "kind": "single",
+        "orderAmount": 67.62,
+        "commission": 2.705,
+        "at": 1759249194360
+      },
+      {
+        "id": "t_1759249064842",
+        "kind": "single",
+        "orderAmount": 49.86,
+        "commission": 1.994,
+        "at": 1759249069114
+      },
+      {
+        "id": "t_1759249062507",
+        "kind": "single",
+        "orderAmount": 92.84,
+        "commission": 3.714,
+        "at": 1759249063638
+      },
+      {
+        "id": "t_1759249045763",
+        "kind": "single",
+        "orderAmount": 93.83,
+        "commission": 3.753,
+        "at": 1759249052925
+      },
+      {
+        "id": "t_1759249043605",
+        "kind": "single",
+        "orderAmount": 25.75,
+        "commission": 1.03,
+        "at": 1759249044720
+      },
+      {
+        "id": "t_1759249041090",
+        "kind": "single",
+        "orderAmount": 79.59,
+        "commission": 3.184,
+        "at": 1759249042069
+      },
+      {
+        "id": "t_1759249034443",
+        "kind": "single",
+        "orderAmount": 41.6,
+        "commission": 1.664,
+        "at": 1759249037897
+      },
+      {
+        "id": "t_1759249032471",
+        "kind": "single",
+        "orderAmount": 47.84,
+        "commission": 1.914,
+        "at": 1759249033315
+      },
+      {
+        "id": "t_1759249030459",
+        "kind": "single",
+        "orderAmount": 50.7,
+        "commission": 2.028,
+        "at": 1759249031165
+      },
+      {
+        "id": "t_1759242304192",
+        "kind": "single",
+        "orderAmount": 34.25,
+        "commission": 1.37,
+        "at": 1759242307090
+      },
+      {
+        "id": "t_1759242294773",
+        "kind": "single",
+        "orderAmount": 28.86,
+        "commission": 1.154,
+        "at": 1759242295633
+      },
+      {
+        "id": "t_1759242289002",
+        "kind": "single",
+        "orderAmount": 30.24,
+        "commission": 1.21,
+        "at": 1759242290338
+      },
+      {
+        "id": "t_1759240867029",
+        "kind": "single",
+        "orderAmount": 20.4,
+        "commission": 0.816,
+        "at": 1759240870828
+      },
+      {
+        "id": "t_1759240855058",
+        "kind": "single",
+        "orderAmount": 18.36,
+        "commission": 0.734,
+        "at": 1759240856005
+      },
+      {
+        "id": "t_1759240853586",
+        "kind": "single",
+        "orderAmount": 70.2,
+        "commission": 2.808,
+        "at": 1759240854059
+      },
+      {
+        "id": "t_1759240851611",
+        "kind": "single",
+        "orderAmount": 45.36,
+        "commission": 1.814,
+        "at": 1759240852210
+      },
+      {
+        "id": "t_1759240849520",
+        "kind": "single",
+        "orderAmount": 66,
+        "commission": 2.64,
+        "at": 1759240850136
+      },
+      {
+        "id": "t_1759239155836",
+        "kind": "single",
+        "orderAmount": 25.38,
+        "commission": 1.015,
+        "at": 1759239156470
+      }
+    ],
+    "pending": null,
+    "staged": null,
+    "daily": {
+      "2025-09-30": {
+        "completed": 10,
+        "commission": 804.821,
+        "seenTotalsCents": [
+          6762,
+          12002,
+          12012,
+          3225,
+          29235,
+          18624,
+          81408
+        ]
+      },
+      "2025-10-01": {
+        "completed": 0,
+        "commission": 0
+      }
+    },
+    "overallCommission": 837.663,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "6ce5d724d32bdd2d72867fc3c7c752ec386ef8a3db6e73c7c3932d41f0519987",
+    "wd_pwd_updated_at": "2025-09-30T12:53:44.875Z"
+  },
+  {
+    "id": 8,
+    "username": "Newaccount",
+    "password": "123123",
+    "balance": 21.54,
+    "createdAt": 1759426940521,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2025-10-13",
+    "history": [
+      {
+        "id": "t_1759567341893",
+        "kind": "single",
+        "orderAmount": 15.73,
+        "commission": 0.629,
+        "at": 1759567342885,
+        "taskSnapshot": {
+          "id": "t_1759567341893",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 15.73,
+          "quantity": 1,
+          "orderAmount": 15.73,
+          "commission": 0.629,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759567339903",
+        "kind": "single",
+        "orderAmount": 3.34,
+        "commission": 0.134,
+        "at": 1759567340796,
+        "taskSnapshot": {
+          "id": "t_1759567339903",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 3.34,
+          "quantity": 1,
+          "orderAmount": 3.34,
+          "commission": 0.134,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759523513812",
+        "kind": "single",
+        "orderAmount": 6.32,
+        "commission": 0.253,
+        "at": 1759523515053,
+        "taskSnapshot": {
+          "id": "t_1759523513812",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 6.32,
+          "quantity": 1,
+          "orderAmount": 6.32,
+          "commission": 0.253,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1759523511215",
+        "kind": "single",
+        "orderAmount": 13.09,
+        "commission": 0.524,
+        "at": 1759523512199,
+        "taskSnapshot": {
+          "id": "t_1759523511215",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 1.19,
+          "quantity": 11,
+          "orderAmount": 13.09,
+          "commission": 0.524,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      }
+    ],
+    "pending": {
+      "id": "t_1759567343918",
+      "kind": "combine",
+      "type": "combined",
+      "orderAmount": 90,
+      "commission": 10.8,
+      "commissionRate": 0.12,
+      "items": [
+        {
+          "title": "Tablet Case",
+          "quantity": 2,
+          "unitPrice": 10.4
+        },
+        {
+          "title": "Power Bank 10k",
+          "quantity": 1,
+          "unitPrice": 23.93
+        },
+        {
+          "title": "Tripod Stand",
+          "quantity": 1,
+          "unitPrice": 15.32
+        },
+        {
+          "title": "Wireless Headphone",
+          "quantity": 1,
+          "unitPrice": 36.62
+        }
+      ],
+      "deficit": 68.46,
+      "__ruleId": "r_1759567306468_4fwx"
+    },
+    "staged": null,
+    "daily": {
+      "2025-10-03": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      },
+      "2025-10-04": {
+        "completed": 2,
+        "commission": 0.763,
+        "seenTotalsCents": [
+          334,
+          1573
+        ]
+      },
+      "2025-10-13": {
+        "completed": 0,
+        "commission": 0,
+        "seenTotalsCents": []
+      }
+    },
+    "overallCommission": 1.54,
+    "isFrozen": false,
+    "wd_pwd_set": true,
+    "wd_pwd_hash": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+    "wd_pwd_updated_at": "2025-10-03T15:13:11.980Z",
+    "avatar": "/static/avatars/u_8.jpg"
+  },
+  {
+    "id": 9,
+    "username": "draciokb123",
+    "password": "112233",
+    "balance": 123.757,
+    "createdAt": 1771966450304,
+    "inviteCode": "120236",
+    "isAdmin": false,
+    "completedToday": 0,
+    "totalCompleted": 0,
+    "lastTaskDate": "2026-02-24",
+    "history": [
+      {
+        "id": "t_1771966999277",
+        "kind": "single",
+        "orderAmount": 99.96,
+        "commission": 3.998,
+        "at": 1771967000789,
+        "taskSnapshot": {
+          "id": "t_1771966999277",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 4.76,
+          "quantity": 21,
+          "orderAmount": 99.96,
+          "commission": 3.998,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1771966996416",
+        "kind": "single",
+        "orderAmount": 11.88,
+        "commission": 0.475,
+        "at": 1771966997544,
+        "taskSnapshot": {
+          "id": "t_1771966996416",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 1.32,
+          "quantity": 9,
+          "orderAmount": 11.88,
+          "commission": 0.475,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1771966924103",
+        "kind": "single",
+        "orderAmount": 110.96,
+        "commission": 4.438,
+        "at": 1771966925292,
+        "taskSnapshot": {
+          "id": "t_1771966924103",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 5.84,
+          "quantity": 19,
+          "orderAmount": 110.96,
+          "commission": 4.438,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1771966918846",
+        "kind": "single",
+        "orderAmount": 56.34,
+        "commission": 2.254,
+        "at": 1771966920965,
+        "taskSnapshot": {
+          "id": "t_1771966918846",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 18.78,
+          "quantity": 3,
+          "orderAmount": 56.34,
+          "commission": 2.254,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1771966912947",
+        "kind": "single",
+        "orderAmount": 81.18,
+        "commission": 3.247,
+        "at": 1771966914246,
+        "taskSnapshot": {
+          "id": "t_1771966912947",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 7.38,
+          "quantity": 11,
+          "orderAmount": 81.18,
+          "commission": 3.247,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1771966906447",
+        "kind": "single",
+        "orderAmount": 25.3,
+        "commission": 1.012,
+        "at": 1771966908609,
+        "taskSnapshot": {
+          "id": "t_1771966906447",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 1.15,
+          "quantity": 22,
+          "orderAmount": 25.3,
+          "commission": 1.012,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1771966899955",
+        "kind": "single",
+        "orderAmount": 74.63,
+        "commission": 2.985,
+        "at": 1771966902279,
+        "taskSnapshot": {
+          "id": "t_1771966899955",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 4.39,
+          "quantity": 17,
+          "orderAmount": 74.63,
+          "commission": 2.985,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1771966896228",
+        "kind": "single",
+        "orderAmount": 36.14,
+        "commission": 1.446,
+        "at": 1771966898092,
+        "taskSnapshot": {
+          "id": "t_1771966896228",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 1.39,
+          "quantity": 26,
+          "orderAmount": 36.14,
+          "commission": 1.446,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      },
+      {
+        "id": "t_1771966891063",
+        "kind": "single",
+        "orderAmount": 97.56,
+        "commission": 3.902,
+        "at": 1771966893552,
+        "taskSnapshot": {
+          "id": "t_1771966891063",
+          "store": "amazon",
+          "kind": "single",
+          "type": "single",
+          "title": "Order",
+          "unitPrice": 97.56,
+          "quantity": 1,
+          "orderAmount": 97.56,
+          "commission": 3.902,
+          "commissionRate": 0.04,
+          "deficit": 0
+        }
+      }
+    ],
+    "pending": {
+      "id": "t_1771967002358",
+      "kind": "combine",
+      "type": "combined",
+      "orderAmount": 354,
+      "commission": 42.48,
+      "commissionRate": 0.12,
+      "items": [
+        {
+          "title": "Tablet Case",
+          "quantity": 2,
+          "unitPrice": 10.7
+        },
+        {
+          "title": "Power Bank 10k",
+          "quantity": 3,
+          "unitPrice": 23.28
+        },
+        {
+          "title": "Tripod Stand",
+          "quantity": 3,
+          "unitPrice": 16.62
+        },
+        {
+          "title": "Wireless Headphone",
+          "quantity": 2,
+          "unitPrice": 44.15
+        },
+        {
+          "title": "USB-C Cable Pack",
+          "quantity": 2,
+          "unitPrice": 6.55
+        }
+      ],
+      "deficit": 230.243,
+      "__ruleId": "r_1771966989774_k65z"
+    },
+    "staged": null,
+    "daily": {
+      "2026-02-24": {
+        "completed": 9,
+        "commission": 23.757,
+        "seenTotalsCents": [
+          9756,
+          3614,
+          7463,
+          2530,
+          8118,
+          5634,
+          11096,
+          1188,
+          9996
+        ]
+      }
+    },
+    "overallCommission": 23.757,
+    "isFrozen": false,
+    "wd_pwd_set": false,
+    "wd_pwd_hash": null,
+    "wd_pwd_updated_at": null,
+    "avatar": "/static/avatars/u_9.jpg"
+  }
+]

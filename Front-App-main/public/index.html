@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico?v=2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>dh_finn</title>
+
+    <!-- ===== GLOBAL LOADER (CSS) ===== -->
+    <style>
+      #__boot_loader_overlay{
+        position:fixed; inset:0; z-index:2147483647;
+        background:rgba(15,23,42,.35); backdrop-filter:blur(1px);
+        display:none; place-items:center;
+      }
+      #__boot_loader_overlay .loader{
+        width:50px; aspect-ratio:1; display:grid;
+        -webkit-mask: conic-gradient(from 15deg,#0000,#000);
+        animation: l26 1s infinite steps(12);
+      }
+      #__boot_loader_overlay .loader,
+      #__boot_loader_overlay .loader:before,
+      #__boot_loader_overlay .loader:after{
+        background:
+          radial-gradient(closest-side at 50% 12.5%, #f03355 96%,#0000) 50% 0/20% 80% repeat-y,
+          radial-gradient(closest-side at 12.5% 50%, #f03355 96%,#0000) 0 50%/80% 20% repeat-x;
+      }
+      #__boot_loader_overlay .loader:before,
+      #__boot_loader_overlay .loader:after{
+        content:""; grid-area:1/1; transform:rotate(30deg);
+      }
+      #__boot_loader_overlay .loader:after{ transform:rotate(60deg); }
+      @keyframes l26 { 100% { transform:rotate(1turn) } }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- ===== GLOBAL LOADER (HTML) ===== -->
+    <div id="__boot_loader_overlay" aria-hidden="true">
+      <div class="loader" role="img" aria-label="loading"></div>
+    </div>
+
+    <div id="root"></div>
+
+    <!-- ===== GLOBAL LOADER (JS) ===== -->
+    <script>
+      (function(){
+        const $ov = document.getElementById("__boot_loader_overlay");
+
+        /* ---------- SPA nav hook: admin par loader hamesha band ---------- */
+        (function(){
+          function toggleForAdmin(){
+            const isAdmin = /^\/admin(\/|$)/.test(location.pathname);
+            if (isAdmin) {
+              if ($ov && $ov.parentNode) $ov.parentNode.removeChild($ov);   // detach overlay
+              // no-op API so existing calls don't break
+              window.__loader = { show(){}, hide(){}, forceHide(){} };
+            } else {
+              if ($ov && !$ov.parentNode) document.body.appendChild($ov);   // restore when leaving /admin
+            }
+          }
+          ["pushState","replaceState"].forEach(m=>{
+            const orig = history[m];
+            history[m] = function(){ const r = orig.apply(this, arguments); toggleForAdmin(); return r; };
+          });
+          window.addEventListener("popstate", toggleForAdmin);
+        })();
+        /* ---------- end SPA admin hook ---------- */
+
+        /* ===== ADMIN: disable global loader on direct /admin load ===== */
+        const IS_ADMIN = /^\/admin(\/|$)/.test(location.pathname);
+        if (IS_ADMIN) {
+          if ($ov) $ov.remove();
+          window.__loader = { show: () => {}, hide: () => {}, forceHide: () => {} };
+          return; // Skip all tracking/patching below for admin pages
+        }
+        /* ===== END ADMIN SKIP ===== */
+
+        // ==== CONFIG ====
+        const API_HINTS  = [/\/api\//i];
+        const SKIP_HINTS = [
+          /\.(png|jpe?g|webp|gif|svg|ico|css|js|map|woff2?)(\?|$)/i,
+          /sockjs|hot-update|webpack|browser-sync|devtools|chrome-extension|favicon/i
+        ];
+        const AUTO_EXPIRE_MS = 8000;
+        const MIN_SHOW_MS    = 550;
+        const DEBOUNCE_MS    = 85;
+        const HARD_VISIBLE_MS= 12000;
+
+        function shouldTrack(urlLike){
+          try{
+            const u = new URL(String(urlLike), location.href);
+            const href = u.href;
+            if (SKIP_HINTS.some(rx => rx.test(href))) return false;
+            return API_HINTS.some(rx => rx.test(href));
+          }catch { return false; }
+        }
+
+        // ==== STATE ====
+        let visible = false, minUntil = 0, sinceShown = 0, hideT = null, debT = null;
+        let pending = 0;
+        const tickets = new Map();
+
+        function log(...a){ if (window.__LOADER_DEBUG) console.log("[loader]", ...a); }
+
+        function _reallyShow(){
+          if (!visible){
+            visible = true;
+            $ov.style.display = "grid";
+            sinceShown = Date.now();
+            log("show");
+          }
+          const now = Date.now();
+          if (minUntil < now + MIN_SHOW_MS) minUntil = now + MIN_SHOW_MS;
+        }
+
+        function _show(){ clearTimeout(debT); debT = setTimeout(_reallyShow, DEBOUNCE_MS); }
+
+        function _hideMaybe(){
+          if (pending > 0) return;
+          const wait = Math.max(0, minUntil - Date.now());
+          clearTimeout(hideT);
+          hideT = setTimeout(() => {
+            if (pending === 0){
+              visible = false;
+              $ov.style.display = "none";
+              log("hide");
+            }
+          }, wait || 60);
+        }
+
+        function inc(key){
+          if (!tickets.has(key)){
+            const to = setTimeout(() => {
+              if (tickets.has(key)){
+                tickets.delete(key);
+                pending = Math.max(0, pending - 1);
+                log("expire", key, "pending:", pending);
+                _hideMaybe();
+              }
+            }, AUTO_EXPIRE_MS);
+            tickets.set(key, to);
+            pending++;
+            log("inc", key, "pending:", pending);
+          }
+          _show();
+        }
+
+        function dec(key){
+          const to = tickets.get(key);
+          if (to){
+            clearTimeout(to);
+            tickets.delete(key);
+            pending = Math.max(0, pending - 1);
+            log("dec", key, "pending:", pending);
+          }
+          _hideMaybe();
+        }
+
+        function forceHide(){
+          for (const to of tickets.values()) clearTimeout(to);
+          tickets.clear();
+          pending = 0;
+          minUntil = 0;
+          visible = false;
+          clearTimeout(hideT); clearTimeout(debT);
+          $ov.style.display = "none";
+          log("forceHide");
+        }
+
+        // 🔧 COMPAT
+        window.__loader = {
+          show: () => _show(),
+          hide: () => forceHide(),
+          forceHide
+        };
+
+        // Global watchdogs
+        setInterval(() => {
+          if (visible && tickets.size === 0) _hideMaybe();
+          if (visible && Date.now() - sinceShown > HARD_VISIBLE_MS) forceHide();
+        }, 1000);
+
+        // ==== FETCH PATCH ====
+        if (!window.___fetchPatchedGlobal && window.fetch){
+          window.___fetchPatchedGlobal = true;
+          const orig = window.fetch.bind(window);
+          window.fetch = async (...args) => {
+            const url  = args[0];
+            const init = args[1] || {};
+            const track = !(init && init.loader === false) && shouldTrack(url);
+            const key = Symbol("f");
+            if (track) inc(key);
+            try { return await orig(...args); }
+            finally { if (track) dec(key); }
+          };
+        }
+
+        // ==== XHR PATCH (axios compatible) ====
+        if (!window.___xhrPatchedGlobal && window.XMLHttpRequest){
+          window.___xhrPatchedGlobal = true;
+          const XHR = window.XMLHttpRequest;
+          const open = XHR.prototype.open, send = XHR.prototype.send;
+
+          XHR.prototype.open = function(method, url, ...rest){
+            this.__urlForLoader = url;
+            return open.call(this, method, url, ...rest);
+          };
+
+          XHR.prototype.send = function(...args){
+            const url   = this.__urlForLoader;
+            const track = !this.__noLoader && shouldTrack(url);
+            const key = Symbol("x");
+            if (track) inc(key);
+
+            const onEnd = () => { if (track) dec(key); cleanup(); };
+            const cleanup = () => {
+              this.removeEventListener("loadend", onEnd);
+              this.removeEventListener("error", onEnd);
+              this.removeEventListener("abort", onEnd);
+            };
+
+            this.addEventListener("loadend", onEnd);
+            this.addEventListener("error", onEnd);
+            this.addEventListener("abort", onEnd);
+
+            return send.apply(this, args);
+          };
+        }
+
+        // Optional: axios interceptors
+        if (window.axios && !window.___axiosPatchedGlobal){
+          window.___axiosPatchedGlobal = true;
+          window.axios.interceptors.request.use(cfg => {
+            const track = cfg && cfg.loader !== false && shouldTrack(cfg.url || "");
+            if (track) { const key = Symbol("a"); cfg.__loaderKey = key; inc(key); }
+            return cfg;
+          });
+          window.axios.interceptors.response.use(
+            res => { if (res.config && res.config.__loaderKey) dec(res.config.__loaderKey); return res; },
+            err => { const cfg = err && err.config; if (cfg && cfg.__loaderKey) dec(cfg.__loaderKey); return Promise.reject(err); }
+          );
+        }
+
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "hidden") forceHide();
+        });
+      })();
+    </script>
+  </body>
+</html>

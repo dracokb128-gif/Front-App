@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Task Tester</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen">
+  <div class="max-w-md mx-auto mt-8 bg-white rounded-xl shadow p-4 border">
+    <h1 class="text-lg font-semibold mb-3">Task Tester</h1>
+
+    <!-- Choose a user -->
+    <label class="text-sm">User ID</label>
+    <input id="userId" class="w-full border rounded px-3 py-2 mb-3"
+           placeholder="u1 / u2 / u3" value="u1"/>
+
+    <!-- Task card -->
+    <div id="card" class="hidden">
+      <div class="flex items-center gap-3 mb-3">
+        <img id="img" src="" alt="" class="w-16 h-16 rounded object-cover border"/>
+        <div>
+          <div id="title" class="font-medium"></div>
+          <div id="type" class="text-xs text-slate-500"></div>
+        </div>
+      </div>
+
+      <div class="text-sm space-y-1 mb-3">
+        <div>Order amount: <b id="amount"></b> USDT</div>
+        <div>Commission: <b id="commission"></b> (rate <span id="rate"></span>)</div>
+        <div>Expected income: <b id="income"></b> USDT</div>
+        <div class="text-xs text-slate-500">Index: <span id="idx"></span></div>
+      </div>
+
+      <div id="warn" class="hidden text-amber-700 bg-amber-50 border border-amber-200 text-sm rounded p-2 mb-3"></div>
+
+      <div class="flex gap-2">
+        <button id="grabBtn" class="px-3 py-2 rounded bg-indigo-600 text-white">🔄 Get next</button>
+        <button id="submitBtn" class="px-3 py-2 rounded bg-emerald-600 text-white disabled:opacity-50" disabled>✅ Submit</button>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty" class="text-sm text-slate-500">
+      Click “Get next” to fetch a task for this user.
+    </div>
+
+    <div id="note" class="text-xs text-slate-500 mt-4">
+      Tip: Combine order inject karna ho to Admin Panel me user ke liye <b>Inject</b> press karo ya
+      <code>POST /api/admin/users/:id/inject</code> se amount set karo.
+    </div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let lastTask = null;
+
+    async function api(method, url, body) {
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: body ? JSON.stringify(body) : undefined
+      });
+      const data = await res.json().catch(()=> ({}));
+      if (!res.ok) throw data;
+      return data;
+    }
+
+    async function loadNext() {
+      const userId = $("userId").value.trim();
+      const data = await api("GET", `/api/user/task/next?userId=${encodeURIComponent(userId)}`);
+      lastTask = data.task;
+      $("empty").classList.add("hidden");
+      $("card").classList.remove("hidden");
+
+      if (!lastTask) {
+        $("title").innerText = "No task";
+        $("type").innerText = data.reasons?.join(", ") || "cap reached";
+        $("submitBtn").disabled = true;
+        return;
+      }
+
+      $("img").src = lastTask.image || "";
+      $("title").innerText = lastTask.title || "";
+      $("type").innerText  = `${lastTask.type} • t${lastTask.index}`;
+      $("amount").innerText = lastTask.orderAmount?.toFixed ? lastTask.orderAmount.toFixed(2) : lastTask.orderAmount;
+      $("commission").innerText = lastTask.commission?.toFixed ? lastTask.commission.toFixed(3) : lastTask.commission;
+      $("income").innerText = lastTask.expectedIncome;
+      $("rate").innerText = lastTask.commissionRate;
+      $("idx").innerText  = lastTask.index;
+
+      // insufficient?
+      if (lastTask.insufficient) {
+        $("warn").classList.remove("hidden");
+        $("warn").innerText = `Insufficient balance. Recharge ${lastTask.rechargeNeeded} USDT to submit this order.`;
+        $("submitBtn").disabled = true;
+      } else {
+        $("warn").classList.add("hidden");
+        $("submitBtn").disabled = false;
+      }
+    }
+
+    async function submitTask() {
+      const userId = $("userId").value.trim();
+      if (!lastTask) return alert("No task loaded");
+      try {
+        const out = await api("POST", "/api/user/task/complete", { userId, taskId: lastTask.id, proofUrl: "" });
+        alert(`Done! +${out.summary.commission} commission. New balance: ${out.summary.newBalance}`);
+        await loadNext();
+      } catch (e) {
+        alert(e.error || "Failed");
+      }
+    }
+
+    $("grabBtn").onclick = loadNext;
+    $("submitBtn").onclick = submitTask;
+  </script>
+</body>
+</html>

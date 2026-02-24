@@ -1,0 +1,294 @@
+[
+  {
+    "id": "rule_bonkqtmf2ms_mfvdeguf",
+    "userId": "11",
+    "taskNo": 15,
+    "amount": "150",
+    "expectedIncome": 0,
+    "status": "confirmed"
+  },
+  {
+    "id": "rule_jqcetgzy4ep_mfviy1gc",
+    "userId": "12",
+    "taskNo": 14,
+    "amountSpec": "75",
+    "expectedIncome": 0,
+    "status": "confirmed"
+  },
+  {
+    "id": "rule_0gnvncgzqyqq_mfvj1kvv",
+    "userId": "12",
+    "taskNo": 17,
+    "amountSpec": "90",
+    "expectedIncome": 0,
+    "status": "confirmed"
+  },
+  {
+    "id": 1,
+    "userId": 3,
+    "taskNo": 10,
+    "amountSpec": "3125.23",
+    "percent": 17,
+    "status": "confirmed",
+    "createdAt": 1758874554780
+  },
+  {
+    "id": "rule_1758959989437",
+    "userId": "2",
+    "taskNo": 5,
+    "amountSpec": "195.36",
+    "percent": 19,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-09-27T08:00:08.189Z"
+  },
+  {
+    "id": "rule_1758967029068",
+    "userId": "1",
+    "taskNo": 12,
+    "amountSpec": "210.253",
+    "percent": 11,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-09-27T09:58:30.682Z"
+  },
+  {
+    "id": "rule_1759087314934",
+    "userId": "1",
+    "taskNo": 7,
+    "amountSpec": "65.23",
+    "percent": 19,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-09-28T19:22:11.527Z"
+  },
+  {
+    "id": "rule_1759227325628",
+    "userId": "5",
+    "taskNo": 5,
+    "amountSpec": "160.56",
+    "percent": 20,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-09-30T10:15:35.404Z"
+  },
+  {
+    "id": "rule_1759259198474",
+    "userId": "7",
+    "taskNo": 8,
+    "amountSpec": "786.763",
+    "percent": 19,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-09-30T19:07:11.576Z"
+  },
+  {
+    "id": "rule_1759259622214",
+    "userId": "7",
+    "taskNo": 10,
+    "amountSpec": "2651.637",
+    "percent": 18,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-09-30T19:14:55.239Z"
+  },
+  {
+    "id": "rule_1759274319504",
+    "userId": "2",
+    "taskNo": 5,
+    "amountSpec": "1536.563",
+    "percent": 19,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-09-30T23:18:57.962Z"
+  },
+  {
+    "id": "rule_1759276222097",
+    "userId": "1",
+    "taskNo": 5,
+    "amountSpec": "3565.54",
+    "percent": 19,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-09-30T23:51:10.864Z"
+  },
+  {
+    "id": "rule_1759277463245",
+    "userId": "1",
+    "taskNo": 10,
+    "amountSpec": "8536.45",
+    "percent": 15,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-10-01T00:14:00.329Z"
+  },
+  {
+    "id": "rule_1759278707795",
+    "userId": "1",
+    "taskNo": 13,
+    "amountSpec": "8922.44",
+    "percent": 12,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-10-01T00:31:56.453Z"
+  },
+  {
+    "id": "rule_1759278812255",
+    "userId": "1",
+    "taskNo": 21,
+    "amountSpec": "22568.55",
+    "percent": 18,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-10-01T00:34:48.486Z"
+  },
+  {
+    "id": "rule_1759279200620",
+    "userId": "1",
+    "taskNo": 5,
+    "amountSpec": "141.44",
+    "percent": 12,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-10-01T00:40:20.884Z"
+  },
+  {
+    "id": "rule_1759279335093",
+    "userId": "1",
+    "taskNo": 8,
+    "amountSpec": "415.55",
+    "percent": 19,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-10-01T00:42:39.076Z"
+  },
+  {
+    "id": "rule_1759279482070",
+    "userId": "1",
+    "taskNo": 3,
+    "amountSpec": "312",
+    "percent": 11,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-10-01T00:45:26.155Z"
+  },
+  {
+    "id": "rule_1759306638140",
+    "userId": "5",
+    "taskNo": 5,
+    "amountSpec": "563",
+    "percent": 12,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-10-01T08:17:39.867Z"
+  },
+  {
+    "id": "rule_1759312568024",
+    "userId": "1",
+    "taskNo": 9,
+    "amountSpec": "986.33",
+    "percent": 12,
+    "status": "used",
+    "used": true,
+    "usedAt": "2025-10-01T09:57:30.591Z"
+  },
+  {
+    "id": "r_1759401466163_xwgy",
+    "userId": "1",
+    "taskNo": 5,
+    "amountSpec": "965",
+    "percent": 12,
+    "status": "used",
+    "createdAt": "2025-10-02T10:37:46.163Z",
+    "used": true,
+    "usedAt": "2025-10-02T10:41:16.420Z"
+  },
+  {
+    "id": "r_1759419565381_3r8n",
+    "userId": "1",
+    "taskNo": 4,
+    "amountSpec": "856",
+    "percent": 23,
+    "status": "used",
+    "createdAt": "2025-10-02T15:39:25.381Z",
+    "used": true,
+    "usedAt": "2025-10-02T15:43:35.977Z"
+  },
+  {
+    "id": "r_1759419975148_uzvx",
+    "userId": "1",
+    "taskNo": 4,
+    "amountSpec": "853.44",
+    "percent": 12,
+    "status": "used",
+    "createdAt": "2025-10-02T15:46:15.148Z",
+    "used": true,
+    "usedAt": "2025-10-02T15:47:47.692Z"
+  },
+  {
+    "id": "r_1759426058616_lks6",
+    "userId": "1",
+    "taskNo": 5,
+    "amountSpec": "1506.55",
+    "percent": 12,
+    "status": "used",
+    "createdAt": "2025-10-02T17:27:38.616Z",
+    "used": true,
+    "usedAt": "2025-10-02T17:28:15.437Z"
+  },
+  {
+    "id": "r_1759480860819_u1c6",
+    "userId": "1",
+    "taskNo": 10,
+    "amountSpec": "3510.445",
+    "percent": 19,
+    "status": "used",
+    "createdAt": "2025-10-03T08:41:00.819Z",
+    "used": true,
+    "usedAt": "2025-10-03T08:41:12.479Z"
+  },
+  {
+    "id": "r_1759496745655_ayml",
+    "userId": "1",
+    "taskNo": 5,
+    "amountSpec": "90.11",
+    "percent": 11,
+    "status": "used",
+    "createdAt": "2025-10-03T13:05:45.655Z",
+    "used": true,
+    "usedAt": "2025-10-03T13:06:01.622Z"
+  },
+  {
+    "id": "r_1759523500605_plfn",
+    "userId": "8",
+    "taskNo": 3,
+    "amountSpec": "90",
+    "percent": 0,
+    "status": "used",
+    "createdAt": "2025-10-03T20:31:40.605Z",
+    "used": true,
+    "usedAt": "2025-10-03T20:32:00.937Z"
+  },
+  {
+    "id": "r_1759567306468_4fwx",
+    "userId": "8",
+    "taskNo": 3,
+    "amountSpec": "90",
+    "percent": 12,
+    "status": "used",
+    "createdAt": "2025-10-04T08:41:46.468Z",
+    "used": true,
+    "usedAt": "2025-10-04T08:42:27.115Z"
+  },
+  {
+    "id": "r_1771966989774_k65z",
+    "userId": "9",
+    "taskNo": 10,
+    "amountSpec": "354",
+    "percent": 12,
+    "status": "used",
+    "createdAt": "2026-02-24T21:03:09.774Z",
+    "used": true,
+    "usedAt": "2026-02-24T21:03:34.927Z"
+  }
+]
